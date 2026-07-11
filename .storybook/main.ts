@@ -1,0 +1,96 @@
+import type { StorybookConfig } from '@storybook/react-webpack5';
+
+const config: StorybookConfig = {
+  stories: ['../src/**/*.stories.@(ts|tsx)'],
+
+  addons: [
+    '@storybook/addon-essentials',
+    {
+      name: "@storybook/addon-webpack5-compiler-swc",
+      options: {
+        swc: () => ({
+          jsc: {
+            transform: {
+              react: {
+                runtime: "automatic", 
+              },
+            },
+          },
+        }),
+      },
+    },
+  ],
+
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
+  },
+
+  typescript: {
+    check: false,
+    reactDocgen: 'react-docgen-typescript',
+  },
+
+  webpackFinal: async (config) => {
+    config.module = config.module ?? { rules: [] };
+
+    // Storybook уже добавляет собственные правила для *.css (в т.ч. внутри rule.oneOf).
+    // Если рядом добавить ещё одно правило с тем же test, файл пройдёт по двум цепочкам
+    // загрузчиков сразу, и итоговый JS-модуль соберётся некорректно
+    // (например, именованные CSS-классы потеряются — styles.wrapper окажется undefined).
+    // Поэтому рекурсивно вычищаем все дефолтные css-правила и ставим свои — для *.scss.
+    const isStyleRule = (rule: any): boolean => {
+      if (!rule || typeof rule !== 'object' || !('test' in rule)) return false;
+      const test = rule.test;
+      if (!(test instanceof RegExp)) return false;
+      return (
+        test.test('styles.css') ||
+        test.test('styles.module.css') ||
+        test.test('styles.scss') ||
+        test.test('styles.module.scss')
+      );
+    };
+
+    const stripStyleRules = (rules: any[]): any[] =>
+      (rules ?? [])
+        .filter((rule) => !isStyleRule(rule))
+        .map((rule) => {
+          if (rule && typeof rule === 'object' && Array.isArray(rule.oneOf)) {
+            return { ...rule, oneOf: stripStyleRules(rule.oneOf) };
+          }
+          return rule;
+        });
+
+    config.module.rules = stripStyleRules(config.module.rules as any[]);
+
+    config.module.rules.push(
+      {
+        // файлы дизайн-токенов и прочие "обычные" стили
+        test: /\.scss$/i,
+        exclude: /\.module\.scss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        // CSS Modules для стилей отдельных компонентов
+        test: /\.module\.scss$/i,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                namedExport: false,
+                localIdentName: '[name]__[local]--[hash:base64:5]',
+              },
+            },
+          },
+          'sass-loader',
+        ],
+      },
+    );
+
+    return config;
+  },
+};
+
+export default config;

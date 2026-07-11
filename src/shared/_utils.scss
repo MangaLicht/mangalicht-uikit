@@ -1,0 +1,57 @@
+
+.container {
+    max-width: calc(var(--container-width) + var(--container-padding-x) * 2);
+    margin-inline: auto;
+    padding-inline: var(--container-padding-x);
+}
+
+.interactive {
+    transition: all var(--transition-duration);
+
+    @include hover {
+        color: var(--text-hover-color);
+        border-color: var(--text-hover-color);
+        cursor: pointer;
+    }
+    &:active {
+        transform: scale(0.92);
+    }
+}
+
+.full-adaptive {
+    width: 100%;
+    height: 100%;
+}
+.adaptive-x {
+    width: 100%;
+    height: auto;
+}
+.adaptive-y {
+    width: auto;
+    height: 100%;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    border: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    clip-path: inset(100%) !important;
+    clip: rect(0 0 0 0) !important;
+    overflow: hidden !important;
+}
+
+.hidden-mobile {
+    @include mobile {
+        display: none !important;
+    }
+}
+
+.visually-mobile {
+    @include mobile-above {
+        display: none !important;
+    }
+}

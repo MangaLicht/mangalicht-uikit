@@ -1,0 +1,50 @@
+{
+  "name": "create-ui-kit-template",
+  "version": "0.0.1",
+  "description": "UI Kit на React + TypeScript со Storybook и сборкой через Webpack",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "webpack",
+    "publish": "npx webpack && npm version patch && npm publish",
+    "dev": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "keywords": [
+    "react",
+    "ui-kit",
+    "typescript",
+    "components"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
+    "@storybook/react": "^8.4.7",
+    "@storybook/react-webpack5": "^8.4.7",
+    "@storybook/test": "^8.4.7",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "css-loader": "^7.1.2",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "sass": "^1.80.6",
+    "sass-loader": "^16.0.3",
+    "storybook": "^8.4.7",
+    "style-loader": "^4.0.0",
+    "styled-components": "^6.4.3",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
