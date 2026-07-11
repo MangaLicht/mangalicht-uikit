@@ -30,7 +30,7 @@ npm install
 ## Разработка компонентов в Storybook
 
 ```bash
-npm run storybook
+npm run dev
 ```
 
 Откроется на http://localhost:6006
