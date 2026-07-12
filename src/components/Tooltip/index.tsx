@@ -46,7 +46,7 @@ export const Tooltip = ({
   disabled = false,
   classNames,
   offset = 12,
-  showDelay = 150,
+  showDelay = 500,
   cursorLag = 100,
 }: TooltipProps) => {
   const [visible, setVisible] = useState(false);

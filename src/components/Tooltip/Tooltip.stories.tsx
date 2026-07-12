@@ -14,13 +14,10 @@ const meta: Meta<typeof Tooltip> = {
     disabled: { control: 'boolean' },
     offset: { control: 'number' },
     showDelay: { control: 'number' },
+    cursorLag: { control: 'number' },
     content: { control: 'text' },
   },
-  parameters: {
-    // тултип рендерится через портал в document.body с position: fixed,
-    // поэтому центрирование Storybook-канваса ему не критично
-    layout: 'padded',
-  },
+  // parameters.layout убран — используется глобальный 'centered' из .storybook/preview.ts
 };
 
 export default meta;
@@ -49,9 +46,11 @@ export const Top: Story = {
     position: 'top',
   },
   render: (args) => (
-    <Tooltip {...args}>
-      <Button labelText='Button' />
-    </Tooltip>
+    <div style={{ display: 'flex', gap: 12 }}>
+      <Tooltip {...args}>
+        <Button labelText='Button' />
+      </Tooltip>
+    </div>
   ),
 };
 
