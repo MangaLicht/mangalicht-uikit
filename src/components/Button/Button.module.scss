@@ -146,6 +146,13 @@
   background-color: transparent;
   border-color: transparent;
   color: var(--uikit-color-text-secondary);
+
+  &:hover {
+    color: var(--uikit-color-text-hover);
+  }
+  &:active {
+    color: var(--uikit-color-text-hover);
+  }
   
   &::after {
       content: '';
