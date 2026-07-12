@@ -1,11 +1,13 @@
 import React, {
   cloneElement,
   isValidElement,
-  useEffect,
+  useCallback,
   useRef,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useMouseTracking } from '../../hooks/useMouseTracking';
+import { useSmoothFollow } from '../../hooks/useSmoothFollow';
 import styles from './Tooltip.module.scss';
 
 export type TooltipPosition = 'top' | 'bottom';
@@ -49,59 +51,25 @@ export const Tooltip = ({
   showDelay = 500,
   cursorLag = 100,
 }: TooltipProps) => {
+
   const [visible, setVisible] = useState(false);
   const showTimer = useRef<number | null>(null);
-  const tooltipRef = useRef<HTMLDivElement | null>(null);
 
-  // куда указывает курсор прямо сейчас
-  const targetPos = useRef({ x: 0, y: 0 });
-  // текущая отрисованная позиция (отстаёт от target при cursorLag > 0)
-  const currentPos = useRef({ x: 0, y: 0 });
-  const rafId = useRef<number | null>(null);
-  const lastFrameTime = useRef<number | null>(null);
+  // применяем расчитанную позицию
+  const applyPosition = useCallback(
+    (el: HTMLDivElement, x: number, y: number) => {
+      const top = position === 'top' ? y - offset : y + offset;
+      el.style.left = `${x}px`;
+      el.style.top = `${top}px`;
+    },
+    [position, offset],
+  );
 
-  const applyPosition = (x: number, y: number) => {
-    if (!tooltipRef.current) return;
-    const top = position === 'top' ? y - offset : y + offset;
-    tooltipRef.current.style.left = `${x}px`;
-    tooltipRef.current.style.top = `${top}px`;
-  };
-
-  // основной цикл сглаживания — работает постоянно, пока смонтирован компонент
-  useEffect(() => {
-    const tick = (time: number) => {
-      if (lastFrameTime.current === null) lastFrameTime.current = time;
-      const dt = time - lastFrameTime.current;
-      lastFrameTime.current = time;
-
-      if (cursorLag <= 0) {
-        currentPos.current = { ...targetPos.current };
-      } else {
-        // экспоненциальное сглаживание с учётом реального времени кадра —
-        // скорость "погони" не зависит от частоты обновления экрана (60/120Hz и т.д.)
-        const factor = 1 - Math.exp(-dt / cursorLag);
-        currentPos.current.x += (targetPos.current.x - currentPos.current.x) * factor;
-        currentPos.current.y += (targetPos.current.y - currentPos.current.y) * factor;
-      }
-
-      applyPosition(currentPos.current.x, currentPos.current.y);
-      rafId.current = requestAnimationFrame(tick);
-    };
-
-    rafId.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafId.current) cancelAnimationFrame(rafId.current);
-      lastFrameTime.current = null;
-    };
-  }, [cursorLag, position, offset]);
-
-  useEffect(() => {
-    return () => {
-      if (showTimer.current) window.clearTimeout(showTimer.current);
-    };
-  }, []);
-
-  if (!isValidElement(children)) return children;
+  // плавное отставание
+  const { elementRef: tooltipRef, setTarget } = useSmoothFollow<HTMLDivElement>(
+    applyPosition,
+    { lag: cursorLag, enabled: visible },
+  );
 
   const clearShowTimer = () => {
     if (showTimer.current) {
@@ -110,37 +78,42 @@ export const Tooltip = ({
     }
   };
 
-  const handleMouseEnter = (event: React.MouseEvent) => {
-    children.props.onMouseEnter?.(event);
-    if (disabled) return;
-    const point = { x: event.clientX, y: event.clientY };
-    // при первом наведении телепортируем подсказку сразу к курсору,
-    // без "прилёта" издалека — лаг применяется только к последующим движениям
-    targetPos.current = point;
-    currentPos.current = point;
-    applyPosition(point.x, point.y);
-    clearShowTimer();
-    showTimer.current = window.setTimeout(() => setVisible(true), showDelay);
-  };
-
-  const handleMouseMove = (event: React.MouseEvent) => {
-    children.props.onMouseMove?.(event);
-    if (disabled) return;
-    targetPos.current = { x: event.clientX, y: event.clientY };
-  };
-
-  const handleMouseLeave = (event: React.MouseEvent) => {
-    children.props.onMouseLeave?.(event);
-    clearShowTimer();
-    setVisible(false);
-  };
-
-  const trigger = cloneElement(children, {
-    onMouseEnter: handleMouseEnter,
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
+  // сырые координаты мыши
+  const { handlers: mouseHandlers } = useMouseTracking({
+    onEnter: (x, y) => {
+      if (disabled) return;
+      setTarget(x, y, { teleport: true });
+      clearShowTimer();
+      showTimer.current = window.setTimeout(() => setVisible(true), showDelay);
+    },
+    onMove: (x, y) => {
+      if (disabled) return;
+      setTarget(x, y);
+    },
+    onLeave: () => {
+      clearShowTimer();
+      setVisible(false);
+    },
   });
 
+  if (!isValidElement(children)) return children;
+
+  const trigger = cloneElement(children, {
+    onMouseEnter: (event: React.MouseEvent) => {
+      children.props.onMouseEnter?.(event);
+      mouseHandlers.onMouseEnter(event);
+    },
+    onMouseMove: (event: React.MouseEvent) => {
+      children.props.onMouseMove?.(event);
+      mouseHandlers.onMouseMove(event);
+    },
+    onMouseLeave: (event: React.MouseEvent) => {
+      children.props.onMouseLeave?.(event);
+      mouseHandlers.onMouseLeave(event);
+    },
+  });
+
+  // разметка компонента
   return (
     <>
       {trigger}
