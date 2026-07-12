@@ -72,3 +72,48 @@ function Example() {
   return <Switch checked={checked} onChange={setChecked} label="Тёмная тема" />;
 }
 ```
+
+### Button
+
+Кнопка с тремя вариантами оформления: `"default"`, `"highlight"`, `"bordered"`.
+
+```tsx
+import { Button } from 'create-ui-kit-template';
+
+function Example() {
+  return (
+    <Button
+      labelText="Сохранить"
+      style="highlight"
+      onClick={() => console.log('clicked')}
+      disabled={false}
+      classNames="my-custom-class"
+    />
+  );
+}
+```
+
+Пропсы:
+- `labelText: string` — текст на кнопке
+- `style?: "default" | "highlight" | "bordered" | "borderedAccent"` — визуальный вариант (по умолчанию `"default"`)
+- `disabled?: boolean` — заблокировать кнопку
+- `onClick?: (event) => void` — колбэк клика
+- `classNames?: string` — дополнительный className для кастомных стилей
+- `iconStart?: React.ReactNode` — иконка (например, svg) перед текстом
+- `iconEnd?: React.ReactNode` — иконка после текста
+
+```tsx
+import { Button } from 'create-ui-kit-template';
+
+function Example() {
+  return (
+    <Button
+      labelText="Добавить"
+      style="default"
+      iconStart={<PlusIcon />}
+      onClick={() => console.log('clicked')}
+    />
+  );
+}
+```
+

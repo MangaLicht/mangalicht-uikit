@@ -1,0 +1,61 @@
+.tooltip {
+  position: fixed;
+  z-index: 1000;
+  max-width: 240px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background-color: var(--uikit-color-tooltip-bg);
+  color: var(--uikit-color-text-accent);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity var(--uikit-transition-fast, 0.18s ease),
+    transform var(--uikit-transition-fast, 0.18s ease),
+
+    left var(--tooltip-lag, 0ms) linear,
+    top var(--tooltip-lag, 0ms) linear;
+
+  &[data-position='top'] {
+    transform: translate(-50%, calc(-100% - 4px));
+
+    &[data-visible='true'] {
+      transform: translate(-50%, -100%);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--uikit-color-tooltip-bg);;
+    }
+  }
+
+  // подсказка "под курсором"
+  &[data-position='bottom'] {
+    transform: translate(-50%, 4px);
+
+    &[data-visible='true'] {
+      transform: translate(-50%, 0);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-bottom-color: var(--uikit-color-tooltip-bg);;
+    }
+  }
+
+  &[data-visible='true'] {
+    opacity: 1;
+  }
+}

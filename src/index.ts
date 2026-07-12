@@ -1,4 +1,4 @@
 export * from './components';
-import './shared/global-vars.scss'
-
-export * from './variables/index' // Экспорт
+import './shared/normalize.scss'
+import './shared/theme-mode-vars.scss'
+import './shared/global-styles.scss'

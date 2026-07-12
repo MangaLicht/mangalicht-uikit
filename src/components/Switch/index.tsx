@@ -1,9 +1,9 @@
-import React, { forwardRef, useId, useEffect, useState, useRef } from 'react';
+import React, { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import styles from './Switch.module.scss';
 
 export interface SwitchProps {
   /** Текущее состояние переключателя */
-  checked: boolean;
+  checked?: boolean;
   /** Колбэк, вызываемый при переключении */
   onChange: (checked: boolean) => void;
   /** Подпись рядом с переключателем */
@@ -14,15 +14,18 @@ export interface SwitchProps {
   name?: string;
   /** Дополнительный className для обёртки */
   className?: string;
+  /** Размер switch*/
+  size?: 'default' | 'small';
 }
 
 /**
- * Switch — переключатель (тумблер) с плавной анимацией движения "бегунка".
- * Построен на нативном input[type=checkbox] для доступности (клавиатура, screen-readers),
- * визуальная часть анимируется через CSS transition.
+ * Switch — переключатель (тумблер) с "trail"-анимацией бегунка (капля,
+ * растягивающаяся в сторону движения и снова собирающаяся в круг).
+ * Бегунок реализован через ::after у .track в Switch.module.scss.
+ * Построен на нативном input[type=checkbox] для доступности (клавиатура, screen-readers).
  */
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
-  ({ checked, onChange, label, disabled = false, name, className }, ref) => {
+  ({ checked, onChange, label, disabled = false, name, className, size = 'default' }, ref) => {
     const generatedId = useId();
     const inputId = `uikit-switch-${generatedId}`;
 
@@ -31,14 +34,22 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       onChange(event.target.checked);
     };
 
-    const initialChecked = useRef(checked);
+    const isFirstRender = useRef(true);
     const [animate, setAnimate] = useState(false);
+    // data-animate включает keyframe-анимацию в Switch.module.scss при каждом
+    // реальном переключении. Сравнивать нужно с ПРЕДЫДУЩИМ значением checked,
+    // а не с изначальным — иначе, например, при возврате false → true → false
+    // на последнем шаге checked снова совпадёт с исходным значением, и
+    // анимация не запустится. isFirstRender нужен только чтобы не проигрывать
+    // анимацию на маунте компонента.
     useEffect(() => {
-      if (initialChecked.current !== checked) {
-        setAnimate(true);
-        const t = window.setTimeout(() => setAnimate(false), 500);
-        return () => window.clearTimeout(t);
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
       }
+      setAnimate(true);
+      const t = window.setTimeout(() => setAnimate(false), 500);
+      return () => window.clearTimeout(t);
     }, [checked]);
 
     return (
@@ -59,7 +70,13 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           role="switch"
           aria-checked={checked}
         />
-        <span className={styles.track} data-checked={checked} data-disabled={disabled} data-animate={animate}></span>
+        <span
+          className={styles.track}
+          data-checked={checked}
+          data-disabled={disabled}
+          data-animate={animate}
+          data-size={size}
+        />
         {label ? <span className={styles.label}>{label}</span> : null}
       </label>
     );

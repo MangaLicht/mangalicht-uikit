@@ -8,7 +8,6 @@ const meta: Meta<typeof Switch> = {
   argTypes: {
     checked: { control: 'boolean' },
     disabled: { control: 'boolean' },
-    loading: { control: 'boolean' },
     label: { control: 'text' },
   },
 };
@@ -52,4 +51,20 @@ export const WithoutLabel: Story = {
   args: {
     checked: false,
   },
+};
+
+const SizesRender = () => {
+  const [checkedDefault, setCheckedDefault] = useState(false);
+  const [checkedSmall, setCheckedSmall] = useState(false);
+
+  return (
+    <div style={{ display: 'flex', gap: 12 }}>
+      <Switch checked={checkedDefault} size='default' label='обычный' onChange={setCheckedDefault} />
+      <Switch checked={checkedSmall} size='small' label='маленький' onChange={setCheckedSmall} />
+    </div>
+  );
+};
+
+export const Sizes: Story = {
+  render: () => <SizesRender />,
 };

@@ -1,0 +1,98 @@
+@use '../../shared/_computed-vars.scss' as *;
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+
+  &[data-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--uikit-color-bg-content-accent);
+  border-radius: 6px;
+  background-color: transparent;
+  box-sizing: border-box;
+  transition:
+    background-color $uikit-transition-fast,
+    border-color $uikit-transition-fast,
+    border-radius $uikit-transition-fast;
+
+  // "radio" — круглая форма вместо квадратной со скруглением
+  &[data-style='radio'] {
+    border-radius: 50%;
+    & .checkmark {
+        visibility: hidden;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        width: 0px;
+        height: 0px;
+        border-radius: 50%;
+        background-color: transparent;
+        transition: all $uikit-transition-fast;
+    }
+
+    &[data-checked='true'] {
+        background-color: transparent !important;
+        &::after {
+            top: 2px;
+            left: 2px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--uikit-color-accent);
+        }
+    }
+  }
+  &[data-checked='true'] {
+    background-color: var(--uikit-color-accent);
+    border-color: var(--uikit-color-accent);
+  }
+}
+
+.checkmark {
+  width: 12px;
+  height: 12px;
+  color: #ffffff;
+  opacity: 0;
+  transform: scale(0.4);
+  transform-origin: center;
+
+  transition:
+    opacity var(--uikit-transition-fast, 0.18s ease),
+    transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  .box[data-checked='true'] & {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
