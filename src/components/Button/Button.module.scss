@@ -1,0 +1,143 @@
+@use '../../shared/computed-vars.scss' as *;
+@use '../../shared/_media.scss' as *;
+
+.button {
+  --btm-border-radius: 6px;
+
+  /*сброс браузерных стилей*/
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  outline: none;
+  border-width: 0;
+  border-style: solid;
+  box-shadow: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: $uikit-const-6rem;
+
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--btm-border-radius);
+  
+  @include tablet {
+    --btm-border-radius: 8px;
+  }
+  @include mobile {
+    --btm-border-radius: 12px;
+  }
+
+  text-align: center;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  & span {
+    user-select: none;
+  }
+  // анимация нажатия
+  transform-origin: center;
+  transform: translateY(0);
+  transition:
+    background-color $uikit-transition-normal,
+    border-color $uikit-transition-normal,
+    color $uikit-transition-normal,
+    transform $uikit-transition-fast;
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--uikit-color-accent);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+  }
+
+  &:hover:not(:disabled)::after {
+    opacity: 100;
+  }
+  &:active:not(:disabled)::after {
+    opacity: 100;
+  }
+}
+
+.default {
+  background-color: var(--uikit-color-bg-content-accent);
+  color: var(--uikit-color-text-secondary);
+
+  &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background-color: var(--uikit-rgba-mask-white);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+  }
+}
+
+.highlight {
+  background-color: var(--uikit-color-accent);
+  border-color: transparent;
+  color: var(--uikit-color-text-accent) !important;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--uikit-rgba-mask-accent);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+}
+
+.bordered {  
+  background-color: transparent;
+  border-width: 2px !important;
+  color: var(--uikit-color-text-secondary);
+  border-color: var(--uikit-color-border);
+
+  &:hover {
+    color: var(--uikit-color-text-hover);
+    border-color: var(--uikit-color-border-hover);
+  }
+  &:active {
+    color: var(--uikit-color-text-hover);
+    border-color: var(--uikit-color-border-hover);
+  }
+}
+
+.borderedAccent {
+  background-color: transparent;
+  border-width: 2px !important;
+  color: var(--uikit-color-accent);
+  border-color: var(--uikit-color-accent);
+
+  &:hover {
+    color: var(--uikit-color-accent-hover);
+    border-color: var(--uikit-color-accent-hover);
+  }
+  &:active {
+    color: var(--uikit-color-accent-hover);
+    border-color: var(--uikit-color-accent-hover);
+  }
+}

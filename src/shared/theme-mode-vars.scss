@@ -1,0 +1,41 @@
+:root {
+    // gray
+    --uikit-hex-white: #FFFFFF;
+    --uikit-hex-gray-0: #E7E7E7;
+    --uikit-hex-gray-1: #C4C8CC;
+    --uikit-hex-gray-2: #AAB0B5;
+    --uikit-hex-gray-3: #90959B;
+    --uikit-hex-gray-4: #76797B;
+    --uikit-hex-gray-5: #444647;
+    --uikit-hex-gray-6: #2b2b2c;
+    --uikit-hex-gray-7: #1A1A1A;
+    --uikit-hex-black: #000000;
+    // blue
+    --uikit-hex-blue-0: #c5ebff;
+    --uikit-hex-blue-1: #99dcff;
+    --uikit-hex-blue-2: #19bdfa;
+    --uikit-hex-blue-3: #00a2f4;
+    --uikit-hex-blue-4: #0078d0;
+    --uikit-hex-blue-5: #0064c1;
+    --uikit-hex-blue-6: #0050a0;
+    --uikit-hex-blue-7: #0053a7;
+    --uikit-hex-blue-8: #00428a;
+
+    --uikit-rgba-mask-black: rgb(0, 0, 0, 0.45);
+    --uikit-rgba-mask-white: rgba(255, 255, 255, 0.3);
+    --uikit-rgba-mask-accent: rgb(0, 162, 244, 0.3);
+
+    // служебные переменные
+    --uikit-color-bg: var(--uikit-hex-white);
+    --uikit-color-bg-content-primary: var(--uikit-hex-gray-2);
+    --uikit-color-bg-content-accent: var(--uikit-hex-gray-3);
+    --uikit-color-bg-content-secondary: var(--uikit-hex-gray-5);
+    --uikit-color-border: var(--uikit-hex-gray-3);
+    --uikit-color-border-hover: var(--uikit-hex-gray-2);
+    --uikit-color-text-primary: var(--uikit-hex-black);
+    --uikit-color-text-secondary: var(--uikit-hex-gray-6);
+    --uikit-color-text-accent: var(--uikit-hex-white);
+    --uikit-color-text-hover: var(--uikit-hex-gray-4);
+    --uikit-color-accent: var(--uikit-hex-blue-4);
+    --uikit-color-accent-hover: var(--uikit-hex-blue-3);
+}
