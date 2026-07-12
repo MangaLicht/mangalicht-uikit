@@ -74,6 +74,13 @@ export const WithIcon: Story = {
   ),
 };
 
+export const Transparent: Story = {
+  args: {
+    labelText: 'Прозрачная',
+    style: 'transparent',
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 12 }}>
@@ -81,6 +88,7 @@ export const AllVariants: Story = {
       <Button labelText="Highlight" style="highlight" onClick={() => {}} />
       <Button labelText="Bordered" style="bordered" onClick={() => {}} />
       <Button labelText="BorderedAccent" style="borderedAccent" onClick={() => {}} />
+      <Button labelText="Transparent" style="transparent" onClick={() => {}} />
       <Button labelText="Disabled" style="default" disabled onClick={() => {}} />
     </div>
   ),

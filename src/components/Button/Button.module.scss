@@ -142,6 +142,26 @@
   }
 }
 
+.transparent {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--uikit-color-text-secondary);
+  
+  &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background-color: var(--uikit-rgba-mask-white);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+  }
+}
+
 .icon {
   display: inline-flex;
   align-items: center;

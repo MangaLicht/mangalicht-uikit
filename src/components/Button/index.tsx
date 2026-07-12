@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import styles from './Button.module.scss';
 
-export type ButtonStyle = 'default' | 'highlight' | 'bordered' | 'borderedAccent';
+export type ButtonStyle = 'default' | 'highlight' | 'bordered' | 'borderedAccent' | 'transparent';
 
 export interface ButtonProps {
   /** Заблокировать кнопку */
@@ -27,6 +27,7 @@ const STYLE_TO_CLASS: Record<ButtonStyle, string> = {
   highlight: styles.highlight,
   bordered: styles.bordered,
   borderedAccent: styles.borderedAccent,
+  transparent: styles.transparent,
 };
 
 /**
