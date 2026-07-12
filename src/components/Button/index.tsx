@@ -16,6 +16,10 @@ export interface ButtonProps {
   labelText: string;
   /** type для нативного button, по умолчанию "button" */
   type?: 'button' | 'submit' | 'reset';
+  /** Дочерний элемент (например, svg-иконка) перед текстом лейбла */
+  iconStart?: React.ReactNode;
+  /** Дочерний элемент (например, svg-иконка) после текста лейбла */
+  iconEnd?: React.ReactNode;
 }
 
 const STYLE_TO_CLASS: Record<ButtonStyle, string> = {
@@ -39,6 +43,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       style = 'default',
       labelText,
       type = 'button',
+      iconStart,
+      iconEnd,
     },
     ref,
   ) => {
@@ -54,7 +60,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         onClick={onClick}
       >
-        <span>{labelText}</span>
+        {iconStart ? (
+          <span className={styles.icon} aria-hidden="true">
+            {iconStart}
+          </span>
+        ) : null}
+        {labelText && <span>{labelText}</span>}
+        {iconEnd ? (
+          <span className={styles.icon} aria-hidden="true">
+            {iconEnd}
+          </span>
+        ) : null}
       </button>
     );
   },

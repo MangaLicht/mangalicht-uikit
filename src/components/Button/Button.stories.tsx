@@ -54,6 +54,26 @@ export const Disabled: Story = {
   },
 };
 
+export const WithIcon: Story = {
+  name: 'With icons (iconStart / iconEnd)',
+  render: () => (
+    <div style={{ display: 'flex', gap: 12 }}>
+      <Button
+        labelText="Добавить"
+        style="default"
+        iconStart={<PlusIcon />}
+        onClick={() => {}}
+      />
+      <Button
+        labelText="Продолжить"
+        style="bordered"
+        iconEnd={<ArrowRightIcon />}
+        onClick={() => {}}
+      />
+    </div>
+  ),
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 12 }}>
@@ -65,3 +85,27 @@ export const AllVariants: Story = {
     </div>
   ),
 };
+
+const PlusIcon = () => (
+  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M8 2v12M2 8h12"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+const ArrowRightIcon = () => (
+  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M3 8h10M9 4l4 4-4 4"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+  </svg>
+);
