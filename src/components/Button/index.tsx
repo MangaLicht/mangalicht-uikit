@@ -3,7 +3,8 @@ import styles from './Button.module.scss';
 
 export type ButtonStyle = 'default' | 'highlight' | 'bordered' | 'borderedAccent' | 'transparent';
 
-export interface ButtonProps {
+export interface ButtonProps 
+{
   /** Заблокировать кнопку */
   disabled?: boolean;
   /** Дополнительный className для кастомных стилей */
@@ -13,7 +14,7 @@ export interface ButtonProps {
   /** Визуальный вариант оформления */
   style?: ButtonStyle;
   /** Текст лейбла внутри кнопки */
-  labelText: string;
+  labelText?: string;
   /** type для нативного button, по умолчанию "button" */
   type?: 'button' | 'submit' | 'reset';
   /** Дочерний элемент (например, svg-иконка) перед текстом лейбла */
@@ -46,6 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type = 'button',
       iconStart,
       iconEnd,
+      ...rest
     },
     ref,
   ) => {
@@ -60,6 +62,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           .join(' ')}
         disabled={disabled}
         onClick={onClick}
+        {...rest}
       >
         {iconStart ? (
           <span className={styles.icon} aria-hidden="true">
