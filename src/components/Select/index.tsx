@@ -5,17 +5,31 @@ import React, {
   useId,
   useRef,
   useState,
-} from 'react';
-import { createPortal } from 'react-dom';
-import { getPortalRoot } from '../../shared/utils/portalRoot';
-import { useClickOutside } from '../../hooks/useClickOutside';
-import { useAnchoredPosition } from '../../hooks/useAnchoredPosition';
-import styles from './Select.module.scss';
+} from 'react'
+import { createPortal } from 'react-dom'
+import { getPortalRoot } from '../../shared/utils/portalRoot'
+import { useClickOutside } from '../../hooks/useClickOutside'
+import { useAnchoredPosition } from '../../hooks/useAnchoredPosition'
+import styles from './Select.module.scss'
+
+// TODO: убрать в отдельный файл или заменить иконночным шрифтом
+const ChevronIcon = () => (
+  <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path
+      d="M2.5 4.5L6 8l3.5-3.5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 export interface SelectOption {
-  value: string;
-  label: string;
-  disabled?: boolean;
+  value: string
+  label: string
+  disabled?: boolean
 }
 
 export interface SelectProps {
@@ -35,20 +49,9 @@ export interface SelectProps {
   placeholder?: string;
   /** name для скрытого input, полезно для нативных форм */
   name?: string;
+  /** ручное указание минимальной ширины контейнера */
+  minWidth?: number
 }
-
-const ChevronIcon = () => (
-  <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path
-      d="M2.5 4.5L6 8l3.5-3.5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
 /**
  * Select — кастомный выпадающий список, построенный на архитектурных
@@ -74,26 +77,27 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       classNames,
       placeholder = 'Выберите значение',
       name,
+      minWidth = 220,
       ...rest
     },
     forwardedRef,
   ) => {
     const generatedId = useId();
-    const listboxId = `uikit-select-listbox-${generatedId}`;
+    const listboxId = `uikit-select-listbox-${generatedId}`
 
-    const isControlled = value !== undefined;
-    const [internalValue, setInternalValue] = useState(defaultValue);
-    const currentValue = isControlled ? value : internalValue;
+    const isControlled = value !== undefined
+    const [internalValue, setInternalValue] = useState(defaultValue)
+    const currentValue = isControlled ? value : internalValue
 
-    const [open, setOpen] = useState(false);
-    const [highlightedIndex, setHighlightedIndex] = useState(-1);
+    const [open, setOpen] = useState(false)
+    const [highlightedIndex, setHighlightedIndex] = useState(-1)
 
     const triggerRef = useRef<HTMLButtonElement | null>(null);
     // мёржим внешний ref (forwardRef) с внутренним, нужным для позиционирования
     const setTriggerRef = useCallback(
       (node: HTMLButtonElement | null) => {
         triggerRef.current = node;
-        if (typeof forwardedRef === 'function') forwardedRef(node);
+        if (typeof forwardedRef === 'function') forwardedRef(node)
         else if (forwardedRef) forwardedRef.current = node;
       },
       [forwardedRef],
@@ -104,34 +108,34 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       { open, offset: 4, matchWidth: true },
     );
 
-    useClickOutside([triggerRef, panelRef], () => setOpen(false), open);
+    useClickOutside([triggerRef, panelRef], () => setOpen(false), open)
 
     // закрываем при скролле страницы (кроме скролла внутри самой панели —
     // список опций может быть длиннее max-height и скроллиться сам по себе)
     useEffect(() => {
-      if (!open) return undefined;
+      if (!open) return undefined
       const handleScroll = (event: Event) => {
-        if (panelRef.current?.contains(event.target as Node)) return;
+        if (panelRef.current?.contains(event.target as Node)) return
         setOpen(false);
       };
-      window.addEventListener('scroll', handleScroll, true);
-      return () => window.removeEventListener('scroll', handleScroll, true);
+      window.addEventListener('scroll', handleScroll, true)
+      return () => window.removeEventListener('scroll', handleScroll, true)
     }, [open, panelRef]);
 
-    const selectedIndex = options.findIndex((o) => o.value === currentValue);
-    const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : undefined;
+    const selectedIndex = options.findIndex((o) => o.value === currentValue)
+    const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : undefined
 
     const commitValue = (nextValue: string) => {
-      if (!isControlled) setInternalValue(nextValue);
-      onChange?.(nextValue);
-      setOpen(false);
-      triggerRef.current?.focus();
+      if (!isControlled) setInternalValue(nextValue)
+      onChange?.(nextValue)
+      setOpen(false)
+      triggerRef.current?.focus()
     };
 
     const openMenu = () => {
-      if (disabled) return;
-      setOpen(true);
-      setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : findNextEnabled(options, -1, 1));
+      if (disabled) return
+      setOpen(true)
+      setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : findNextEnabled(options, -1, 1))
     };
 
     const handleTriggerKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -148,33 +152,33 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
-          setHighlightedIndex((i) => findNextEnabled(options, i, 1));
+          setHighlightedIndex((i) => findNextEnabled(options, i, 1))
           break;
         case 'ArrowUp':
           event.preventDefault();
-          setHighlightedIndex((i) => findNextEnabled(options, i, -1));
+          setHighlightedIndex((i) => findNextEnabled(options, i, -1))
           break;
         case 'Home':
           event.preventDefault();
-          setHighlightedIndex(findNextEnabled(options, -1, 1));
+          setHighlightedIndex(findNextEnabled(options, -1, 1))
           break;
         case 'End':
           event.preventDefault();
-          setHighlightedIndex(findNextEnabled(options, options.length, -1));
+          setHighlightedIndex(findNextEnabled(options, options.length, -1))
           break;
         case 'Enter':
         case ' ': {
           event.preventDefault();
           const option = options[highlightedIndex];
-          if (option && !option.disabled) commitValue(option.value);
+          if (option && !option.disabled) commitValue(option.value)
           break;
         }
         case 'Escape':
-          event.preventDefault();
-          setOpen(false);
-          break;
+          event.preventDefault()
+          setOpen(false)
+          break
         default:
-          break;
+          break
       }
     };
 
@@ -183,6 +187,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
         <button
           ref={setTriggerRef}
           type="button"
+          style={{minWidth: `${minWidth}px`}}
           className={[styles.trigger, classNames].filter(Boolean).join(' ')}
           disabled={disabled}
           aria-haspopup="listbox"
@@ -240,11 +245,11 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
           getPortalRoot(),
         )}
       </>
-    );
+    )
   },
-);
+)
 
-Select.displayName = 'Select';
+Select.displayName = 'Select'
 
 function findNextEnabled(options: SelectOption[], from: number, dir: 1 | -1): number {
   const len = options.length;

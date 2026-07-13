@@ -1,34 +1,62 @@
+@use './Select-vars' as *;
+@use '../../shared/_media.scss' as *;
+
 .trigger {
+  // служебная переменная для адаптации скугленья углов
+  --select-border-radius: var(--uikit-border-radius--desktop, 4px);
+
+/*сброс браузерных стилей*/
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  outline: none;
+  border-width: 0;
+  border-style: solid;
+  box-shadow: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  width: 220px;
+  width: 100%;
   height: 40px;
   padding: 0 12px;
-  border-radius: 8px;
-  border: 1px solid var(--uikit-color-track-off, #cbd5e1);
-  background-color: #ffffff;
+
+  border-radius: var(--select-border-radius);
+
+  @include tablet {
+    --select-border-radius: var(--uikit-border-radius--tablet);
+  }
+  @include mobile {
+    --select-border-radius: var(--uikit-border-radius--mobile);
+  }
+
+  border: $select-border-width solid $select-trigger-border-color;
+  background-color: $select-trigger-bg-color;
   box-sizing: border-box;
   margin: 0;
   font: inherit;
-  font-size: 14px;
+  font-size: $select-font-size;
   cursor: pointer;
   transition:
     border-color var(--uikit-transition-fast, 0.18s ease),
     box-shadow var(--uikit-transition-fast, 0.18s ease);
 
   &:hover:not(:disabled) {
-    border-color: var(--uikit-color-primary, #4f46e5);
+    border-color: $select-trigger-border-color--hover;
   }
 
   &:focus-visible {
     outline: none;
-    box-shadow: var(--uikit-focus-ring, 0 0 0 3px rgba(79, 70, 229, 0.35));
   }
 
   &[data-open='true'] {
-    border-color: var(--uikit-color-primary, #4f46e5);
+    border-color: $select-trigger-border-color--open;
   }
 
   &:disabled {
@@ -41,10 +69,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #1f2937;
+  color: $select-value-text-color;
 
   &[data-placeholder='true'] {
-    color: #9ca3af;
+    color: $select-placeholder-color;
   }
 }
 
@@ -53,7 +81,7 @@
   flex-shrink: 0;
   width: 12px;
   height: 12px;
-  color: #6b7280;
+  color: $select-chevron-color;
   transition: transform var(--uikit-transition-medium, 0.25s cubic-bezier(0.4, 0, 0.2, 1));
 
   &[data-open='true'] {
@@ -74,9 +102,9 @@
   max-height: 240px;
   overflow-y: auto;
   border-radius: 8px;
-  border: 1px solid var(--uikit-color-track-off, #cbd5e1);
-  background-color: #ffffff;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  border: $select-border-width solid $select-panel-border-color;
+  background-color: $select-panel-bg-color;
+  box-shadow: 0 8px 24px $select-panel-shadow-color;
   box-sizing: border-box;
 
   opacity: 0;
@@ -91,27 +119,47 @@
     transform: translateY(0);
     pointer-events: auto;
   }
+
+    /* стили для всех chromium браузеров */
+  &::-webkit-scrollbar {
+    width: 4px; 
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent; 
+    border-radius: 0px;
+    margin: 4px 0px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $select-panel-scroll-thumb-color; 
+    //TODO: сделать адаптацию для разных экранов
+    border-radius: 12px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: $select-panel-scroll-thumb-color--hover; 
+  }
+
 }
 
 .option {
   padding: 8px 10px;
   border-radius: 6px;
   font-size: 14px;
-  color: #1f2937;
+  color: $select-option-text-color;
   cursor: pointer;
   transition: background-color var(--uikit-transition-fast, 0.18s ease);
 
   &[data-highlighted='true'] {
-    background-color: rgba(79, 70, 229, 0.1);
+    background-color: $select-option--highlight;
   }
 
   &[data-selected='true'] {
-    color: var(--uikit-color-primary, #4f46e5);
+    color: $select-option-text-color--selected;
     font-weight: 500;
   }
 
   &[data-disabled='true'] {
-    color: #9ca3af;
+    color: $select-option-text-color--disabled;
     cursor: not-allowed;
   }
 }

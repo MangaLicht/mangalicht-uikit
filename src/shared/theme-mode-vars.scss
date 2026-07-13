@@ -21,22 +21,37 @@
     --uikit-hex-blue-7: #0053a7;
     --uikit-hex-blue-8: #00428a;
 
-    --uikit-rgba-mask-black: rgb(0, 0, 0, 0.45);
-    --uikit-rgba-mask-white: rgba(255, 255, 255, 0.3);
-    --uikit-rgba-mask-accent: rgb(0, 162, 244, 0.3);
+    --uikit-rgba-mask-black-4: rgb(0, 0, 0, 0.4);
+    --uikit-rgba-mask-black-3: rgb(0, 0, 0, 0.3);
+    --uikit-rgba-mask-black-2: rgb(0, 0, 0, 0.2);
+    --uikit-rgba-mask-black-1: rgb(0, 0, 0, 0.12);
+    --uikit-rgba-mask-white-4: rgba(255, 255, 255, 0.4);
+    --uikit-rgba-mask-white-3: rgba(255, 255, 255, 0.3);
+    --uikit-rgba-mask-white-2: rgba(255, 255, 255, 0.2);
+    --uikit-rgba-mask-white-1: rgba(255, 255, 255, 0.12);
+    --uikit-rgba-mask-accent-4: rgb(0, 162, 244, 0.4);
+    --uikit-rgba-mask-accent-3: rgb(0, 162, 244, 0.3);
+    --uikit-rgba-mask-accent-2: rgb(0, 162, 244, 0.2);
+    --uikit-rgba-mask-accent-1: rgb(0, 162, 244, 0.12);
 
     // служебные переменные
     --uikit-color-bg: var(--uikit-hex-white);
-    --uikit-color-bg-content-primary: var(--uikit-hex-gray-2);
+    --uikit-color-bg-content-primary: var(--uikit-hex-gray-0);
+    --uikit-color-bg-content-secondary: var(--uikit-hex-gray-2);
     --uikit-color-bg-content-accent: var(--uikit-hex-gray-3);
-    --uikit-color-bg-content-secondary: var(--uikit-hex-gray-5);
     --uikit-color-tooltip-bg: var(--uikit-hex-gray-6);
     --uikit-color-border: var(--uikit-hex-gray-3);
-    --uikit-color-border-hover: var(--uikit-hex-gray-2);
+    --uikit-color-border--hover: var(--uikit-hex-gray-2);
     --uikit-color-text-primary: var(--uikit-hex-black);
     --uikit-color-text-secondary: var(--uikit-hex-gray-6);
-    --uikit-color-text-accent: var(--uikit-hex-white);
-    --uikit-color-text-hover: var(--uikit-hex-gray-4);
+    --uikit-color-text--accent: var(--uikit-hex-white);
+    --uikit-color-text--hover: var(--uikit-hex-gray-4);
     --uikit-color-accent: var(--uikit-hex-blue-4);
-    --uikit-color-accent-hover: var(--uikit-hex-blue-3);
+    --uikit-color-accent--hover: var(--uikit-hex-blue-3);
+
+    --uikit-soft-shadow: var(--uikit-rgba-mask-black-1);
+
+    --uikit-border-radius--desktop: 6px;
+    --uikit-border-radius--tablet: 8px;
+    --uikit-border-radius--mobile: 12px;
 }
