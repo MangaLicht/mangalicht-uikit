@@ -14,6 +14,11 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    viewport: {
+      viewports: {
+      },
+        disable: false,
+      },
     layout: 'centered',
   },
 };
