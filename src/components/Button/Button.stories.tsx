@@ -89,6 +89,7 @@ export const AllVariants: Story = {
       <Button labelText="Bordered" style="bordered" onClick={() => {}} />
       <Button labelText="BorderedAccent" style="borderedAccent" onClick={() => {}} />
       <Button labelText="Transparent" style="transparent" onClick={() => {}} />
+      <Button labelText="Without Anim" style="default" data-animation='none' onClick={() => {}} />
       <Button labelText="Disabled" style="default" disabled onClick={() => {}} />
     </div>
   ),

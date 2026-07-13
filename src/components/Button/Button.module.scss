@@ -50,7 +50,7 @@
     color $uikit-transition-normal,
     transform $uikit-transition-fast;
 
-  &:active:not(:disabled) {
+  &[data-animation='default']:active:not(:disabled) {
     transform: translateY(1px);
   }
 
