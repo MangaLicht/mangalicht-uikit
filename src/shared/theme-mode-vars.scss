@@ -1,18 +1,11 @@
-:root {
-    // служебные переменные
-    --uikit-color-bg: var(--uikit-hex-white);
-    --uikit-color-bg-content-primary: var(--uikit-hex-gray-0);
-    --uikit-color-bg-content-secondary: var(--uikit-hex-gray-2);
-    --uikit-color-bg-content-accent: var(--uikit-hex-gray-3);
-    --uikit-color-tooltip-bg: var(--uikit-hex-gray-6);
-    --uikit-color-border: var(--uikit-hex-gray-3);
-    --uikit-color-border--hover: var(--uikit-hex-gray-2);
-    --uikit-color-text-primary: var(--uikit-hex-black);
-    --uikit-color-text-secondary: var(--uikit-hex-gray-6);
-    --uikit-color-text--accent: var(--uikit-hex-white);
-    --uikit-color-text--hover: var(--uikit-hex-gray-4);
-    --uikit-color-accent: var(--uikit-hex-blue-4);
-    --uikit-color-accent--hover: var(--uikit-hex-blue-3);
+body {
+    background-color: var(--uikit-bg-color);
+    transition: background-color 0.18s ease;
+}
 
-    --uikit-soft-shadow: var(--uikit-rgba-mask-black-1);
+body[data-theme='light'] {
+    --uikit-bg-color: var(--uikit-hex-white);
+}
+body[data-theme='dark'] {
+    --uikit-bg-color: var(--uikit-hex-black);
 }
