@@ -1,0 +1,20 @@
+// default style
+$btn-default-bg-color: var(--uikit-component-bg-color--accent);
+$btm-default-highlight-mask: var(--uikit-component-hover-mask);
+$btn-default-text: var(--uikit-text-secondary);
+$btn-default-text--hover: var(--uikit-text-secondary--hover);
+// highlight style
+$btm-highlight-bg-color: var(--uikit-component-bg-accent-color);
+$btm-highlight-highlight-mask: var(--uikit-component-hover-mask--accent);
+$btm-highlight-text: var(--uikit-text-highlight);
+$btm-highlight-text--hover: var(--uikit-text-highlight--hover);
+// bordered style
+$btn-bordered-border-color: var(--uikit-block-border-primary-color);
+$btn-bordered-border-color--hover: var(--uikit-block-border-primary-color--hover);
+$btn-bordered-text: var(--uikit-block-border-primary-color);
+$btn-bordered-text--hover: var(--uikit-block-border-primary-color--hover);
+// bordered accent style
+$btn-bordacct-border-color: var(--uikit-block-border-highlight-color);
+$btn-bordacct-border-color--hover: var(--uikit-block-border-highlight-color--hover);
+$btn-bordacct-text: var(--uikit-block-border-highlight-color);
+$btn-bordacct-text--hover: var(--uikit-block-border-highlight-color--hover);

@@ -1,4 +1,5 @@
 @use '../../shared/computed-vars.scss' as *;
+@use './Button-vars' as *;
 @use '../../shared/_media.scss' as *;
 
 .button {
@@ -39,6 +40,7 @@
   line-height: 1;
   cursor: pointer;
   & span {
+    color: inherit;
     user-select: none;
   }
   // анимация нажатия
@@ -55,7 +57,7 @@
   }
 
   &:focus-visible {
-    outline: 1px solid var(--uikit-color-accent);
+    outline: 1px solid var(--uikit-hex-blue-3);
   }
 
   &:disabled {
@@ -73,8 +75,11 @@
 }
 
 .default {
-  background-color: var(--uikit-color-bg-content-accent);
-  color: var(--uikit-color-text-secondary);
+  background-color: $btn-default-bg-color;
+  color: $btn-default-text;
+
+  &:hover:not(:disabled) {color: $btn-default-text--hover;}
+  &:active:not(:disabled) {color: $btn-default-text--hover;}
 
   &::after {
       content: '';
@@ -84,7 +89,7 @@
       width: 100%;
       height: 100%;
       border-radius: inherit;
-      background-color: var(--uikit-rgba-mask-white);
+      background-color: $btm-default-highlight-mask;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease;
@@ -92,9 +97,13 @@
 }
 
 .highlight {
-  background-color: var(--uikit-color-accent);
+  background-color: $btm-highlight-bg-color;
   border-color: transparent;
-  color: var(--uikit-color-text-accent) !important;
+  color: $btm-highlight-text;
+
+  &:hover:not(:disabled) { color: $btm-highlight-text--hover; }
+  &:active:not(:disabled) { color: $btm-highlight-text--hover; }
+
   &::after {
     content: '';
     position: absolute;
@@ -103,7 +112,7 @@
     width: 100%;
     height: 100%;
     border-radius: inherit;
-    background-color: var(--uikit-rgba-mask-accent);
+    background-color: $btm-highlight-highlight-mask;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -113,46 +122,42 @@
 .bordered {  
   background-color: transparent;
   border-width: 2px !important;
-  color: var(--uikit-color-text-secondary);
-  border-color: var(--uikit-color-border);
+  color: $btn-bordered-text;
+  border-color: $btn-bordered-border-color;
 
-  &:hover {
-    color: var(--uikit-color-text-hover);
-    border-color: var(--uikit-color-border-hover);
+  &:hover:not(:disabled) {
+    color: $btn-bordered-text--hover;
+    border-color: $btn-bordered-border-color--hover;
   }
   &:active {
-    color: var(--uikit-color-text-hover);
-    border-color: var(--uikit-color-border-hover);
+    color: $btn-bordered-text--hover;
+    border-color: $btn-bordered-border-color--hover;
   }
 }
 
 .borderedAccent {
   background-color: transparent;
   border-width: 2px !important;
-  color: var(--uikit-color-accent);
-  border-color: var(--uikit-color-accent);
+  color: $btn-bordacct-text;
+  border-color: $btn-bordacct-border-color;
 
-  &:hover {
-    color: var(--uikit-color-accent-hover);
-    border-color: var(--uikit-color-accent-hover);
+  &:hover:not(:disabled) {
+    color: $btn-bordacct-text--hover;
+    border-color: $btn-bordacct-border-color--hover;
   }
-  &:active {
-    color: var(--uikit-color-accent-hover);
-    border-color: var(--uikit-color-accent-hover);
+  &:active:not(:disabled) {
+    color: $btn-bordacct-text--hover;
+    border-color: $btn-bordacct-border-color--hover;
   }
 }
 
 .transparent {
   background-color: transparent;
   border-color: transparent;
-  color: var(--uikit-color-text-secondary);
+  color: $btn-default-text;
 
-  &:hover {
-    color: var(--uikit-color-text-hover);
-  }
-  &:active {
-    color: var(--uikit-color-text-hover);
-  }
+  &:hover:not(:disabled) {color: $btn-default-text--hover;}
+  &:active:not(:disabled) {color: $btn-default-text--hover;}
   
   &::after {
       content: '';
@@ -162,7 +167,7 @@
       width: 100%;
       height: 100%;
       border-radius: inherit;
-      background-color: var(--uikit-rgba-mask-white);
+      background-color: $btm-default-highlight-mask;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease;

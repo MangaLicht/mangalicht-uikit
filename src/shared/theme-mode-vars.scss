@@ -1,39 +1,4 @@
 :root {
-    // gray
-    --uikit-hex-white: #FFFFFF;
-    --uikit-hex-gray-0: #E7E7E7;
-    --uikit-hex-gray-1: #C4C8CC;
-    --uikit-hex-gray-2: #AAB0B5;
-    --uikit-hex-gray-3: #90959B;
-    --uikit-hex-gray-4: #76797B;
-    --uikit-hex-gray-5: #444647;
-    --uikit-hex-gray-6: #2b2b2c;
-    --uikit-hex-gray-7: #1A1A1A;
-    --uikit-hex-black: #000000;
-    // blue
-    --uikit-hex-blue-0: #c5ebff;
-    --uikit-hex-blue-1: #99dcff;
-    --uikit-hex-blue-2: #19bdfa;
-    --uikit-hex-blue-3: #00a2f4;
-    --uikit-hex-blue-4: #0078d0;
-    --uikit-hex-blue-5: #0064c1;
-    --uikit-hex-blue-6: #0050a0;
-    --uikit-hex-blue-7: #0053a7;
-    --uikit-hex-blue-8: #00428a;
-
-    --uikit-rgba-mask-black-4: rgb(0, 0, 0, 0.4);
-    --uikit-rgba-mask-black-3: rgb(0, 0, 0, 0.3);
-    --uikit-rgba-mask-black-2: rgb(0, 0, 0, 0.2);
-    --uikit-rgba-mask-black-1: rgb(0, 0, 0, 0.12);
-    --uikit-rgba-mask-white-4: rgba(255, 255, 255, 0.4);
-    --uikit-rgba-mask-white-3: rgba(255, 255, 255, 0.3);
-    --uikit-rgba-mask-white-2: rgba(255, 255, 255, 0.2);
-    --uikit-rgba-mask-white-1: rgba(255, 255, 255, 0.12);
-    --uikit-rgba-mask-accent-4: rgb(0, 162, 244, 0.4);
-    --uikit-rgba-mask-accent-3: rgb(0, 162, 244, 0.3);
-    --uikit-rgba-mask-accent-2: rgb(0, 162, 244, 0.2);
-    --uikit-rgba-mask-accent-1: rgb(0, 162, 244, 0.12);
-
     // служебные переменные
     --uikit-color-bg: var(--uikit-hex-white);
     --uikit-color-bg-content-primary: var(--uikit-hex-gray-0);
@@ -50,8 +15,4 @@
     --uikit-color-accent--hover: var(--uikit-hex-blue-3);
 
     --uikit-soft-shadow: var(--uikit-rgba-mask-black-1);
-
-    --uikit-border-radius--desktop: 6px;
-    --uikit-border-radius--tablet: 8px;
-    --uikit-border-radius--mobile: 12px;
 }
