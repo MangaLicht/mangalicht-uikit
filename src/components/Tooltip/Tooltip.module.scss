@@ -1,15 +1,18 @@
+@use './Tooltip-vars' as *;
+
 .tooltip {
   position: fixed;
   z-index: 1000;
   max-width: 240px;
   padding: 6px 10px;
   border-radius: 6px;
-  background-color: var(--uikit-color-tooltip-bg);
-  color: var(--uikit-color-text-accent);
+  background-color: $tooltip-bg-color;
+  color: $tooltip-text-color;
   font-size: 12px;
   line-height: 1.4;
   white-space: normal;
   pointer-events: none;
+  box-shadow: 0 2px 8px $tooltip-shadow-color;
   opacity: 0;
   transition:
     opacity var(--uikit-transition-fast, 0.18s ease),
@@ -32,7 +35,7 @@
       left: 50%;
       transform: translateX(-50%);
       border: 5px solid transparent;
-      border-top-color: var(--uikit-color-tooltip-bg);;
+      border-top-color: $tooltip-bg-color;
     }
   }
 
@@ -51,7 +54,7 @@
       left: 50%;
       transform: translateX(-50%);
       border: 5px solid transparent;
-      border-bottom-color: var(--uikit-color-tooltip-bg);;
+      border-bottom-color: $tooltip-bg-color;
     }
   }
 

@@ -6,7 +6,6 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -53,5 +52,8 @@
     "typescript": "^5.6.3",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.8.0"
   }
 }

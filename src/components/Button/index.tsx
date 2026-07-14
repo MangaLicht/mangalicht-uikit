@@ -1,26 +1,29 @@
-import React, { forwardRef } from 'react';
-import styles from './Button.module.scss';
+import React, { forwardRef } from 'react'
+import styles from './Button.module.scss'
 
-export type ButtonStyle = 'default' | 'highlight' | 'bordered' | 'borderedAccent' | 'transparent';
+export type ButtonAnimation = 'default' | 'none'
+export type ButtonStyle = 'default' | 'highlight' | 'bordered' | 'borderedAccent' | 'transparent'
 
 export interface ButtonProps 
 {
   /** Заблокировать кнопку */
-  disabled?: boolean;
+  disabled?: boolean
   /** Дополнительный className для кастомных стилей */
-  classNames?: string;
+  classNames?: string
   /** Колбэк клика по кнопке */
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   /** Визуальный вариант оформления */
-  style?: ButtonStyle;
+  style?: ButtonStyle
   /** Текст лейбла внутри кнопки */
-  labelText?: string;
+  labelText?: string
   /** type для нативного button, по умолчанию "button" */
-  type?: 'button' | 'submit' | 'reset';
+  type?: 'button' | 'submit' | 'reset'
   /** Дочерний элемент (например, svg-иконка) перед текстом лейбла */
-  iconStart?: React.ReactNode;
+  iconStart?: React.ReactNode
   /** Дочерний элемент (например, svg-иконка) после текста лейбла */
-  iconEnd?: React.ReactNode;
+  iconEnd?: React.ReactNode
+  /** Режимы анимации */
+  animation?: ButtonAnimation
 }
 
 const STYLE_TO_CLASS: Record<ButtonStyle, string> = {
@@ -47,11 +50,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type = 'button',
       iconStart,
       iconEnd,
+      animation = 'default',
       ...rest
     },
     ref,
   ) => {
-    const variantClass = STYLE_TO_CLASS[style] ?? styles.default;
+    const variantClass = STYLE_TO_CLASS[style] ?? styles.default
 
     return (
       <button
@@ -61,6 +65,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           .filter(Boolean)
           .join(' ')}
         disabled={disabled}
+        data-animation={animation}
         onClick={onClick}
         {...rest}
       >
