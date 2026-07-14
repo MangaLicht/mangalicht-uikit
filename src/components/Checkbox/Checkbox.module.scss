@@ -1,4 +1,5 @@
 @use '../../shared/_computed-vars.scss' as *;
+@use './Checkbox-vars' as *;
 
 .wrapper {
   display: inline-flex;
@@ -34,7 +35,7 @@
   flex-shrink: 0;
   width: 20px;
   height: 20px;
-  border: 2px solid var(--uikit-color-bg-content-accent);
+  border: 2px solid $checkbox-border-color;
   border-radius: 6px;
   background-color: transparent;
   box-sizing: border-box;
@@ -42,6 +43,18 @@
     background-color $uikit-transition-fast,
     border-color $uikit-transition-fast,
     border-radius $uikit-transition-fast;
+
+  &:hover:not([data-disabled='true']) {
+    border-color: $checkbox-border-color--hover;
+
+    &[data-checked='true'] {
+      &[data-style='radio']::after {
+        background-color: $checkbox-checked-bg-color--hover;
+      }
+      background-color: $checkbox-checked-bg-color--hover;
+      border-color: $checkbox-border-color--active--hover;
+    }
+  }
 
   // "radio" — круглая форма вместо квадратной со скруглением
   &[data-style='radio'] {
@@ -69,20 +82,20 @@
             left: 2px;
             width: 12px;
             height: 12px;
-            background-color: var(--uikit-color-accent);
+            background-color: $checkbox-checked-bg-color;
         }
     }
   }
   &[data-checked='true'] {
-    background-color: var(--uikit-color-accent);
-    border-color: var(--uikit-color-accent);
+    background-color: $checkbox-checked-bg-color;
+    border-color: $checkbox-border-color--active;
   }
 }
 
 .checkmark {
   width: 12px;
   height: 12px;
-  color: #ffffff;
+  color: $checkbox-checkmark-color;
   opacity: 0;
   transform: scale(0.4);
   transform-origin: center;
