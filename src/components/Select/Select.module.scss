@@ -102,7 +102,7 @@
   max-height: 240px;
   overflow-y: auto;
   border-radius: 8px;
-  border: $select-border-width solid $select-panel-border-color;
+  border: 0 solid $select-panel-border-color;
   background-color: $select-panel-bg-color;
   box-shadow: 0 8px 24px $select-panel-shadow-color;
   box-sizing: border-box;
