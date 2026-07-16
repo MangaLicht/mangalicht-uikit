@@ -1,0 +1,38 @@
+@use './_Block-vars.scss' as *;
+@use '../../shared/media' as *;
+@use '../../shared/mixins' as *;
+
+.blockCard {
+    --border-radius: var(--uikit-border-radius--desktop);
+
+    width: inherit;
+    height: inherit;
+    padding: $blockcard-padding;
+    border-radius: calc(var(--border-radius) + $blockcard-padding);
+    overflow: hidden;
+    
+    @include tablet {--border-radius: var(--uikit-border-radius--tablet);}
+    @include mobile {--border-radius: var(--uikit-border-radius--mobile);}
+
+    & span {
+        column-gap: calc(rem(4));
+    }
+}
+
+.title {
+    color: $blockcard-title-color;
+    text-align: left;
+    text-decoration: none;
+    font-weight: $blockcard-title-weight;
+    font-style: normal;
+}
+
+.default {
+    background-color: $blockcard-bg-color;
+    box-shadow: 0 8px 24px 0px $blockcard-shadow-color;
+}
+
+.outlined {
+    background-color: transparent;
+    border: $blockcard-border-width solid $blockcard-border-color; 
+}

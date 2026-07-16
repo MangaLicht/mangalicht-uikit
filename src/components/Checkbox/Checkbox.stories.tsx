@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { Checkbox } from './';
+import { Checkbox } from './index';
 
-const meta: Meta<typeof Checkbox> = {
+const meta = {
   title: 'Components/Checkbox',
   component: Checkbox,
   argTypes: {
@@ -17,9 +16,7 @@ const meta: Meta<typeof Checkbox> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Checkbox>;
 
-/** Управляемый пример с реальным состоянием React — для интерактивных историй */
 const ControlledCheckbox = (args: React.ComponentProps<typeof Checkbox>) => {
   const [checked, setChecked] = useState(args.checked ?? false);
   return (
@@ -34,7 +31,7 @@ const ControlledCheckbox = (args: React.ComponentProps<typeof Checkbox>) => {
   );
 };
 
-export const Default: Story = {
+export const Default = {
   render: ControlledCheckbox,
   args: {
     checked: false,
@@ -43,7 +40,7 @@ export const Default: Story = {
   },
 };
 
-export const Radio: Story = {
+export const Radio = {
   render: ControlledCheckbox,
   args: {
     checked: false,
@@ -52,7 +49,7 @@ export const Radio: Story = {
   },
 };
 
-export const CheckedByDefault: Story = {
+export const CheckedByDefault = {
   render: ControlledCheckbox,
   args: {
     checked: true,
@@ -61,7 +58,7 @@ export const CheckedByDefault: Story = {
   },
 };
 
-export const Disabled: Story = {
+export const Disabled = {
   render: ControlledCheckbox,
   args: {
     checked: false,
@@ -71,7 +68,7 @@ export const Disabled: Story = {
   },
 };
 
-export const DisabledChecked: Story = {
+export const DisabledChecked = {
   render: ControlledCheckbox,
   args: {
     checked: true,
@@ -81,7 +78,7 @@ export const DisabledChecked: Story = {
   },
 };
 
-export const WithoutLabel: Story = {
+export const WithoutLabel = {
   render: ControlledCheckbox,
   args: {
     checked: false,
@@ -89,7 +86,7 @@ export const WithoutLabel: Story = {
   },
 };
 
-export const Uncontrolled: Story = {
+export const Uncontrolled = {
   name: 'Uncontrolled (defaultChecked)',
   render: () => (
     <Checkbox
@@ -101,7 +98,7 @@ export const Uncontrolled: Story = {
   ),
 };
 
-export const AllVariants: Story = {
+export const AllVariants = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ display: 'flex', gap: 24 }}>

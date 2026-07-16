@@ -7,9 +7,9 @@ import React, {
   useState,
 } from 'react'
 import { createPortal } from 'react-dom'
-import { getPortalRoot } from '../../shared/utils/portalRoot'
-import { useClickOutside } from '../../hooks/useClickOutside'
-import { useAnchoredPosition } from '../../hooks/useAnchoredPosition'
+import { getPortalRoot } from '@shared/utils/portalRoot'
+import { useClickOutside } from '@hooks/useClickOutside'
+import { useAnchoredPosition } from '@hooks/useAnchoredPosition'
 import styles from './Select.module.scss'
 
 // TODO: убрать в отдельный файл или заменить иконночным шрифтом

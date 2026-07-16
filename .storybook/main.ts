@@ -1,4 +1,8 @@
+/// <reference types="node" />
+import * as path from 'path';
 import type { StorybookConfig } from '@storybook/react-webpack5';
+
+declare const __dirname: string;
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(ts|tsx)'],
@@ -88,6 +92,16 @@ const config: StorybookConfig = {
         ],
       },
     );
+
+    config.resolve = config.resolve ?? { alias: {} };
+    config.resolve.alias = {
+      ...(config.resolve.alias ?? {}),
+      '@': path.resolve(__dirname, '../src'),
+      '@components': path.resolve(__dirname, '../src/components'),
+      '@hooks': path.resolve(__dirname, '../src/hooks'),
+      '@shared': path.resolve(__dirname, '../src/shared'),
+      '@icons': path.resolve(__dirname, '../src/icons'),
+    };
 
     return config;
   },

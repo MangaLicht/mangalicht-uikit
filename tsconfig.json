@@ -5,6 +5,15 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
+    "ignoreDeprecations": "6.0",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@shared/*": ["shared/*"],
+      "@icons/*": ["icons/*"]
+    },
 
     "declaration": true,
     "declarationDir": "dist",

@@ -6,9 +6,9 @@ import React, {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { getPortalRoot } from '../../shared/utils/portalRoot';
-import { useMouseTracking } from '../../hooks/useMouseTracking';
-import { useSmoothFollow } from '../../hooks/useSmoothFollow';
+import { getPortalRoot } from '@/shared/utils/portalRoot';
+import { useMouseTracking } from '@/hooks/useMouseTracking';
+import { useSmoothFollow } from '@/hooks/useSmoothFollow';
 import styles from './Tooltip.module.scss';
 
 export type TooltipPosition = 'top' | 'bottom';

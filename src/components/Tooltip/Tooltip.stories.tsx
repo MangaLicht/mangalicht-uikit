@@ -1,9 +1,8 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { Tooltip } from './';
+import { Tooltip } from './index'
 import { Button } from '../Button'
 
-const meta: Meta<typeof Tooltip> = {
+const meta = {
   title: 'Components/Tooltip',
   component: Tooltip,
   argTypes: {
@@ -21,7 +20,6 @@ const meta: Meta<typeof Tooltip> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Tooltip>;
 
 // простая кнопка-триггер многоразового использования в историях
 const TriggerButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
@@ -40,12 +38,12 @@ const TriggerButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => 
   </button>
 );
 
-export const Top: Story = {
+export const Top = {
   args: {
     content: 'Подсказка сверху',
     position: 'top',
   },
-  render: (args) => (
+  render: (args: any) => (
     <div style={{ display: 'flex', gap: 12 }}>
       <Tooltip {...args}>
         <Button labelText='Button' />
@@ -54,65 +52,65 @@ export const Top: Story = {
   ),
 };
 
-export const Bottom: Story = {
+export const Bottom = {
   args: {
     content: 'Подсказка снизу',
     position: 'bottom',
   },
-  render: (args) => (
+  render: (args: any) => (
     <Tooltip {...args}>
       <TriggerButton />
     </Tooltip>
   ),
 };
 
-export const LongContent: Story = {
+export const LongContent = {
   args: {
     content:
       'Длинный текст подсказки, который переносится на несколько строк благодаря max-width в стилях компонента',
     position: 'top',
   },
-  render: (args) => (
+  render: (args: any) => (
     <Tooltip {...args}>
       <TriggerButton />
     </Tooltip>
   ),
 };
 
-export const Disabled: Story = {
+export const Disabled = {
   args: {
     content: 'Эта подсказка никогда не появится',
     position: 'top',
     disabled: true,
   },
-  render: (args) => (
+  render: (args: any) => (
     <Tooltip {...args}>
       <TriggerButton />
     </Tooltip>
   ),
 };
 
-export const NoDelay: Story = {
+export const NoDelay = {
   name: 'Instant show (showDelay = 0)',
   args: {
     content: 'Появляется мгновенно',
     position: 'top',
     showDelay: 0,
   },
-  render: (args) => (
+  render: (args: any) => (
     <Tooltip {...args}>
       <TriggerButton />
     </Tooltip>
   ),
 };
 
-export const OnPlainText: Story = {
+export const OnPlainText = {
   name: 'On a plain HTML tag',
   args: {
     content: 'Работает и на обычном span',
     position: 'top',
   },
-  render: (args) => (
+  render: (args: any) => (
     <Tooltip {...args}>
       <span style={{ textDecoration: 'underline dotted', cursor: 'help' }}>
         Текст с подсказкой
@@ -121,7 +119,7 @@ export const OnPlainText: Story = {
   ),
 };
 
-export const MultipleTriggers: Story = {
+export const MultipleTriggers = {
   render: () => (
     <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
       <Tooltip content="Подсказка сверху" position="top">

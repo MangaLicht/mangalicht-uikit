@@ -1,8 +1,7 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './';
+import React from 'react'
+import { Button } from './index'
 
-const meta: Meta<typeof Button> = {
+const meta = {
   title: 'Components/Button',
   component: Button,
   argTypes: {
@@ -16,37 +15,36 @@ const meta: Meta<typeof Button> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Button>;
 
-export const Default: Story = {
+export const Default = {
   args: {
     labelText: 'Нажми меня',
     style: 'default',
   },
 };
 
-export const Highlight: Story = {
+export const Highlight = {
   args: {
     labelText: 'Акцентная кнопка',
     style: 'highlight',
   },
 };
 
-export const Bordered: Story = {
+export const Bordered = {
   args: {
     labelText: 'С рамкой',
     style: 'bordered',
   },
 };
 
-export const BorderedAccent: Story = {
+export const BorderedAccent = {
   args: {
     labelText: 'С рамкой',
     style: 'borderedAccent',
   },
 };
 
-export const Disabled: Story = {
+export const Disabled = {
   args: {
     labelText: 'Недоступно',
     style: 'default',
@@ -54,7 +52,7 @@ export const Disabled: Story = {
   },
 };
 
-export const WithIcon: Story = {
+export const WithIcon = {
   name: 'With icons (iconStart / iconEnd)',
   render: () => (
     <div style={{ display: 'flex', gap: 12 }}>
@@ -74,14 +72,14 @@ export const WithIcon: Story = {
   ),
 };
 
-export const Transparent: Story = {
+export const Transparent = {
   args: {
     labelText: 'Прозрачная',
     style: 'transparent',
   },
 };
 
-export const AllVariants: Story = {
+export const AllVariants = {
   render: () => (
     <div style={{ display: 'flex', gap: 12 }}>
       <Button labelText="Default" style="default" onClick={() => {}} />
@@ -106,15 +104,15 @@ const PlusIcon = () => (
   </svg>
 );
 
-const ArrowRightIcon = () => (
-  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M3 8h10M9 4l4 4-4 4"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-    />
-  </svg>
+const ArrowRightIcon = () => React.createElement(
+  'svg',
+  { viewBox: '0 0 16 16', xmlns: 'http://www.w3.org/2000/svg' },
+  React.createElement('path', {
+    d: 'M3 8h10M9 4l4 4-4 4',
+    stroke: 'currentColor',
+    strokeWidth: '2',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    fill: 'none',
+  }),
 );

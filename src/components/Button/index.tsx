@@ -34,11 +34,6 @@ const STYLE_TO_CLASS: Record<ButtonStyle, string> = {
   transparent: styles.transparent,
 };
 
-/**
- * Button — базовая кнопка с тремя вариантами оформления:
- * "default" (залитая основным цветом), "highlight" (акцентная на подложке)
- * и "bordered" (прозрачная с рамкой).
- */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
