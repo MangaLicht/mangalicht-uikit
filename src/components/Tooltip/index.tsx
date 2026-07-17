@@ -18,9 +18,9 @@ export interface TooltipProps {
   content: React.ReactNode;
   /** Элемент, при наведении на который появляется подсказка */
   children: React.ReactElement<{
-    onMouseEnter?: React.MouseEventHandler;
-    onMouseMove?: React.MouseEventHandler;
-    onMouseLeave?: React.MouseEventHandler;
+    onMouseEnter?: React.MouseEventHandler<HTMLElement>;
+    onMouseMove?: React.MouseEventHandler<HTMLElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLElement>;
   }>;
   /** Появляется над курсором или под курсором */
   position?: TooltipPosition;

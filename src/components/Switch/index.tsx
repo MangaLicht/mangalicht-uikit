@@ -1,19 +1,17 @@
 import React, { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import styles from './Switch.module.scss';
 
-export interface SwitchProps {
+export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'checked' | 'onChange' | 'type' | 'value' | 'size'> {
   /** Текущее состояние переключателя */
   checked?: boolean;
   /** Колбэк, вызываемый при переключении */
   onChange: (checked: boolean) => void;
   /** Подпись рядом с переключателем */
-  label?: string;
+  labelText?: string;
   /** Заблокировать переключатель */
   disabled?: boolean;
   /** name для нативного input[type=checkbox], полезно для форм */
   name?: string;
-  /** Дополнительный className для обёртки */
-  className?: string;
   /** Размер switch*/
   size?: 'default' | 'small';
 }
@@ -25,7 +23,7 @@ export interface SwitchProps {
  * Построен на нативном input[type=checkbox] для доступности (клавиатура, screen-readers).
  */
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
-  ({ checked, onChange, label, disabled = false, name, className, size = 'default' }, ref) => {
+  ({ checked, onChange, labelText: label, disabled = false, name, className, size = 'default' }, ref) => {
     const generatedId = useId();
     const inputId = `uikit-switch-${generatedId}`;
 
