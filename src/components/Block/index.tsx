@@ -52,7 +52,7 @@ export const Block: FC<IBlockProps> = ({
     const heightWrapper: string = (height != null && height > 0) ? `${height}px` : '100%'
 
     return (
-        <div style={{width: widthWrapper, height: heightWrapper}}>
+        <div className={styles.blockWrapper} style={{width: widthWrapper, height: heightWrapper}}>
             { title && 
                 <span className={styles.titleWrapper}>
                     {variantTitle[titleStyle]}

@@ -2,6 +2,11 @@
 @use '../../shared/media' as *;
 @use '../../shared/mixins' as *;
 
+.blockWrapper {
+    display: block;
+    align-items: center;
+}
+
 .block {
     --matched-border-radius: var(--uikit-border-radius--desktop);
 
@@ -14,7 +19,7 @@
     @include tablet {--matched-border-radius: var(--uikit-border-radius--tablet);}
     @include mobile {--matched-border-radius: var(--uikit-border-radius--mobile);}
 
-    & > div > .block {
+    & .blockWrapper > .block {
         border-radius: var(--uikit-border-radius--desktop) !important;
         @include tablet {border-radius: var(--uikit-border-radius--tablet) !important;}
         @include mobile {border-radius: var(--uikit-border-radius--mobile) !important;}
