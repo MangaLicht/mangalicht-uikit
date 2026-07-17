@@ -1,12 +1,11 @@
 import React from 'react'
 import type { FC, JSX, ReactElement, ReactNode } from 'react'
-
-import styles from './Block.module.scss'
 import { validateChildren } from '@shared/utils/validateChildren'
 import { Button } from '@/components/Button'
+import styles from './Block.module.scss'
 
-export interface IBlockCardProps extends IUIKitProps {
-    style: BlockCardStyle
+export interface IBlockProps extends IUIKitProps {
+    style: BlockStyle
     title?: string
     titleStyle?: TitleStyle
     titleChildren?: ReactNode | ReactElement
@@ -15,15 +14,15 @@ export interface IBlockCardProps extends IUIKitProps {
     children?: ReactNode | ReactElement
 }
 
-export type BlockCardStyle = 'default' | 'outlined'
+export type BlockStyle = 'default' | 'outlined'
 export type TitleStyle = 1 | 2 | 3 | 4 | 5 | 6
 
-const STYLE_TO_CLASS: Record<BlockCardStyle, string> = {
+const STYLE_TO_CLASS: Record<BlockStyle, string> = {
     default: styles.default,
     outlined: styles.outlined
 }
 
-export const BlockCard: FC<IBlockCardProps> = ({
+export const Block: FC<IBlockProps> = ({
     style,
     title,
     titleStyle = 2,
@@ -55,16 +54,16 @@ export const BlockCard: FC<IBlockCardProps> = ({
     return (
         <div style={{width: widthWrapper, height: heightWrapper}}>
             { title && 
-                <span className={styles.blockCard__titleWrapper}>
+                <span className={styles.titleWrapper}>
                     {variantTitle[titleStyle]}
                     {validTitleChildren}
                 </span>
             }
-            <div className={[styles.blockCard, STYLE_TO_CLASS[style], classNames].filter(Boolean).join(' ')}>
+            <div className={[styles.block, STYLE_TO_CLASS[style], classNames].filter(Boolean).join(' ')}>
                 {children}
             </div>
         </div>
     )
 }
 
-BlockCard.displayName = 'BlockCard'
+Block.displayName = 'Block'

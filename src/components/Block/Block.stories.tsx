@@ -1,10 +1,10 @@
 import React from 'react';
-import { BlockCard } from './index';
+import { Block } from './index';
 import { Button } from '../Button';
 
 const meta = {
-  title: 'Components/BlockCard',
-  component: BlockCard,
+  title: 'Components/Block',
+  component: 'Block',
   argTypes: {
     style: {
       control: 'select',
@@ -19,9 +19,9 @@ export default meta;
 export const Default = {
   render: () => (
     <div style={{display: 'flex', width: '256px', height: '512px'}}>
-      <BlockCard style='default' title='Test' titleStyle={3}>
+      <Block style='default' title='Test' titleStyle={3}>
         <Button labelText='button' />
-      </BlockCard>
+      </Block>
     </div>
   ),
 }
@@ -29,9 +29,19 @@ export const Default = {
 export const Outlined = {
   render: () => (
     <div style={{display: 'flex', width: '256px', height: '512px'}}>
-      <BlockCard style='outlined' title='Test' titleStyle={3}>
+      <Block style='outlined' title='Test' titleStyle={3}>
         <Button labelText='button' />
-      </BlockCard>
+      </Block>
+    </div>
+  ),
+}
+
+export const Nested = {
+  render: () => (
+    <div style={{display: 'flex', width: '256px', height: '512px'}}>
+      <Block style='default' title='Test' titleStyle={3}>
+        <Block style='outlined'></Block>
+      </Block>
     </div>
   ),
 }

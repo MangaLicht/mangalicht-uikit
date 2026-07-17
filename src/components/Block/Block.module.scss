@@ -2,37 +2,43 @@
 @use '../../shared/media' as *;
 @use '../../shared/mixins' as *;
 
-.blockCard {
-    --border-radius: var(--uikit-border-radius--desktop);
+.block {
+    --matched-border-radius: var(--uikit-border-radius--desktop);
 
     width: inherit;
     height: inherit;
-    padding: $blockcard-padding;
-    border-radius: calc(var(--border-radius) + $blockcard-padding);
+    padding: $block-padding;
+    border-radius: calc(var(--matched-border-radius) + $block-padding);
     overflow: hidden;
-    
-    @include tablet {--border-radius: var(--uikit-border-radius--tablet);}
-    @include mobile {--border-radius: var(--uikit-border-radius--mobile);}
 
-    & span {
-        column-gap: calc(rem(4));
+    @include tablet {--matched-border-radius: var(--uikit-border-radius--tablet);}
+    @include mobile {--matched-border-radius: var(--uikit-border-radius--mobile);}
+
+    & > div > .block {
+        border-radius: var(--uikit-border-radius--desktop) !important;
+        @include tablet {border-radius: var(--uikit-border-radius--tablet) !important;}
+        @include mobile {border-radius: var(--uikit-border-radius--mobile) !important;}
     }
 }
 
 .title {
-    color: $blockcard-title-color;
+    color: $block-title-color;
     text-align: left;
     text-decoration: none;
-    font-weight: $blockcard-title-weight;
+    font-weight: $block-title-weight;
     font-style: normal;
+}
+.titleWrapper {
+    display: inline-flex;
+    column-gap: calc(rem(4));
 }
 
 .default {
-    background-color: $blockcard-bg-color;
-    box-shadow: 0 8px 24px 0px $blockcard-shadow-color;
+    background-color: $block-bg-color;
+    box-shadow: 0 4px 8px 0px $block-shadow-color;
 }
 
 .outlined {
-    background-color: transparent;
-    border: $blockcard-border-width solid $blockcard-border-color; 
+    background-color: $block-bg-bordered-color;
+    border: $block-border-width solid $block-border-color; 
 }
