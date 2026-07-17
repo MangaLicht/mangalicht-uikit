@@ -4,7 +4,7 @@ import styles from './Button.module.scss'
 export type ButtonAnimation = 'default' | 'none'
 export type ButtonVariants = 'default' | 'highlight' | 'bordered' | 'borderedAccent' | 'ghost'
 
-export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'type' | 'style'> {
+export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'type' | 'variant'> {
   /** Заблокировать кнопку */
   disabled?: boolean
   /** Дополнительный className для кастомных стилей */
@@ -13,6 +13,8 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   /** Визуальный вариант оформления */
   variant?: ButtonVariants
+  /** пометка что кнопка должна быть окрашена в красный */
+  isAlert?: boolean;
   /** Текст лейбла внутри кнопки */
   labelText?: string
   /** type для нативного button, по умолчанию "button" */
@@ -40,7 +42,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       classNames,
       onClick,
-      variant: style = 'default',
+      variant = 'default',
+      isAlert = false,
       labelText,
       type = 'button',
       iconStart,
@@ -50,7 +53,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const variantClass = STYLE_TO_CLASS[style] ?? styles.default
+    const variantClass = STYLE_TO_CLASS[variant] ?? styles.default
 
     return (
       <button
@@ -61,6 +64,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           .join(' ')}
         disabled={disabled}
         data-animation={animation}
+        data-alert={isAlert}
         onClick={onClick}
         {...rest}
       >

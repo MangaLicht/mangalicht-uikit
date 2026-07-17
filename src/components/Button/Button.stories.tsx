@@ -5,12 +5,13 @@ const meta = {
   title: 'Components/Button',
   component: Button,
   argTypes: {
-    style: {
+    variant: {
       control: 'select',
       options: ['default', 'highlight', 'bordered', 'borderedAccent'],
     },
     disabled: { control: 'boolean' },
     labelText: { control: 'text' },
+    isAlert: { control: 'boolean' },
   },
 };
 
@@ -26,28 +27,28 @@ export const Default = {
 export const Highlight = {
   args: {
     labelText: 'Акцентная кнопка',
-    style: 'highlight',
+    variant: 'highlight',
   },
 };
 
 export const Bordered = {
   args: {
     labelText: 'С рамкой',
-    style: 'bordered',
+    variant: 'bordered',
   },
 };
 
 export const BorderedAccent = {
   args: {
     labelText: 'С рамкой',
-    style: 'borderedAccent',
+    variant: 'borderedAccent',
   },
 };
 
 export const Disabled = {
   args: {
     labelText: 'Недоступно',
-    style: 'default',
+    variant: 'default',
     disabled: true,
   },
 };
@@ -58,13 +59,13 @@ export const WithIcon = {
     <div style={{ display: 'flex', gap: 12 }}>
       <Button
         labelText="Добавить"
-        style="default"
+        variant="default"
         iconStart={<PlusIcon />}
         onClick={() => {}}
       />
       <Button
         labelText="Продолжить"
-        style="bordered"
+        variant="bordered"
         iconEnd={<ArrowRightIcon />}
         onClick={() => {}}
       />
@@ -82,13 +83,13 @@ export const Transparent = {
 export const AllVariants = {
   render: () => (
     <div style={{ display: 'flex', gap: 12 }}>
-      <Button labelText="Default" style="default" onClick={() => {}} />
-      <Button labelText="Highlight" style="highlight" onClick={() => {}} />
-      <Button labelText="Bordered" style="bordered" onClick={() => {}} />
-      <Button labelText="BorderedAccent" style="borderedAccent" onClick={() => {}} />
-      <Button labelText="Transparent" style="transparent" onClick={() => {}} />
-      <Button labelText="Without Anim" style="default" data-animation='none' onClick={() => {}} />
-      <Button labelText="Disabled" style="default" disabled onClick={() => {}} />
+      <Button labelText="Default" variant="default" onClick={() => {}} />
+      <Button labelText="Highlight" variant="highlight" onClick={() => {}} />
+      <Button labelText="Bordered" variant="bordered" onClick={() => {}} />
+      <Button labelText="BorderedAccent" variant="borderedAccent" onClick={() => {}} />
+      <Button labelText="Transparent" variant="ghost" onClick={() => {}} />
+      <Button labelText="Without Anim" variant="default" data-animation='none' onClick={() => {}} />
+      <Button labelText="Disabled" variant="default" disabled onClick={() => {}} />
     </div>
   ),
 };
