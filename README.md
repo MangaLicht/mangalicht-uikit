@@ -1,4 +1,4 @@
-# create-ui-kit-template
+# mangalicht-uikit
 
 UI Kit на React + TypeScript с поддержкой Storybook и сборкой через Webpack.
 
