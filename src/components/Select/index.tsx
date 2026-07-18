@@ -188,7 +188,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
         <button
           ref={setTriggerRef}
           type="button"
-          checkboxStyle={{minWidth: `${minWidth}px`}}
+          style={{minWidth: `${minWidth}px`}}
           className={[styles.trigger, className, classNames].filter(Boolean).join(' ')}
           disabled={disabled}
           aria-haspopup="listbox"
@@ -224,7 +224,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             role="listbox"
             className={styles.panel}
             data-open={open}
-            checkboxStyle={panelStyle}
+            style={panelStyle}
           >
             {options.map((option, index) => (
               <li
