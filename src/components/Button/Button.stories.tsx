@@ -20,7 +20,7 @@ export default meta;
 export const Default = {
   args: {
     labelText: 'Нажми меня',
-    style: 'default',
+    variant: 'default',
   },
 };
 

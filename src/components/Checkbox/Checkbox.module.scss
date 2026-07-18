@@ -92,6 +92,11 @@
   }
 }
 
+.label {
+  color: $checkbox-label-color;
+  transition: color 0.1 ease;
+}
+
 .checkmark {
   width: 12px;
   height: 12px;

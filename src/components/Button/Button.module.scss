@@ -109,6 +109,10 @@
   background-color: $btm-highlight-bg-color;
   border-color: transparent;
   color: $btm-highlight-text;
+  
+  & > span {
+    font-weight: 700 !important;
+  }
 
   &[data-alert='true'] {
     color: var(--c-white);
