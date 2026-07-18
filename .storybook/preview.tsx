@@ -3,10 +3,6 @@ import React, { useEffect } from 'react';
 // @ts-ignore: allow importing global SCSS in Storybook preview
 import '../src/shared/normalize.scss'
 // @ts-ignore: allow importing global SCSS in Storybook preview
-import '../src/shared/global-vars.scss'
-// @ts-ignore: allow importing global SCSS in Storybook preview
-//import '../src/shared/theme-mode-vars.scss'
-// @ts-ignore: allow importing global SCSS in Storybook preview
 import '../src/shared/global-styles.scss'
 // @ts-ignore: allow importing global SCSS in Storybook preview
 import '../src/shared/theme-mode-vars.scss'
