@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { Checkbox } from './';
+import { Checkbox } from './index';
 
-const meta: Meta<typeof Checkbox> = {
+const meta = {
   title: 'Components/Checkbox',
   component: Checkbox,
   argTypes: {
-    style: {
+    variant: {
       control: 'select',
       options: ['default', 'radio'],
     },
@@ -17,9 +16,7 @@ const meta: Meta<typeof Checkbox> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Checkbox>;
 
-/** Управляемый пример с реальным состоянием React — для интерактивных историй */
 const ControlledCheckbox = (args: React.ComponentProps<typeof Checkbox>) => {
   const [checked, setChecked] = useState(args.checked ?? false);
   return (
@@ -34,87 +31,87 @@ const ControlledCheckbox = (args: React.ComponentProps<typeof Checkbox>) => {
   );
 };
 
-export const Default: Story = {
+export const Default = {
   render: ControlledCheckbox,
   args: {
     checked: false,
-    style: 'default',
+    variant: 'default',
     labelText: 'Согласен с условиями',
   },
 };
 
-export const Radio: Story = {
+export const Radio = {
   render: ControlledCheckbox,
   args: {
     checked: false,
-    style: 'radio',
+    variant: 'radio',
     labelText: 'Круглый вариант',
   },
 };
 
-export const CheckedByDefault: Story = {
+export const CheckedByDefault = {
   render: ControlledCheckbox,
   args: {
     checked: true,
-    style: 'default',
+    variant: 'default',
     labelText: 'Отмечено по умолчанию',
   },
 };
 
-export const Disabled: Story = {
+export const Disabled = {
   render: ControlledCheckbox,
   args: {
     checked: false,
     disabled: true,
-    style: 'default',
+    variant: 'default',
     labelText: 'Недоступно',
   },
 };
 
-export const DisabledChecked: Story = {
+export const DisabledChecked = {
   render: ControlledCheckbox,
   args: {
     checked: true,
     disabled: true,
-    style: 'default',
+    variant: 'default',
     labelText: 'Недоступно (отмечено)',
   },
 };
 
-export const WithoutLabel: Story = {
+export const WithoutLabel = {
   render: ControlledCheckbox,
   args: {
     checked: false,
-    style: 'default',
+    variant: 'default',
   },
 };
 
-export const Uncontrolled: Story = {
+export const Uncontrolled = {
   name: 'Uncontrolled (defaultChecked)',
   render: () => (
     <Checkbox
       defaultChecked
-      style="default"
+      variant="default"
       labelText="Неуправляемый режим"
       onClick={(checked) => console.log('checked:', checked)}
     />
   ),
 };
 
-export const AllVariants: Story = {
+export const AllVariants = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ display: 'flex', gap: 24 }}>
-        <Checkbox labelText="Default" style="default" defaultChecked={false} />
-        <Checkbox labelText="Default checked" style="default" defaultChecked />
-        <Checkbox labelText="Default disabled" style="default" disabled />
+        <Checkbox labelText="Default" variant="default" defaultChecked={false} />
+        <Checkbox labelText="Default checked" variant="default" defaultChecked />
+        <Checkbox labelText="Default disabled" variant="default" disabled />
       </div>
       <div style={{ display: 'flex', gap: 24 }}>
-        <Checkbox labelText="Radio" style="radio" defaultChecked={false} />
-        <Checkbox labelText="Radio checked" style="radio" defaultChecked />
+        <Checkbox labelText="Radio" variant="radio" defaultChecked={false} />
+        <Checkbox labelText="Radio checked" variant="radio" defaultChecked />
         <Checkbox
           labelText="Radio disabled"
-          style="radio"
+          variant="radio"
           disabled
           defaultChecked
         />

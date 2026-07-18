@@ -15,6 +15,13 @@ module.exports = {
   },
 
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@hooks': path.resolve(__dirname, 'src/hooks'),
+      '@shared': path.resolve(__dirname, 'src/shared'),
+      '@icons': path.resolve(__dirname, 'src/icons'),
+    },
     extensions: ['.tsx', '.ts', '.js'],
   },
 

@@ -15,6 +15,11 @@
   }
 }
 
+.label {
+  color: $switch-label-color;
+  transition: color 0.1 ease;
+}
+
 .track {
   &[data-size="default"] {
     --track-width: 36px;

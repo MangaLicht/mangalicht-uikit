@@ -6,9 +6,9 @@ import React, {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { getPortalRoot } from '../../shared/utils/portalRoot';
-import { useMouseTracking } from '../../hooks/useMouseTracking';
-import { useSmoothFollow } from '../../hooks/useSmoothFollow';
+import { getPortalRoot } from '@/shared/utils/portalRoot';
+import { useMouseTracking } from '@/hooks/useMouseTracking';
+import { useSmoothFollow } from '@/hooks/useSmoothFollow';
 import styles from './Tooltip.module.scss';
 
 export type TooltipPosition = 'top' | 'bottom';
@@ -18,9 +18,9 @@ export interface TooltipProps {
   content: React.ReactNode;
   /** Элемент, при наведении на который появляется подсказка */
   children: React.ReactElement<{
-    onMouseEnter?: React.MouseEventHandler;
-    onMouseMove?: React.MouseEventHandler;
-    onMouseLeave?: React.MouseEventHandler;
+    onMouseEnter?: React.MouseEventHandler<HTMLElement>;
+    onMouseMove?: React.MouseEventHandler<HTMLElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLElement>;
   }>;
   /** Появляется над курсором или под курсором */
   position?: TooltipPosition;

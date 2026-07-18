@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
 import { Switch } from './index';
 
-const meta: Meta<typeof Switch> = {
+const meta = {
   title: 'Components/Switch',
   component: Switch,
   argTypes: {
@@ -13,15 +12,14 @@ const meta: Meta<typeof Switch> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Switch>;
 
 /** Управляемый пример с реальным состоянием React */
-const ControlledSwitch = (args: React.ComponentProps<typeof Switch>) => {
+const ControlledSwitch = (args: any) => {
   const [checked, setChecked] = useState(args.checked);
   return <Switch {...args} checked={checked} onChange={setChecked} />;
 };
 
-export const Default: Story = {
+export const Default = {
   render: ControlledSwitch,
   args: {
     checked: false,
@@ -29,7 +27,7 @@ export const Default: Story = {
   },
 };
 
-export const CheckedByDefault: Story = {
+export const CheckedByDefault = {
   render: ControlledSwitch,
   args: {
     checked: true,
@@ -37,7 +35,7 @@ export const CheckedByDefault: Story = {
   },
 };
 
-export const Disabled: Story = {
+export const Disabled = {
   render: ControlledSwitch,
   args: {
     checked: false,
@@ -46,7 +44,7 @@ export const Disabled: Story = {
   },
 };
 
-export const WithoutLabel: Story = {
+export const WithoutLabel = {
   render: ControlledSwitch,
   args: {
     checked: false,
@@ -65,6 +63,6 @@ const SizesRender = () => {
   );
 };
 
-export const Sizes: Story = {
-  render: () => <SizesRender />,
+export const Sizes = {
+  render: () => React.createElement(SizesRender, null),
 };

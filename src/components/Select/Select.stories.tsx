@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { Select } from './';
-import type { SelectOption } from './';
+import { Select } from './index';
 
-const fruitOptions: SelectOption[] = [
+const fruitOptions = [
   { value: 'apple', label: 'Яблоко' },
   { value: 'banana', label: 'Банан' },
   { value: 'cherry', label: 'Вишня', disabled: true },
@@ -11,12 +9,12 @@ const fruitOptions: SelectOption[] = [
   { value: 'kiwi', label: 'Киви' },
 ];
 
-const longOptions: SelectOption[] = Array.from({ length: 20 }, (_, i) => ({
+const longOptions = Array.from({ length: 20 }, (_, i) => ({
   value: `item-${i + 1}`,
   label: `Пункт списка ${i + 1}`,
 }));
 
-const meta: Meta<typeof Select> = {
+const meta = {
   title: 'Components/Select',
   component: Select,
   argTypes: {
@@ -27,7 +25,6 @@ const meta: Meta<typeof Select> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Select>;
 
 /** Управляемый пример с реальным состоянием React — для интерактивных историй */
 const ControlledSelect = (args: React.ComponentProps<typeof Select>) => {
@@ -36,7 +33,7 @@ const ControlledSelect = (args: React.ComponentProps<typeof Select>) => {
     <Select
       {...args}
       value={value}
-      onChange={(next) => {
+      onChange={(next: any) => {
         setValue(next);
         args.onChange?.(next);
       }}
@@ -44,7 +41,7 @@ const ControlledSelect = (args: React.ComponentProps<typeof Select>) => {
   );
 };
 
-export const Default: Story = {
+export const Default = {
   render: ControlledSelect,
   args: {
     options: fruitOptions,
@@ -52,7 +49,7 @@ export const Default: Story = {
   },
 };
 
-export const WithPreselectedValue: Story = {
+export const WithPreselectedValue = {
   render: ControlledSelect,
   args: {
     options: fruitOptions,
@@ -60,7 +57,7 @@ export const WithPreselectedValue: Story = {
   },
 };
 
-export const WithDisabledOption: Story = {
+export const WithDisabledOption = {
   name: 'With a disabled option (Вишня)',
   render: ControlledSelect,
   args: {
@@ -69,7 +66,7 @@ export const WithDisabledOption: Story = {
   },
 };
 
-export const Disabled: Story = {
+export const Disabled = {
   render: ControlledSelect,
   args: {
     options: fruitOptions,
@@ -78,7 +75,7 @@ export const Disabled: Story = {
   },
 };
 
-export const LongScrollableList: Story = {
+export const LongScrollableList = {
   name: 'Long list (internal scroll)',
   render: ControlledSelect,
   args: {
@@ -87,7 +84,7 @@ export const LongScrollableList: Story = {
   },
 };
 
-export const Uncontrolled: Story = {
+export const Uncontrolled = {
   name: 'Uncontrolled (defaultValue)',
   render: () => (
     <Select
@@ -103,7 +100,7 @@ export const Uncontrolled: Story = {
  * даже если родительский контейнер обрезает overflow, выпадающий список
  * всё равно раскрывается поверх него, а не прячется под маской.
  */
-export const InsideOverflowContainer: Story = {
+export const InsideOverflowContainer = {
   name: 'Inside overflow:hidden container',
   render: () => (
     <div
@@ -126,7 +123,7 @@ export const InsideOverflowContainer: Story = {
   ),
 };
 
-export const MultipleSelectsSideBySide: Story = {
+export const MultipleSelectsSideBySide = {
   name: 'Multiple selects',
   render: () => (
     <div style={{ display: 'flex', gap: 16 }}>

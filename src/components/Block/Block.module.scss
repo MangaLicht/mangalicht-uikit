@@ -1,0 +1,49 @@
+@use './_Block-vars.scss' as *;
+@use '../../shared/media' as *;
+@use '../../shared/mixins' as *;
+
+.blockWrapper {
+    display: block;
+    align-items: center;
+}
+
+.block {
+    --matched-border-radius: var(--uikit-border-radius--desktop);
+
+    width: inherit;
+    height: inherit;
+    padding: $block-padding;
+    border-radius: calc(var(--matched-border-radius) + $block-padding);
+    overflow: hidden;
+
+    @include tablet {--matched-border-radius: var(--uikit-border-radius--tablet);}
+    @include mobile {--matched-border-radius: var(--uikit-border-radius--mobile);}
+
+    & .blockWrapper > .block {
+        border-radius: var(--uikit-border-radius--desktop) !important;
+        @include tablet {border-radius: var(--uikit-border-radius--tablet) !important;}
+        @include mobile {border-radius: var(--uikit-border-radius--mobile) !important;}
+    }
+}
+
+.title {
+    color: $block-title-color;
+    text-align: left;
+    text-decoration: none;
+    font-weight: $block-title-weight;
+    font-style: normal;
+}
+.titleWrapper {
+    display: inline-flex;
+    column-gap: calc(rem(4));
+}
+
+.default {
+    background-color: $block-bg-color;
+    box-shadow: 0 4px 8px 0px $block-shadow-color;
+}
+
+.outlined {
+    background-color: $block-bg-bordered-color;
+    border: $block-border-width solid $block-border-color; 
+}

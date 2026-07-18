@@ -7,9 +7,9 @@ import React, {
   useState,
 } from 'react'
 import { createPortal } from 'react-dom'
-import { getPortalRoot } from '../../shared/utils/portalRoot'
-import { useClickOutside } from '../../hooks/useClickOutside'
-import { useAnchoredPosition } from '../../hooks/useAnchoredPosition'
+import { getPortalRoot } from '@shared/utils/portalRoot'
+import { useClickOutside } from '@hooks/useClickOutside'
+import { useAnchoredPosition } from '@hooks/useAnchoredPosition'
 import styles from './Select.module.scss'
 
 // TODO: убрать в отдельный файл или заменить иконночным шрифтом
@@ -32,7 +32,7 @@ export interface SelectOption {
   disabled?: boolean
 }
 
-export interface SelectProps {
+export interface SelectProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value' | 'defaultValue' | 'onChange' | 'children' | 'type'> {
   /** Список опций */
   options: SelectOption[];
   /** Текущее значение — если передано, компонент становится управляемым */
@@ -74,6 +74,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       defaultValue,
       onChange,
       disabled = false,
+      className,
       classNames,
       placeholder = 'Выберите значение',
       name,
@@ -188,7 +189,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
           ref={setTriggerRef}
           type="button"
           style={{minWidth: `${minWidth}px`}}
-          className={[styles.trigger, classNames].filter(Boolean).join(' ')}
+          className={[styles.trigger, className, classNames].filter(Boolean).join(' ')}
           disabled={disabled}
           aria-haspopup="listbox"
           aria-expanded={open}

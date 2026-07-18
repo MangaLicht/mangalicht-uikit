@@ -1,72 +1,71 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './';
+import React from 'react'
+import { Button } from './index'
 
-const meta: Meta<typeof Button> = {
+const meta = {
   title: 'Components/Button',
   component: Button,
   argTypes: {
-    style: {
+    variant: {
       control: 'select',
       options: ['default', 'highlight', 'bordered', 'borderedAccent'],
     },
     disabled: { control: 'boolean' },
     labelText: { control: 'text' },
+    isAlert: { control: 'boolean' },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Button>;
 
-export const Default: Story = {
+export const Default = {
   args: {
     labelText: 'Нажми меня',
-    style: 'default',
+    variant: 'default',
   },
 };
 
-export const Highlight: Story = {
+export const Highlight = {
   args: {
     labelText: 'Акцентная кнопка',
-    style: 'highlight',
+    variant: 'highlight',
   },
 };
 
-export const Bordered: Story = {
+export const Bordered = {
   args: {
     labelText: 'С рамкой',
-    style: 'bordered',
+    variant: 'bordered',
   },
 };
 
-export const BorderedAccent: Story = {
+export const BorderedAccent = {
   args: {
     labelText: 'С рамкой',
-    style: 'borderedAccent',
+    variant: 'borderedAccent',
   },
 };
 
-export const Disabled: Story = {
+export const Disabled = {
   args: {
     labelText: 'Недоступно',
-    style: 'default',
+    variant: 'default',
     disabled: true,
   },
 };
 
-export const WithIcon: Story = {
+export const WithIcon = {
   name: 'With icons (iconStart / iconEnd)',
   render: () => (
     <div style={{ display: 'flex', gap: 12 }}>
       <Button
         labelText="Добавить"
-        style="default"
+        variant="default"
         iconStart={<PlusIcon />}
         onClick={() => {}}
       />
       <Button
         labelText="Продолжить"
-        style="bordered"
+        variant="bordered"
         iconEnd={<ArrowRightIcon />}
         onClick={() => {}}
       />
@@ -74,23 +73,23 @@ export const WithIcon: Story = {
   ),
 };
 
-export const Transparent: Story = {
+export const Ghost = {
   args: {
     labelText: 'Прозрачная',
-    style: 'transparent',
+    variant: 'ghost',
   },
 };
 
-export const AllVariants: Story = {
+export const AllVariants = {
   render: () => (
     <div style={{ display: 'flex', gap: 12 }}>
-      <Button labelText="Default" style="default" onClick={() => {}} />
-      <Button labelText="Highlight" style="highlight" onClick={() => {}} />
-      <Button labelText="Bordered" style="bordered" onClick={() => {}} />
-      <Button labelText="BorderedAccent" style="borderedAccent" onClick={() => {}} />
-      <Button labelText="Transparent" style="transparent" onClick={() => {}} />
-      <Button labelText="Without Anim" style="default" data-animation='none' onClick={() => {}} />
-      <Button labelText="Disabled" style="default" disabled onClick={() => {}} />
+      <Button labelText="Default" variant="default" onClick={() => {}} />
+      <Button labelText="Highlight" variant="highlight" onClick={() => {}} />
+      <Button labelText="Bordered" variant="bordered" onClick={() => {}} />
+      <Button labelText="BorderedAccent" variant="borderedAccent" onClick={() => {}} />
+      <Button labelText="Transparent" variant="ghost" onClick={() => {}} />
+      <Button labelText="Without Anim" variant="default" data-animation='none' onClick={() => {}} />
+      <Button labelText="Disabled" variant="default" disabled onClick={() => {}} />
     </div>
   ),
 };
@@ -106,15 +105,15 @@ const PlusIcon = () => (
   </svg>
 );
 
-const ArrowRightIcon = () => (
-  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M3 8h10M9 4l4 4-4 4"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-    />
-  </svg>
+const ArrowRightIcon = () => React.createElement(
+  'svg',
+  { viewBox: '0 0 16 16', xmlns: 'http://www.w3.org/2000/svg' },
+  React.createElement('path', {
+    d: 'M3 8h10M9 4l4 4-4 4',
+    stroke: 'currentColor',
+    strokeWidth: '2',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    fill: 'none',
+  }),
 );

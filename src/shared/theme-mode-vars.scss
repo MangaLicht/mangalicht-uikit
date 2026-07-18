@@ -1,18 +1,81 @@
 :root {
-    // служебные переменные
-    --uikit-color-bg: var(--uikit-hex-white);
-    --uikit-color-bg-content-primary: var(--uikit-hex-gray-0);
-    --uikit-color-bg-content-secondary: var(--uikit-hex-gray-2);
-    --uikit-color-bg-content-accent: var(--uikit-hex-gray-3);
-    --uikit-color-tooltip-bg: var(--uikit-hex-gray-6);
-    --uikit-color-border: var(--uikit-hex-gray-3);
-    --uikit-color-border--hover: var(--uikit-hex-gray-2);
-    --uikit-color-text-primary: var(--uikit-hex-black);
-    --uikit-color-text-secondary: var(--uikit-hex-gray-6);
-    --uikit-color-text--accent: var(--uikit-hex-white);
-    --uikit-color-text--hover: var(--uikit-hex-gray-4);
-    --uikit-color-accent: var(--uikit-hex-blue-4);
-    --uikit-color-accent--hover: var(--uikit-hex-blue-3);
+    --c-white: #FFFFFF;
+    --c-grey-50: #E4E5E7;
+    --c-grey-100: #C9CBCF;
+    --c-grey-200: #AEB1B7;
+    --c-grey-250: #A4A6AD;
+    --c-grey-300: #93969F;
+    --c-grey-400: #787C87;
+    --c-grey-500: #60636C;
+    --c-grey-600: #484A51;
+    --c-grey-700: #303136;
+    --c-grey-800: #18181B;
+    --c-grey-850: #101013;
+    --c-black: #000000;
+    --c-accent-light: #168fff;
+    --c-accent-dark: #0085ff;
+    --c-alert-light: #C41E3A;
+    --c-alert-dark: #e4334a;
+    --c-yellow-light: #F0B32D;
+    --c-yellow-dark: #F7C870;
+    --c-neutral-dark-50: rgba(0, 0, 0, 0.05);
+    --c-neutral-dark-100: rgba(0, 0, 0, 0.1);
+    --c-neutral-dark-200: rgba(0, 0, 0, 0.2);
+    --c-neutral-dark-300: rgba(0, 0, 0, 0.3);
+    --c-neutral-dark-400: rgba(0, 0, 0, 0.4);
+    --c-neutral-dark-500: rgba(0, 0, 0, 0.5);
+    --c-neutral-light-50: rgb(228, 229, 231, 0.05);
+    --c-neutral-light-100: rgb(228, 229, 231, 0.1);
+    --c-neutral-light-200: rgb(228, 229, 231, 0.2);
+    --c-neutral-light-300: rgb(228, 229, 231, 0.3);
+    --c-neutral-light-400: rgb(228, 229, 231, 0.4);
+    --c-neutral-light-500: rgb(228, 229, 231, 0.5);
 
-    --uikit-soft-shadow: var(--uikit-rgba-mask-black-1);
+    // Borders
+    --uikit-border-radius--desktop: 6px;
+    --uikit-border-radius--tablet: 8px;
+    --uikit-border-radius--mobile: 12px;
+}
+
+:root[data-theme='light'] {
+    --uikit-bg-main: var(--c-white) !important;
+    --uikit-primary: var(--c-grey-200) !important;
+    --uikit-primary-hover: color-mix(in srgb, var(--c-grey-200), var(--c-neutral-light-200) 20%) !important;
+    --uikit-secondary: var(--c-grey-100) !important;
+    --uikit-bg-block: var(--c-grey-50) !important;
+    --uikit-bg-block-inner: var(--c-white) !important;
+    --uikit-border: var(--c-grey-300) !important;
+    --uikit-accent: var(--c-accent-light) !important;
+    --uikit-accent-hover: color-mix(in srgb, var(--c-accent-light), var(--c-neutral-light-200) 20%) !important;
+    --uikit-alert: var(--c-alert-light) !important;
+    --uikit-alert-hover: color-mix(in srgb, var(--c-alert-light), var(--c-neutral-light-200) 20%) !important;
+    --uikit-yellow: var(--c-yellow-light) !important;
+    --uikit-bg-tooltip: var(--c-white) !important;
+    --uikit-text-main: var(--c-black) !important;
+    --uikit-text-muted: var(--c-grey-800) !important;
+    --uikit-text-ghost: var(--c-neutral-dark-300) !important;
+    --uikit-block-shadow: var(--c-neutral-dark-100) !important;
+    --uikit-neutral-mask: var(--c-neutral-light-300) !important;
+    --uikit-neutral-accent-mask: var(--c-neutral-dark-100) !important;
+}
+:root[data-theme='dark'] {
+    --uikit-bg-main: var(--c-black) !important;
+    --uikit-primary: var(--c-grey-500) !important;
+    --uikit-primary-hover: color-mix(in srgb, var(--c-grey-300), var(--c-white) 3%) !important;
+    --uikit-secondary: var(--c-grey-600) !important;
+    --uikit-bg-block: var(--c-grey-700) !important;
+    --uikit-bg-block-inner: var(--c-grey-800) !important;
+    --uikit-border: var(--c-grey-850) !important;
+    --uikit-accent: var(--c-accent-dark) !important;
+    --uikit-accent-hover: color-mix(in srgb, var(--c-accent-dark), var(--c-white) 40%) !important;
+    --uikit-alert: var(--c-alert-dark) !important;
+    --uikit-alert-hover: color-mix(in srgb, var(--c-alert-dark), var(--c-white) 40%) !important;
+    --uikit-yellow: var(--c-yellow-dark) !important;
+    --uikit-bg-tooltip: var(--c-grey-800) !important;
+    --uikit-text-main: var(--c-white) !important;
+    --uikit-text-muted: var(--c-grey-100) !important;
+    --uikit-text-ghost: var(--c-neutral-light-300) !important;
+    --uikit-block-shadow: var(--c-neutral-light-100) !important;
+    --uikit-neutral-mask: var(--c-neutral-light-300) !important;
+    --uikit-neutral-accent-mask: var(--c-neutral-light-400) !important;
 }

@@ -2,22 +2,23 @@ import React, { forwardRef } from 'react'
 import styles from './Button.module.scss'
 
 export type ButtonAnimation = 'default' | 'none'
-export type ButtonStyle = 'default' | 'highlight' | 'bordered' | 'borderedAccent' | 'transparent'
+export type ButtonVariants = 'default' | 'highlight' | 'bordered' | 'borderedAccent' | 'ghost'
 
-export interface ButtonProps 
-{
+export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'type' | 'variant'> {
   /** Заблокировать кнопку */
   disabled?: boolean
   /** Дополнительный className для кастомных стилей */
   classNames?: string
   /** Колбэк клика по кнопке */
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
   /** Визуальный вариант оформления */
-  style?: ButtonStyle
+  variant?: ButtonVariants
+  /** пометка что кнопка должна быть окрашена в красный */
+  isAlert?: boolean;
   /** Текст лейбла внутри кнопки */
   labelText?: string
   /** type для нативного button, по умолчанию "button" */
-  type?: 'button' | 'submit' | 'reset'
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type']
   /** Дочерний элемент (например, svg-иконка) перед текстом лейбла */
   iconStart?: React.ReactNode
   /** Дочерний элемент (например, svg-иконка) после текста лейбла */
@@ -26,26 +27,23 @@ export interface ButtonProps
   animation?: ButtonAnimation
 }
 
-const STYLE_TO_CLASS: Record<ButtonStyle, string> = {
+const STYLE_TO_CLASS: Record<ButtonVariants, string> = {
   default: styles.default,
   highlight: styles.highlight,
   bordered: styles.bordered,
   borderedAccent: styles.borderedAccent,
-  transparent: styles.transparent,
+  ghost: styles.ghost,
 };
 
-/**
- * Button — базовая кнопка с тремя вариантами оформления:
- * "default" (залитая основным цветом), "highlight" (акцентная на подложке)
- * и "bordered" (прозрачная с рамкой).
- */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       disabled = false,
+      className,
       classNames,
       onClick,
-      style = 'default',
+      variant = 'default',
+      isAlert = false,
       labelText,
       type = 'button',
       iconStart,
@@ -55,17 +53,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const variantClass = STYLE_TO_CLASS[style] ?? styles.default
+    const variantClass = STYLE_TO_CLASS[variant] ?? styles.default
 
     return (
       <button
         ref={ref}
         type={type}
-        className={[styles.button, variantClass, classNames]
+        className={[styles.button, variantClass, className, classNames]
           .filter(Boolean)
           .join(' ')}
         disabled={disabled}
         data-animation={animation}
+        data-alert={isAlert}
         onClick={onClick}
         {...rest}
       >

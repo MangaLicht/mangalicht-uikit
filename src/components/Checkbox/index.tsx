@@ -1,9 +1,9 @@
 import React, { forwardRef, useId, useState } from 'react';
 import styles from './Checkbox.module.scss';
 
-export type CheckboxStyle = 'default' | 'radio';
+export type CheckboxVariant = 'default' | 'radio';
 
-export interface CheckboxProps {
+export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'checked' | 'defaultChecked' | 'onChange' | 'onClick' | 'type' | 'value'> {
   /** Текущее состояние — если передано, компонент становится управляемым (controlled) */
   checked?: boolean;
   /** Начальное состояние для неуправляемого (uncontrolled) использования */
@@ -15,7 +15,7 @@ export interface CheckboxProps {
   /** Колбэк переключения, получает новое значение checked */
   onClick?: (checked: boolean) => void;
   /** Визуальный вариант: "default" (квадратный) или "radio" (круглый) */
-  style?: CheckboxStyle;
+  variant?: CheckboxVariant;
   /** Текст лейбла рядом с чекбоксом */
   labelText?: string;
   /** name для нативного input, полезно для форм */
@@ -34,9 +34,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       checked,
       defaultChecked = false,
       disabled = false,
+      className,
       classNames,
       onClick,
-      style = 'default',
+      variant = 'default',
       labelText,
       name,
     },
@@ -59,7 +60,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <label
         htmlFor={inputId}
-        className={[styles.wrapper, classNames].filter(Boolean).join(' ')}
+        className={[styles.wrapper, className, classNames].filter(Boolean).join(' ')}
         data-disabled={disabled}
       >
         <input
@@ -76,7 +77,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           className={styles.box}
           data-checked={currentChecked}
           data-disabled={disabled}
-          data-style={style}
+          data-style={variant}
         >
           <svg
             className={styles.checkmark}
@@ -94,7 +95,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             />
           </svg>
         </span>
-        {labelText ? <span>{labelText}</span> : null}
+        {labelText ? <span className={styles.label}>{labelText}</span> : null}
       </label>
     );
   },

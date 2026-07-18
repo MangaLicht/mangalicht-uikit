@@ -78,8 +78,17 @@
   background-color: $btn-default-bg-color;
   color: $btn-default-text;
 
+  &[data-alert='true'] {
+    color: var(--c-white);
+    background-color: var(--uikit-alert);
+    &:hover:not(:disabled) {color: var(--c-white);}
+    &:active:not(:disabled) {color: var(--c-white);}
+  }
+
   &:hover:not(:disabled) {color: $btn-default-text--hover;}
   &:active:not(:disabled) {color: $btn-default-text--hover;}
+
+  transition: color 0.1 ease, background-color 0.1 ease;
 
   &::after {
       content: '';
@@ -100,9 +109,22 @@
   background-color: $btm-highlight-bg-color;
   border-color: transparent;
   color: $btm-highlight-text;
+  
+  & > span {
+    font-weight: 700 !important;
+  }
+
+  &[data-alert='true'] {
+    color: var(--c-white);
+    background-color: var(--uikit-alert);
+    &:hover:not(:disabled) {color: var(--c-white);}
+    &:active:not(:disabled) {color: var(--c-white);}
+  }
 
   &:hover:not(:disabled) { color: $btm-highlight-text--hover; }
   &:active:not(:disabled) { color: $btm-highlight-text--hover; }
+
+  transition: color 0.1 ease, background-color 0.1 ease;
 
   &::after {
     content: '';
@@ -125,6 +147,20 @@
   color: $btn-bordered-text;
   border-color: $btn-bordered-border-color;
 
+  &[data-alert='true'] {
+    color: var(--uikit-alert);
+    border-color: var(--uikit-alert);
+    &:hover:not(:disabled) {
+      color: var(--c-alert-hover);
+      border-color: var(--c-alert-hover);
+    }
+    &:active {
+      color: var(--c-alert-hover);
+      border-color: var(--c-alert-hover);
+    }
+  }
+  transition: color 0.1 ease, border-color 0.1 ease;
+
   &:hover:not(:disabled) {
     color: $btn-bordered-text--hover;
     border-color: $btn-bordered-border-color--hover;
@@ -141,6 +177,20 @@
   color: $btn-bordacct-text;
   border-color: $btn-bordacct-border-color;
 
+  &[data-alert='true'] {
+    color: var(--uikit-alert);
+    border-color: var(--uikit-alert);
+    &:hover:not(:disabled) {
+      color: var(--c-alert-hover);
+      border-color: var(--c-alert-hover);
+    }
+    &:active {
+      color: var(--c-alert-hover);
+      border-color: var(--c-alert-hover);
+    }
+  }
+  transition: color 0.1 ease, border-color 0.1 ease;
+
   &:hover:not(:disabled) {
     color: $btn-bordacct-text--hover;
     border-color: $btn-bordacct-border-color--hover;
@@ -151,10 +201,17 @@
   }
 }
 
-.transparent {
+.ghost {
   background-color: transparent;
   border-color: transparent;
   color: $btn-default-text;
+
+  &[data-alert='true'] {
+    color: var(--uikit-alert);
+    &:hover:not(:disabled) {color: var(--c-alert-hover);}
+    &:active:not(:disabled) {color: var(--c-alert-hover);}
+  }
+  transition: color 0.1 ease;
 
   &:hover:not(:disabled) {color: $btn-default-text--hover;}
   &:active:not(:disabled) {color: $btn-default-text--hover;}
