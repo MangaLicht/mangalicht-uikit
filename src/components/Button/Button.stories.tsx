@@ -73,10 +73,10 @@ export const WithIcon = {
   ),
 };
 
-export const Transparent = {
+export const Ghost = {
   args: {
     labelText: 'Прозрачная',
-    style: 'transparent',
+    variant: 'ghost',
   },
 };
 

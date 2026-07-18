@@ -40,6 +40,7 @@
     --uikit-accent: var(--c-accent-light) !important;
     --uikit-accent-hover: color-mix(in srgb, var(--c-accent-light), var(--c-neutral-light-200) 20%) !important;
     --uikit-alert: var(--c-alert-light) !important;
+    --uikit-alert-hover: color-mix(in srgb, var(--c-alert-light), var(--c-neutral-light-200) 20%) !important;
     --uikit-yellow: var(--c-yellow-light) !important;
     --uikit-bg-tooltip: var(--c-white) !important;
     --uikit-text-main: var(--c-black) !important;
@@ -59,6 +60,7 @@
     --uikit-accent: var(--c-accent-light) !important;
     --uikit-accent-hover: color-mix(in srgb, var(--c-accent-light), var(--c-neutral-light-200) 20%) !important;
     --uikit-alert: var(--c-alert-light) !important;
+    --uikit-alert-hover: color-mix(in srgb, var(--c-alert-light), var(--c-neutral-light-200) 20%) !important;
     --uikit-yellow: var(--c-yellow-light) !important;
     --uikit-bg-tooltip: var(--c-white) !important;
     --uikit-text-main: var(--c-black) !important;
@@ -77,8 +79,9 @@
     --uikit-accent: var(--c-accent-dark) !important;
     --uikit-accent-hover: color-mix(in srgb, var(--c-accent-dark), var(--c-white) 40%) !important;
     --uikit-alert: var(--c-alert-dark) !important;
+    --uikit-alert-hover: color-mix(in srgb, var(--c-alert-dark), var(--c-white) 40%) !important;
     --uikit-yellow: var(--c-yellow-dark) !important;
-    --uikit-bg-tooltip: var(--c-white) !important;
+    --uikit-bg-tooltip: var(--c-grey-800) !important;
     --uikit-text-main: var(--c-white) !important;
     --uikit-text-muted: var(--c-grey-100) !important;
     --uikit-text-ghost: var(--c-neutral-light-300) !important;

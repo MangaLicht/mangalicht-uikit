@@ -5,7 +5,7 @@ const meta = {
   title: 'Components/Checkbox',
   component: Checkbox,
   argTypes: {
-    style: {
+    variant: {
       control: 'select',
       options: ['default', 'radio'],
     },
@@ -35,7 +35,7 @@ export const Default = {
   render: ControlledCheckbox,
   args: {
     checked: false,
-    style: 'default',
+    variant: 'default',
     labelText: 'Согласен с условиями',
   },
 };
@@ -44,7 +44,7 @@ export const Radio = {
   render: ControlledCheckbox,
   args: {
     checked: false,
-    style: 'radio',
+    variant: 'radio',
     labelText: 'Круглый вариант',
   },
 };
@@ -53,7 +53,7 @@ export const CheckedByDefault = {
   render: ControlledCheckbox,
   args: {
     checked: true,
-    style: 'default',
+    variant: 'default',
     labelText: 'Отмечено по умолчанию',
   },
 };
@@ -63,7 +63,7 @@ export const Disabled = {
   args: {
     checked: false,
     disabled: true,
-    style: 'default',
+    variant: 'default',
     labelText: 'Недоступно',
   },
 };
@@ -73,7 +73,7 @@ export const DisabledChecked = {
   args: {
     checked: true,
     disabled: true,
-    style: 'default',
+    variant: 'default',
     labelText: 'Недоступно (отмечено)',
   },
 };
@@ -82,7 +82,7 @@ export const WithoutLabel = {
   render: ControlledCheckbox,
   args: {
     checked: false,
-    style: 'default',
+    variant: 'default',
   },
 };
 
@@ -91,7 +91,7 @@ export const Uncontrolled = {
   render: () => (
     <Checkbox
       defaultChecked
-      style="default"
+      variant="default"
       labelText="Неуправляемый режим"
       onClick={(checked) => console.log('checked:', checked)}
     />
@@ -102,16 +102,16 @@ export const AllVariants = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ display: 'flex', gap: 24 }}>
-        <Checkbox labelText="Default" style="default" defaultChecked={false} />
-        <Checkbox labelText="Default checked" style="default" defaultChecked />
-        <Checkbox labelText="Default disabled" style="default" disabled />
+        <Checkbox labelText="Default" variant="default" defaultChecked={false} />
+        <Checkbox labelText="Default checked" variant="default" defaultChecked />
+        <Checkbox labelText="Default disabled" variant="default" disabled />
       </div>
       <div style={{ display: 'flex', gap: 24 }}>
-        <Checkbox labelText="Radio" style="radio" defaultChecked={false} />
-        <Checkbox labelText="Radio checked" style="radio" defaultChecked />
+        <Checkbox labelText="Radio" variant="radio" defaultChecked={false} />
+        <Checkbox labelText="Radio checked" variant="radio" defaultChecked />
         <Checkbox
           labelText="Radio disabled"
-          style="radio"
+          variant="radio"
           disabled
           defaultChecked
         />
