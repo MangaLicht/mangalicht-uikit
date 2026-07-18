@@ -65,7 +65,7 @@ npm run publish
 нативном `input[type="checkbox"]` для доступности.
 
 ```tsx
-import { Switch } from 'create-ui-kit-template';
+import { Switch } from 'mangalicht-uikit';
 
 function Example() {
   const [checked, setChecked] = useState(false);
@@ -84,7 +84,7 @@ function Example() {
   return (
     <Button
       labelText="Сохранить"
-      style="highlight"
+      variant="highlight"
       onClick={() => console.log('clicked')}
       disabled={false}
       classNames="my-custom-class"
@@ -95,7 +95,7 @@ function Example() {
 
 Пропсы:
 - `labelText: string` — текст на кнопке
-- `style?: "default" | "highlight" | "bordered" | "borderedAccent"` — визуальный вариант (по умолчанию `"default"`)
+- `variant?: "default" | "highlight" | "bordered" | "borderedAccent"` — визуальный вариант (по умолчанию `"default"`)
 - `disabled?: boolean` — заблокировать кнопку
 - `onClick?: (event) => void` — колбэк клика
 - `classNames?: string` — дополнительный className для кастомных стилей
@@ -109,7 +109,7 @@ function Example() {
   return (
     <Button
       labelText="Добавить"
-      style="default"
+      variant="default"
       iconStart={<PlusIcon />}
       onClick={() => console.log('clicked')}
     />
