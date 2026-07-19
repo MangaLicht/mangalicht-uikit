@@ -8,7 +8,7 @@ UI Kit на React + TypeScript с поддержкой Storybook и сборко
 src/
   components/   — React-компоненты (например, Switch)
   icons/        — SVG-иконки как React-компоненты
-  variables/    — дизайн-токены (SCSS/CSS-переменные, цвета, отступы и т.д.)
+  shared/    — скрипты которые используются повсеместно в приложении
   index.ts      — точка входа библиотеки
 ```
 
