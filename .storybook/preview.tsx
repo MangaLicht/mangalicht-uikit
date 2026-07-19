@@ -5,7 +5,7 @@ import '../src/shared/normalize.scss'
 // @ts-ignore: allow importing global SCSS in Storybook preview
 import '../src/shared/global-styles.scss'
 // @ts-ignore: allow importing global SCSS in Storybook preview
-import '../src/shared/theme-mode-vars.scss'
+import '../src/shared/theme-vars.scss'
 
 const ThemeBackground = ({
   theme,
