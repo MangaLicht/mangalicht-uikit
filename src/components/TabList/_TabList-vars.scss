@@ -1,0 +1,9 @@
+// Tab container variables
+$tab-indicator-ease: cubic-bezier(0.55, 0.02, 0.81, 1);
+$tab-indicator-duration: 0.2s;
+$tab-container-bg: var(--uikit-bg-block);
+$tab-container-bg-inner: var(--uikit-secondary);
+$tab-indicator-bg: var(--uikit-accent);
+$tab-active-color: var(--uikit-bg-main);
+$tab-active-highlight: var(--uikit-neutral-mask);
+$tab-item-highlight: var(--uikit-neutral-accent-mask);

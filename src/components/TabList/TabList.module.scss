@@ -1,0 +1,92 @@
+@use '../../shared/_media.scss' as *;
+@use './_TabList-vars.scss' as *;
+
+.tabList {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.tabsContainer {
+  --border-radius: var(--uikit-border-radius--desktop);
+  --border-radius-inner: calc(var(--border-radius) - 2px);
+
+  @include tablet {
+    --border-radius: var(--uikit-border-radius--tablet);
+  }
+  @include mobile {
+    --border-radius: var(--uikit-border-radius--mobile);
+  }
+
+  display: inline-flex;
+  width: 100%;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--border-radius);
+  &[data-variant='block'] {
+    background-color: $tab-container-bg;
+  }
+  &[data-variant='inner'] {
+    background-color: $tab-container-bg-inner;
+  }
+  position: relative;
+  z-index: 1;
+
+  & button {
+    border-radius: var(--border-radius-inner) !important;
+
+    &:not([class*='activeTab'])::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background-color: $tab-item-highlight;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    &:not([class*='activeTab']):hover:not(:disabled)::after {
+      opacity: 100;
+    }
+  }
+  &:has(button[class*='activeTab']:hover:not(:disabled)):last-child > div::after {
+    opacity: 100;
+  }
+}
+
+.activeTab {
+  font-weight: 600;
+}
+
+.indicator {
+  position: absolute;
+  top: 2px;
+  height: calc(100% - 4px);
+  border-radius: var(--border-radius-inner);
+  background-color: $tab-indicator-bg;
+  z-index: -1;
+  pointer-events: none !important;
+  &[data-anim='true'] {
+    transition:
+      left $tab-indicator-duration $tab-indicator-ease,
+      width $tab-indicator-duration $tab-indicator-ease;
+  }
+
+  &::after {
+    content: '';
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background-color: $tab-active-highlight;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+}

@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const Loading = () => {
   return (
     <svg  width="800px" height="800px" viewBox="0 0 1024 1024" fill="none">

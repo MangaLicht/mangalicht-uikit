@@ -1,4 +1,5 @@
 @use '../../shared/_computed-vars.scss' as *;
+@use '../../shared/mixins' as *;
 @use './Checkbox-vars' as *;
 
 .wrapper {
@@ -28,13 +29,15 @@
 }
 
 .box {
+  --box-size: 20px;
+
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 20px;
-  height: 20px;
+  width: var(--box-size);
+  height: var(--box-size);
   border: 2px solid $checkbox-border-color;
   border-radius: 6px;
   background-color: transparent;
@@ -60,30 +63,30 @@
   &[data-style='radio'] {
     border-radius: 50%;
     & .checkmark {
-        visibility: hidden;
+      visibility: hidden;
     }
 
     &::after {
-        content: '';
-        position: absolute;
-        top: 55%;
-        left: 50%;
-        width: 0px;
-        height: 0px;
-        border-radius: 50%;
-        background-color: transparent;
-        transition: all $uikit-transition-fast;
+      content: '';
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      width: 0px;
+      height: 0px;
+      border-radius: 50%;
+      background-color: transparent;
+      transition: all $uikit-transition-fast;
     }
 
     &[data-checked='true'] {
-        background-color: transparent !important;
-        &::after {
-            top: 2px;
-            left: 2px;
-            width: 12px;
-            height: 12px;
-            background-color: $checkbox-checked-bg-color;
-        }
+      background-color: transparent !important;
+      &::after {
+        top: 2.5px;
+        left: 2.5px;
+        width: calc(var(--box-size) - rem(8) - 2px);
+        height: calc(var(--box-size) - rem(8) - 2px);
+        background-color: $checkbox-checked-bg-color;
+      }
     }
   }
   &[data-checked='true'] {
@@ -94,7 +97,7 @@
 
 .label {
   color: $checkbox-label-color;
-  transition: color 0.1 ease;
+  transition: color 0.1s ease;
 }
 
 .checkmark {

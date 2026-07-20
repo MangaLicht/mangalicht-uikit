@@ -10,21 +10,8 @@ import { createPortal } from 'react-dom'
 import { getPortalRoot } from '@shared/utils/portalRoot'
 import { useClickOutside } from '@hooks/useClickOutside'
 import { useAnchoredPosition } from '@hooks/useAnchoredPosition'
+import { ChevronIcon } from '@icons/Chevron'
 import styles from './Select.module.scss'
-
-// TODO: убрать в отдельный файл или заменить иконночным шрифтом
-const ChevronIcon = () => (
-  <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path
-      d="M2.5 4.5L6 8l3.5-3.5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
 export interface SelectOption {
   value: string

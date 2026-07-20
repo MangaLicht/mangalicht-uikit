@@ -1,88 +1,93 @@
 @use 'sass:math';
 
 @mixin reset-link {
-    color: inherit;
-    &, &:hover {
-        text-decoration: none;
-    }
+  color: inherit;
+  &,
+  &:hover {
+    text-decoration: none;
+  }
 }
 @mixin reset-button {
-    padding: 0;
-    background-color: transparent;
-    border: none;
-    outline: none;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
 }
 
 @mixin visually-hidden {
-    display: none !important;
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    margin: -1px !important;
-    border: 0 !important;
-    padding: 0 !important;
-    white-space: nowrap !important;
-    clip-path: inset(100%) !important;
-    clip: rect(0 0 0 0) !important;
-    overflow: hidden !important;
+  display: none !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  border: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  clip-path: inset(100%) !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
 }
 
-@mixin fluid-text ($max: 48, $min: 16) {
-    $maxViewportWidth: 1400;
-    $minViewportWidth: 360;
+@mixin fluid-text($max: 48, $min: 16) {
+  $maxViewportWidth: 1400;
+  $minViewportWidth: 360;
 
-    $maxSize: math.div($max, 16);
-    $minSize: math.div($min, 16);
-    $maxWidth: math.div($maxViewportWidth, 16);
-    $minWidth: math.div($minViewportWidth, 16);
+  $maxSize: math.div($max, 16);
+  $minSize: math.div($min, 16);
+  $maxWidth: math.div($maxViewportWidth, 16);
+  $minWidth: math.div($minViewportWidth, 16);
 
-    $slope: math.div(($maxSize - $minSize), ($maxWidth - $minWidth));
-    $yAxisIntersection: -$minWidth * $slope + $minSize;
+  $slope: math.div(($maxSize - $minSize), ($maxWidth - $minWidth));
+  $yAxisIntersection: -$minWidth * $slope + $minSize;
 
-    font-size: clamp(#{$minSize * 1rem}, #{$yAxisIntersection * 1rem} + #{$slope * 180vw}, #{$maxSize * 1rem});
+  font-size: clamp(
+    #{$minSize * 1rem},
+    #{$yAxisIntersection * 1rem} + #{$slope * 180vw},
+    #{$maxSize * 1rem}
+  );
 }
 
 @function rem($pxels) {
-    @if math.is-unitless($pxels) {
-        @return math.div($pxels, 16) * 1rem;
-    } @else {
-        @error 'Нельзя использовать еденицы измерения в функции! Используйте только числа.';
-    }
+  @if math.is-unitless($pxels) {
+    @return math.div($pxels, 16) * 1rem;
+  } @else {
+    @error 'Нельзя использовать еденицы измерения в функции! Используйте только числа.';
+  }
 }
 
 @mixin hide-scrollbar {
-    scrollbar-width: none;
-    
-    &::-webkit-scrollbar {
-        width: 0 !important;
-    }
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
 }
 
 @mixin flex-center($isInline: false) {
-    @if $isInline {
-        display: inline-flex;
-    } @else {
-        display: flex;
-    }
-    justify-content: center;
-    align-items: center;
+  @if $isInline {
+    display: inline-flex;
+  } @else {
+    display: flex;
+  }
+  justify-content: center;
+  align-items: center;
 }
 
 @mixin abs-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
 }
 
 @mixin square($size) {
-    width: $size;
-    aspect-ratio: 1;
+  width: $size;
+  aspect-ratio: 1;
 }
 
-@mixin line-clamp ($max: 1) {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: $max;
-    overflow: hidden;
+@mixin line-clamp($max: 1) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $max;
+  overflow: hidden;
 }

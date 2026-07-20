@@ -1,0 +1,127 @@
+@use './Input-vars' as *;
+@use '../../shared/_media.scss' as *;
+@use '../../shared/_mixins.scss' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: $input-label-color;
+}
+
+.fieldWrapper {
+  --input-border-radius: var(--uikit-border-radius--desktop, 6px);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--input-border-radius);
+  border: $input-border-width solid $input-border-color;
+  background-color: $input-bg-color;
+  transition:
+    border-color var(--uikit-transition-fast, 0.18s ease),
+    box-shadow var(--uikit-transition-fast, 0.18s ease);
+
+  @include tablet {
+    --input-border-radius: var(--uikit-border-radius--tablet);
+  }
+  @include mobile {
+    --input-border-radius: var(--uikit-border-radius--mobile);
+  }
+
+  &:hover:not([data-disabled='true']) {
+    border-color: $input-border-color--hover;
+  }
+
+  &:focus-within {
+    border-color: $input-border-color--focus;
+  }
+
+  &[data-invalid='true'] {
+    border-color: $input-border-color--error;
+  }
+
+  &[data-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-left: 12px;
+  color: $input-icon-color;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.input {
+  @include reset-button;
+
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  font: inherit;
+  font-size: $input-font-size;
+  color: $input-text-color;
+  background: transparent;
+
+  &::placeholder {
+    color: $input-placeholder-color;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.clearButton {
+  @include reset-button;
+  @include flex-center($isInline: true);
+
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border-radius: 50%;
+  color: $input-clear-icon-color;
+  cursor: pointer;
+  transition: background-color var(--uikit-transition-fast, 0.18s ease);
+
+  &:hover {
+    background-color: $input-clear-hover-bg;
+  }
+
+  svg {
+    width: 60%;
+    height: 60%;
+  }
+}
+
+.message {
+  font-size: 12px;
+  line-height: 1.4;
+  color: $input-hint-color;
+
+  &[data-variant='error'] {
+    color: $input-error-color;
+  }
+}
