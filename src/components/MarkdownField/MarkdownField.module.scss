@@ -7,6 +7,10 @@
   gap: 6px;
   width: 100%;
   font-family: inherit;
+
+  & .button {
+    font-size: 8px;
+  }
 }
 .header {
   display: flex;
@@ -211,15 +215,15 @@
   padding: 2px 6px;
   border-radius: 4px;
   background-color: $md-preview-code-bg;
-  color: transparent;
-  filter: blur(4px);
+  color: inherit;
+  filter: blur($md-spoiler-blur);
   cursor: pointer;
   user-select: none;
   transition:
     filter 0.2s ease,
     color 0.2s ease;
   &:hover {
-    filter: blur(2px);
+    filter: blur($md-spoiler-blur-hover);
   }
   &.spoilerRevealed {
     filter: blur(0);
