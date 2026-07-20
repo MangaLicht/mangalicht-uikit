@@ -1,9 +1,11 @@
-@use '../../shared/computed-vars.scss' as *;
+@use '../../shared/_computed-vars.scss' as *;
 @use './Button-vars' as *;
 @use '../../shared/_media.scss' as *;
 
 .button {
   --btm-border-radius: 6px;
+
+  position: relative;
 
   /*сброс браузерных стилей*/
   appearance: none;
@@ -57,7 +59,7 @@
   }
 
   &:focus-visible {
-    outline: 1px solid var(--uikit-hex-blue-3);
+    outline: 1px solid var(--uikit-accent);
   }
 
   &:disabled {
@@ -88,7 +90,7 @@
   &:hover:not(:disabled) {color: $btn-default-text--hover;}
   &:active:not(:disabled) {color: $btn-default-text--hover;}
 
-  transition: color 0.1 ease, background-color 0.1 ease;
+  transition: color 0.1s ease, background-color 0.1s ease;
 
   &::after {
       content: '';
@@ -124,7 +126,7 @@
   &:hover:not(:disabled) { color: $btm-highlight-text--hover; }
   &:active:not(:disabled) { color: $btm-highlight-text--hover; }
 
-  transition: color 0.1 ease, background-color 0.1 ease;
+  transition: color 0.1s ease, background-color 0.1s ease;
 
   &::after {
     content: '';
@@ -151,15 +153,15 @@
     color: var(--uikit-alert);
     border-color: var(--uikit-alert);
     &:hover:not(:disabled) {
-      color: var(--c-alert-hover);
-      border-color: var(--c-alert-hover);
+      color: var(--uikit-alert-hover);
+      border-color: var(--uikit-alert-hover);
     }
     &:active {
-      color: var(--c-alert-hover);
-      border-color: var(--c-alert-hover);
+      color: var(--uikit-alert-hover);
+      border-color: var(--uikit-alert-hover);
     }
   }
-  transition: color 0.1 ease, border-color 0.1 ease;
+  transition: color 0.1s ease, border-color 0.1s ease;
 
   &:hover:not(:disabled) {
     color: $btn-bordered-text--hover;
@@ -181,15 +183,15 @@
     color: var(--uikit-alert);
     border-color: var(--uikit-alert);
     &:hover:not(:disabled) {
-      color: var(--c-alert-hover);
-      border-color: var(--c-alert-hover);
+      color: var(--uikit-alert-hover);
+      border-color: var(--uikit-alert-hover);
     }
     &:active {
-      color: var(--c-alert-hover);
-      border-color: var(--c-alert-hover);
+      color: var(--uikit-alert-hover);
+      border-color: var(--uikit-alert-hover);
     }
   }
-  transition: color 0.1 ease, border-color 0.1 ease;
+  transition: color 0.1s ease, border-color 0.1s ease;
 
   &:hover:not(:disabled) {
     color: $btn-bordacct-text--hover;
@@ -208,10 +210,10 @@
 
   &[data-alert='true'] {
     color: var(--uikit-alert);
-    &:hover:not(:disabled) {color: var(--c-alert-hover);}
-    &:active:not(:disabled) {color: var(--c-alert-hover);}
+    &:hover:not(:disabled) {color: var(--uikit-alert-hover);}
+    &:active:not(:disabled) {color: var(--uikit-alert-hover);}
   }
-  transition: color 0.1 ease;
+  transition: color 0.1s ease;
 
   &:hover:not(:disabled) {color: $btn-default-text--hover;}
   &:active:not(:disabled) {color: $btn-default-text--hover;}
