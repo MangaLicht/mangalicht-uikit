@@ -35,7 +35,8 @@
   font-size: 12px;
   color: $md-mode-text-color;
   cursor: pointer;
-  transition: color var(--uikit-transition-fast, 0.18s ease),
+  transition:
+    color var(--uikit-transition-fast, 0.18s ease),
     background-color var(--uikit-transition-fast, 0.18s ease);
   svg {
     width: 12px;
@@ -97,7 +98,8 @@
   border-radius: 4px;
   color: $md-toolbar-icon-color;
   cursor: pointer;
-  transition: color var(--uikit-transition-fast, 0.18s ease),
+  transition:
+    color var(--uikit-transition-fast, 0.18s ease),
     background-color var(--uikit-transition-fast, 0.18s ease);
   svg {
     width: 14px;
@@ -138,6 +140,7 @@
     cursor: not-allowed;
   }
 }
+
 .preview {
   padding: 10px 12px;
   font-size: $md-font-size;
@@ -148,13 +151,20 @@
     // global-styles.scss сбрасывает font-weight в 400 универсальным
     // селектором '*' — без явного переопределения здесь bold и
     // # заголовки из markdown визуально не отличались бы от обычного текста
-    strong, b {
+    strong,
+    b {
       font-weight: 900;
     }
-    em, i {
+    em,
+    i {
       font-style: italic;
     }
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       margin: 0 0 8px;
       font-weight: 700;
     }
@@ -164,7 +174,8 @@
         margin-bottom: 0;
       }
     }
-    ul, ol {
+    ul,
+    ol {
       margin: 0 0 8px;
       padding-left: 20px;
     }
@@ -204,7 +215,9 @@
   filter: blur(4px);
   cursor: pointer;
   user-select: none;
-  transition: filter 0.2s ease, color 0.2s ease;
+  transition:
+    filter 0.2s ease,
+    color 0.2s ease;
   &:hover {
     filter: blur(2px);
   }
