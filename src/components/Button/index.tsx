@@ -2,9 +2,19 @@ import React, { forwardRef } from 'react'
 import styles from './Button.module.scss'
 
 export type ButtonAnimation = 'default' | 'none'
-export type ButtonVariants = 'default' | 'highlight' | 'bordered' | 'borderedAccent' | 'ghost'
 
-export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'type' | 'variant'> {
+export type ButtonVariants =
+  | 'default'
+  | 'highlight'
+  | 'bordered'
+  | 'borderedAccent'
+  | 'ghost'
+  | 'transparent'
+
+export interface ButtonProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'children' | 'type' | 'variant'
+> {
   /** Заблокировать кнопку */
   disabled?: boolean
   /** Дополнительный className для кастомных стилей */
@@ -14,7 +24,7 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   /** Визуальный вариант оформления */
   variant?: ButtonVariants
   /** пометка что кнопка должна быть окрашена в красный */
-  isAlert?: boolean;
+  isAlert?: boolean
   /** Текст лейбла внутри кнопки */
   labelText?: string
   /** type для нативного button, по умолчанию "button" */
@@ -33,7 +43,8 @@ const STYLE_TO_CLASS: Record<ButtonVariants, string> = {
   bordered: styles.bordered,
   borderedAccent: styles.borderedAccent,
   ghost: styles.ghost,
-};
+  transparent: styles.transparent,
+}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -59,9 +70,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         type={type}
-        className={[styles.button, variantClass, className, classNames]
-          .filter(Boolean)
-          .join(' ')}
+        className={[styles.button, variantClass, className, classNames].filter(Boolean).join(' ')}
         disabled={disabled}
         data-animation={animation}
         data-alert={isAlert}
@@ -69,19 +78,19 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...rest}
       >
         {iconStart ? (
-          <span className={styles.icon} aria-hidden="true">
+          <span className={styles.icon} aria-hidden='true'>
             {iconStart}
           </span>
         ) : null}
         {labelText && <span>{labelText}</span>}
         {iconEnd ? (
-          <span className={styles.icon} aria-hidden="true">
+          <span className={styles.icon} aria-hidden='true'>
             {iconEnd}
           </span>
         ) : null}
       </button>
-    );
+    )
   },
-);
+)
 
-Button.displayName = 'Button';
+Button.displayName = 'Button'
