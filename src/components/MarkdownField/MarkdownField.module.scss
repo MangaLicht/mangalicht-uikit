@@ -1,0 +1,248 @@
+@use './MarkdownField-vars' as *;
+@use '../../shared/_media.scss' as *;
+@use '../../shared/_mixins.scss' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: $md-label-color;
+}
+
+.modeSwitch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 6px;
+  background-color: $md-toolbar-bg-color;
+}
+
+.modeButton {
+  @include reset-button;
+  @include flex-center($isInline: true);
+
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: $md-mode-text-color;
+  cursor: pointer;
+  transition: color var(--uikit-transition-fast, 0.18s ease),
+    background-color var(--uikit-transition-fast, 0.18s ease);
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  &[data-active='true'] {
+    color: $md-mode-text-color--active;
+    background-color: $md-mode-bg--active;
+  }
+}
+
+// ширина поля целиком определяется контейнером и не меняется —
+// растёт только высота (см. useAutosizeTextarea), поэтому переполнение
+// текста всегда уходит переносом строк вниз, а не расширением вбок
+.fieldWrapper {
+  --md-border-radius: var(--uikit-border-radius--desktop, 6px);
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--md-border-radius);
+  border: $md-border-width solid $md-border-color;
+  background-color: $md-bg-color;
+  overflow: hidden;
+  transition: border-color var(--uikit-transition-fast, 0.18s ease);
+
+  @include tablet {
+    --md-border-radius: var(--uikit-border-radius--tablet);
+  }
+  @include mobile {
+    --md-border-radius: var(--uikit-border-radius--mobile);
+  }
+
+  &:hover:not([data-disabled='true']) {
+    border-color: $md-border-color--hover;
+  }
+
+  &:focus-within {
+    border-color: $md-border-color--focus;
+  }
+
+  &[data-invalid='true'] {
+    border-color: $md-border-color--error;
+  }
+
+  &[data-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  border-bottom: 1px solid $md-toolbar-border-color;
+  background-color: $md-toolbar-bg-color;
+}
+
+.toolbarButton {
+  @include reset-button;
+  @include flex-center;
+
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  color: $md-toolbar-icon-color;
+  cursor: pointer;
+  transition: color var(--uikit-transition-fast, 0.18s ease),
+    background-color var(--uikit-transition-fast, 0.18s ease);
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover:not(:disabled) {
+    color: $md-toolbar-icon-color--hover;
+    background-color: $md-toolbar-hover-bg;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.textarea {
+  @include reset-button;
+
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  // ширина фиксирована родителем, высоту берёт на себя useAutosizeTextarea
+  resize: none;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: $md-font-size;
+  line-height: 1.5;
+  color: $md-text-color;
+  background: transparent;
+  word-break: break-word;
+
+  &::placeholder {
+    color: $md-placeholder-color;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.preview {
+  padding: 10px 12px;
+  font-size: $md-font-size;
+  line-height: 1.5;
+  color: $md-text-color;
+  word-break: break-word;
+
+  :global {
+    // global-styles.scss сбрасывает font-weight в 400 универсальным
+    // селектором '*' — без явного переопределения здесь **bold** и
+    // # заголовки из markdown визуально не отличались бы от обычного текста
+    strong, b {
+      font-weight: 900;
+    }
+    em, i {
+      font-style: italic;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+    p {
+      margin: 0 0 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    ul, ol {
+      margin: 0 0 8px;
+      padding-left: 20px;
+    }
+    a {
+      color: var(--uikit-accent);
+    }
+    code {
+      padding: 1px 4px;
+      border-radius: 4px;
+      background-color: $md-preview-code-bg;
+      font-size: 0.9em;
+    }
+    pre {
+      padding: 8px 10px;
+      border-radius: 6px;
+      background-color: $md-preview-code-bg;
+      overflow-x: auto;
+
+      code {
+        padding: 0;
+        background: none;
+      }
+    }
+    blockquote {
+      margin: 0 0 8px;
+      padding-left: 10px;
+      border-left: 2px solid $md-preview-quote-border;
+      color: $md-hint-color;
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.message {
+  font-size: 12px;
+  line-height: 1.4;
+  color: $md-hint-color;
+
+  &[data-variant='error'] {
+    color: $md-error-color;
+  }
+}
+
+.counter {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: $md-counter-color;
+
+  &[data-over='true'] {
+    color: $md-counter-color--over;
+  }
+}
