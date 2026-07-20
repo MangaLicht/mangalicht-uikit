@@ -86,7 +86,8 @@ npm run publish
 
 ---
 
-## Компоненты
+```tsx
+import { Switch } from 'mangalicht-uikit';
 
 Общий паттерн для всех компонентов формы (`Switch`, `Checkbox`, `Select`, `Input`, `MarkdownField`): поддерживается **controlled** режим (значение задаётся через `value`/`checked` + `onChange`) и, где это применимо, **uncontrolled** (через `defaultValue`/`defaultChecked`). Все компоненты пробрасывают `ref` на нативный DOM-элемент (`forwardRef`) и принимают `classNames` для дополнительных стилей поверх базовых.
 
@@ -111,9 +112,8 @@ function Example() {
 ```
 
 Пропсы:
-- `labelText?: string` — текст на кнопке
-- `variant?: "default" | "highlight" | "bordered" | "borderedAccent" | "ghost"` — визуальный вариант (по умолчанию `"default"`)
-- `isAlert?: boolean` — окрасить кнопку в акцентный (тревожный) цвет, независимо от `variant`
+- `labelText: string` — текст на кнопке
+- `variant?: "default" | "highlight" | "bordered" | "borderedAccent"` — визуальный вариант (по умолчанию `"default"`)
 - `disabled?: boolean` — заблокировать кнопку
 - `onClick?: (event) => void` — колбэк клика
 - `type?: "button" | "submit" | "reset"` — нативный type, по умолчанию `"button"`
