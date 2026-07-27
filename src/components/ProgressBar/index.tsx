@@ -1,6 +1,8 @@
 import React, { forwardRef } from 'react'
 import styles from './ProgressBar.module.scss'
 
+export type ProgressFill = 'yellow' | 'accent'
+
 export interface ProgressBarProps {
   /** Минимальное значение шкалы. По умолчанию 0 */
   min?: number;
@@ -14,6 +16,8 @@ export interface ProgressBarProps {
   label?: React.ReactNode;
   /** Доступное имя для screen reader — полезно, когда showLabel=false */
   ariaLabel?: string;
+  /** Вариации трека прогресс бара */
+  fillColor?: ProgressFill
   /** className на саму полосу-трек */
   classNames?: string;
   /** className на корневой контейнер (трек + подпись) */
@@ -37,6 +41,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
       value,
       showLabel = true,
       label,
+      fillColor = 'yellow',
       ariaLabel,
       classNames,
       wrapperClassName,
@@ -59,7 +64,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
           aria-valuenow={value}
           aria-label={ariaLabel}
         >
-          <div className={styles.fill} style={{ width: `${percentage}%` }} />
+          <div className={styles.fill} style={{ width: `${percentage}%` }} data-fill={fillColor} />
         </div>
 
         {showLabel ? <span className={styles.label}>{label ?? value}</span> : null}

@@ -23,9 +23,16 @@
   inset: 0;
   width: 0%;
   border-radius: inherit;
-  background-color: $progress-fill-bg;
+  
+  &[data-fill='yellow'] {
+    background-color: $progress-fill-yellow-bg;
+  }
+  &[data-fill='accent'] {
+    background-color: $progress-fill-accent-bg;
+  }
+
   // плавно "доезжает" до новой ширины при изменении value/min/max в рантайме
-  transition: width var(--uikit-transition-normal, 0.3s cubic-bezier(0.85, 0.05, 0.18, 1.35));
+  transition: width 0.3s cubic-bezier(0.85, 0.05, 0.18, 1.35);
 }
 
 .label {

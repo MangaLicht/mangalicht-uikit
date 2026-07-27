@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ProgressBar } from './index';
+import { options } from 'marked';
 
 const meta = {
   title: 'Components/ProgressBar',
@@ -9,6 +10,10 @@ const meta = {
     max: { control: 'number' },
     value: { control: 'number' },
     showLabel: { control: 'boolean' },
+    fillColor: { 
+      options: ['yellow', 'accent'],
+      control: { type: 'radio' },
+     }
   },
 };
 
@@ -36,6 +41,21 @@ export const Default = {
   render: (args: React.ComponentProps<typeof ProgressBar>) => (
     <div style={{ width: 320 }}>
       <ProgressBar {...args} />
+    </div>
+  ),
+};
+
+export const FillColors = {
+  args: {
+    min: 0,
+    max: 100,
+    value: 40,
+    fillColor: 'yellow'
+  },
+  render: (args: React.ComponentProps<typeof ProgressBar>) => (
+    <div style={{ width: 320 }}>
+      <ProgressBar {...args} />
+      <ProgressBar min={0} max={100} value={50} fillColor='accent' />
     </div>
   ),
 };
@@ -88,10 +108,7 @@ const DynamicRangeDemo = () => {
 
   return (
     <div style={{ width: 320 }}>
-      <ProgressBar min={0} max={max} value={80} />
-      <p style={{ marginTop: 8, fontSize: 12, color: '#888' }}>
-        max переключается между 100 и 300 каждые 2 секунды, value=80 неизменно
-      </p>
+      <ProgressBar min={0} max={400} value={max} />
     </div>
   );
 };
