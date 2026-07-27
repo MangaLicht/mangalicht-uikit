@@ -16,6 +16,7 @@ src/
 ## Стили
 
 Стили пишутся на **SCSS**:
+
 - `*.scss` — общие стили и дизайн-токены (`src/shared/theme-vars.scss`, `src/shared/normalize.scss`, `src/shared/global-styles.scss`)
 - `*.module.scss` — CSS Modules для отдельных компонентов (например, `Button.module.scss`), классы генерируются с уникальными хешами и импортируются как обычный объект: `import styles from './Button.module.scss'`
 
@@ -28,11 +29,11 @@ src/
 Все цветовые токены компонентов (`--uikit-*`) объявлены не на `:root`, а на `:root[data-theme='light']` и `:root[data-theme='dark']` — поэтому после установки пакета **на `<html>` или любой родительский элемент нужно проставить атрибут `data-theme`**, иначе компоненты будут не окрашены:
 
 ```tsx
-document.documentElement.dataset.theme = 'light'; // или 'dark'
+document.documentElement.dataset.theme = 'light' // или 'dark'
 ```
 
 ```html
-<html data-theme="light">
+<html data-theme="light"></html>
 ```
 
 Переключение темы в рантайме — это просто смена значения атрибута.
@@ -48,7 +49,7 @@ npm install mangalicht-uikit
 Импортируйте стили и компоненты из точки входа пакета:
 
 ```tsx
-import { Button, Input } from 'mangalicht-uikit';
+import { Button, Input } from 'mangalicht-uikit'
 // normalize/theme-vars/global-styles подключаются автоматически вместе с пакетом
 ```
 
@@ -95,22 +96,23 @@ npm run publish
 Кнопка с пятью вариантами оформления.
 
 ```tsx
-import { Button } from 'mangalicht-uikit';
+import { Button } from 'mangalicht-uikit'
 
 function Example() {
   return (
     <Button
-      labelText="Сохранить"
-      variant="highlight"
+      labelText='Сохранить'
+      variant='highlight'
       onClick={() => console.log('clicked')}
       disabled={false}
-      classNames="my-custom-class"
+      classNames='my-custom-class'
     />
-  );
+  )
 }
 ```
 
 Пропсы:
+
 - `labelText?: string` — текст на кнопке
 - `variant?: "default" | "highlight" | "bordered" | "borderedAccent" | "ghost"` — визуальный вариант (по умолчанию `"default"`)
 - `isAlert?: boolean` — окрасить кнопку в акцентный (тревожный) цвет, независимо от `variant`
@@ -124,11 +126,11 @@ function Example() {
 - остальные нативные атрибуты `<button>` пробрасываются как есть (`{...rest}`)
 
 ```tsx
-import { Button } from 'mangalicht-uikit';
-import { PlusIcon } from './PlusIcon';
+import { Button } from 'mangalicht-uikit'
+import { PlusIcon } from './PlusIcon'
 
 function Example() {
-  return <Button labelText="Добавить" iconStart={<PlusIcon />} onClick={() => {}} />;
+  return <Button labelText='Добавить' iconStart={<PlusIcon />} onClick={() => {}} />
 }
 ```
 
@@ -137,16 +139,17 @@ function Example() {
 Тумблер-переключатель с плавной CSS-анимацией движения бегунка, построен на нативном `input[type="checkbox"]` для доступности. **Полностью controlled** — состояние всегда приходит через `checked`, компонент не хранит его сам.
 
 ```tsx
-import { useState } from 'react';
-import { Switch } from 'mangalicht-uikit';
+import { useState } from 'react'
+import { Switch } from 'mangalicht-uikit'
 
 function Example() {
-  const [checked, setChecked] = useState(false);
-  return <Switch checked={checked} onChange={setChecked} labelText="Тёмная тема" />;
+  const [checked, setChecked] = useState(false)
+  return <Switch checked={checked} onChange={setChecked} labelText='Тёмная тема' />
 }
 ```
 
 Пропсы:
+
 - `checked?: boolean` — текущее состояние
 - `onChange: (checked: boolean) => void` — **обязательный** колбэк переключения
 - `labelText?: string` — подпись рядом с переключателем
@@ -159,21 +162,22 @@ function Example() {
 Чекбокс с двумя вариантами оформления: `"default"` (квадратный) и `"radio"` (круглый, чисто визуально — семантика остаётся `checkbox`). Поддерживает controlled и uncontrolled режимы.
 
 ```tsx
-import { Checkbox } from 'mangalicht-uikit';
+import { Checkbox } from 'mangalicht-uikit'
 
 function Example() {
   return (
     <Checkbox
       defaultChecked={false}
       onClick={(checked) => console.log(checked)}
-      labelText="Согласен с условиями"
-      variant="default"
+      labelText='Согласен с условиями'
+      variant='default'
     />
-  );
+  )
 }
 ```
 
 Пропсы:
+
 - `checked?: boolean` / `defaultChecked?: boolean` — управляемое/неуправляемое состояние
 - `onClick?: (checked: boolean) => void` — колбэк переключения (несмотря на название, вызывается при изменении состояния, а не при клике мышью)
 - `variant?: "default" | "radio"` — визуальный вариант
@@ -184,11 +188,11 @@ function Example() {
 Кастомный выпадающий список: доступность через паттерн collapsible listbox (`aria-activedescendant`), позиционирование через `@floating-ui/dom`, панель рендерится в портал.
 
 ```tsx
-import { useState } from 'react';
-import { Select } from 'mangalicht-uikit';
+import { useState } from 'react'
+import { Select } from 'mangalicht-uikit'
 
 function Example() {
-  const [value, setValue] = useState<string>();
+  const [value, setValue] = useState<string>()
   return (
     <Select
       options={[
@@ -198,13 +202,14 @@ function Example() {
       ]}
       value={value}
       onChange={setValue}
-      placeholder="Выберите фрукт"
+      placeholder='Выберите фрукт'
     />
-  );
+  )
 }
 ```
 
 Пропсы:
+
 - `options: { value: string; label: string; disabled?: boolean }[]` — список опций
 - `value?: string` / `defaultValue?: string` — управляемое/неуправляемое значение
 - `onChange?: (value: string) => void`
@@ -220,18 +225,19 @@ function Example() {
 Всплывающая подсказка, следующая за курсором с эффектом плавного отставания (реализовано на `requestAnimationFrame`, а не на CSS-transition).
 
 ```tsx
-import { Tooltip } from 'mangalicht-uikit';
+import { Tooltip } from 'mangalicht-uikit'
 
 function Example() {
   return (
-    <Tooltip content="Подсказка появится здесь" position="top" showDelay={300}>
+    <Tooltip content='Подсказка появится здесь' position='top' showDelay={300}>
       <button>Наведи на меня</button>
     </Tooltip>
-  );
+  )
 }
 ```
 
 Пропсы:
+
 - `content: React.ReactNode` — содержимое подсказки
 - `children: React.ReactElement` — **единственный** дочерний элемент-триггер (на него навешиваются обработчики мыши через `cloneElement`)
 - `position?: "top" | "bottom"` — появление над/под курсором (по умолчанию `"top"`)
@@ -247,18 +253,19 @@ function Example() {
 Контейнер-карточка с опциональным заголовком (`h1`–`h6` через `titleStyle`) и двумя вариантами оформления.
 
 ```tsx
-import { Block } from 'mangalicht-uikit';
+import { Block } from 'mangalicht-uikit'
 
 function Example() {
   return (
-    <Block variant="outlined" title="Настройки" titleStyle={3} width={400}>
+    <Block variant='outlined' title='Настройки' titleStyle={3} width={400}>
       <p>Содержимое блока</p>
     </Block>
-  );
+  )
 }
 ```
 
 Пропсы:
+
 - `variant: "default" | "outlined"` — **обязательный** визуальный вариант
 - `title?: string` — заголовок
 - `titleStyle?: 1 | 2 | 3 | 4 | 5 | 6` — какой тег заголовка использовать, `h1`–`h6` (по умолчанию `2`)
@@ -271,43 +278,44 @@ function Example() {
 Однострочное поле ввода с валидацией. Подходит и для обычных текстовых полей, и для поисковой строки (через `icon` + `clearable`).
 
 ```tsx
-import { useState } from 'react';
-import { Input } from 'mangalicht-uikit';
-import { SearchIcon } from 'mangalicht-uikit';
+import { useState } from 'react'
+import { Input } from 'mangalicht-uikit'
+import { SearchIcon } from 'mangalicht-uikit'
 
 function SearchExample() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('')
   return (
     <Input
       icon={<SearchIcon />}
       value={query}
       onChange={setQuery}
-      placeholder="Поиск..."
+      placeholder='Поиск...'
       clearable
-      type="search"
+      type='search'
     />
-  );
+  )
 }
 
 function EmailExample() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('')
   return (
     <Input
-      label="Email"
+      label='Email'
       value={email}
       onChange={setEmail}
-      hint="Мы не передаём email третьим лицам"
+      hint='Мы не передаём email третьим лицам'
       rules={{
         required: 'Укажите email',
         pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Похоже, это не email' },
       }}
-      validateOn="change"
+      validateOn='change'
     />
-  );
+  )
 }
 ```
 
 Пропсы:
+
 - `value?: string` / `defaultValue?: string` — управляемое/неуправляемое значение
 - `onChange?: (value: string, event?) => void`
 - `label?: string` — подпись над полем
@@ -327,27 +335,28 @@ function EmailExample() {
 Многострочное поле с поддержкой markdown: тулбар форматирования, переключатель «Написать / Превью» и автоматическое расширение по высоте — **ширина поля остаётся неизменной**, текст переносится по словам, а контейнер растёт вниз вслед за контентом.
 
 ```tsx
-import { useState } from 'react';
-import { MarkdownField } from 'mangalicht-uikit';
+import { useState } from 'react'
+import { MarkdownField } from 'mangalicht-uikit'
 
 function Example() {
-  const [text, setText] = useState('');
+  const [text, setText] = useState('')
   return (
     <MarkdownField
-      label="Описание"
+      label='Описание'
       value={text}
       onChange={setText}
-      placeholder="Поддерживается **markdown**: списки, ссылки, код..."
+      placeholder='Поддерживается **markdown**: списки, ссылки, код...'
       minRows={4}
       maxRows={12}
       rules={{ maxLength: { value: 500, message: 'Максимум 500 символов' } }}
       showCounter
     />
-  );
+  )
 }
 ```
 
 Пропсы:
+
 - `value?: string` / `defaultValue?: string`, `onChange?: (value: string, event?) => void` — сырой markdown-текст
 - `label?: string`, `hint?: string`, `errorMessage?: string`
 - `rules?: ValidationRules`, `validateOn?: "change" | "blur" | "submit"`, `onValidChange?: (isValid, error) => void` — как в `Input`
@@ -367,11 +376,11 @@ function Example() {
 
 ```ts
 interface ValidationRules {
-  required?: boolean | string;                                  // своя ошибка вместо дефолтной — передайте строку
-  minLength?: number | { value: number; message: string };
-  maxLength?: number | { value: number; message: string };
-  pattern?: RegExp | { value: RegExp; message: string };
-  validate?: (value: string) => string | null | undefined | false; // произвольный валидатор
+  required?: boolean | string // своя ошибка вместо дефолтной — передайте строку
+  minLength?: number | { value: number; message: string }
+  maxLength?: number | { value: number; message: string }
+  pattern?: RegExp | { value: RegExp; message: string }
+  validate?: (value: string) => string | null | undefined | false // произвольный валидатор
 }
 ```
 
@@ -386,16 +395,48 @@ interface ValidationRules {
 ```
 
 `validateOn` определяет момент пересчёта ошибки:
+
 - `"blur"` (по умолчанию) — ошибка не показывается, пока поле не потеряло фокус хотя бы раз; после этого пересчитывается по каждому blur
 - `"change"` — после первого blur ошибка пересчитывается на каждое изменение значения (быстро пропадает по мере исправления)
 - `"submit"` — валидация не запускается автоматически; вызывайте её вручную при отправке формы (например, храните `ref` на поле и валидируйте значение самостоятельно перед сабмитом)
+
+### ProgressBar
+
+Горизонтальный индикатор прогресса с закруглёнными краями и подписью значения справа.
+
+```tsx
+import { ProgressBar } from 'mangalicht-uikit'
+
+function Example() {
+  return <ProgressBar min={0} max={1000} value={500} />
+}
+```
+
+Пропсы:
+
+- `value: number` — **обязательный**, текущее/целевое значение (визуально клэмпится в диапазон `[min, max]`, если выходит за него)
+- `min?: number` — минимум шкалы (по умолчанию `0`)
+- `max?: number` — максимум шкалы (по умолчанию `100`)
+- `showLabel?: boolean` — показывать подпись справа (по умолчанию `true`)
+- `label?: React.ReactNode` — переопределяет содержимое подписи (по умолчанию отображается само `value`), например для вывода процентов вместо сырого числа
+- `ariaLabel?: string` — доступное имя для screen reader, полезно при `showLabel={false}`
+- `classNames?: string` — на трек, `wrapperClassName?: string` — на корневой контейнер (трек + подпись)
+  `min`/`max`/`value` — обычные React-пропы, компонент не кеширует их при монтировании, поэтому шкалу можно свободно менять в рантайме (например, если границы приходят с сервера и обновляются уже после первого рендера):
+
+```tsx
+function Example({ target }: { target: number }) {
+  const [max, setMax] = useState(100)
+  // max можно менять в любой момент — полоса пересчитается на следующий рендер
+  return <ProgressBar min={0} max={max} value={target} />
+}
+```
 
 ### Иконки
 
 Библиотека экспортирует набор SVG-иконок, использующихся во встроенных компонентах — их можно переиспользовать и в своей разметке:
 
 ```tsx
-import { ChevronIcon, SearchIcon, CloseIcon } from 'mangalicht-uikit';
+import { ChevronIcon, SearchIcon, CloseIcon } from 'mangalicht-uikit'
 ```
 
 Доступны: `ChevronIcon`, `SearchIcon`, `CloseIcon`, `BoldIcon`, `ItalicIcon`, `LinkIcon`, `ListIcon`, `CodeIcon`, `EyeIcon`, `PencilIcon`. Все иконки — `currentColor`, наследуют размер и цвет от родителя через CSS.

@@ -1,0 +1,38 @@
+@use './ProgressBar-vars' as *;
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: $progress-label-gap;
+  width: 100%;
+  font-family: inherit;
+}
+
+.track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: $progress-height;
+  border-radius: 999px;
+  background-color: $progress-track-bg;
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  border-radius: inherit;
+  background-color: $progress-fill-bg;
+  // плавно "доезжает" до новой ширины при изменении value/min/max в рантайме
+  transition: width var(--uikit-transition-normal, 0.3s cubic-bezier(0.85, 0.05, 0.18, 1.35));
+}
+
+.label {
+  flex-shrink: 0;
+  min-width: $progress-label-min-width;
+  text-align: right;
+  font-size: $progress-label-font-size;
+  font-weight: 700;
+  color: $progress-label-color;
+}

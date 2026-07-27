@@ -49,11 +49,8 @@
   // анимация нажатия
   transform-origin: center;
   transform: translateY(0);
-  transition:
-    background-color $uikit-transition-normal,
-    border-color $uikit-transition-normal,
-    color $uikit-transition-normal,
-    transform $uikit-transition-fast;
+
+  transition: all 500ms cubic-bezier(0, 0.44, 0.36, 1.01);
 
   &[data-animation='default']:active:not(:disabled) {
     transform: translateY(1px);
@@ -99,10 +96,6 @@
     color: $btn-default-text--hover;
   }
 
-  transition:
-    color 0.1s ease,
-    background-color 0.1s ease;
-
   &::after {
     content: '';
     position: absolute;
@@ -145,10 +138,6 @@
     color: $btm-highlight-text--hover;
   }
 
-  transition:
-    color 0.1s ease,
-    background-color 0.1s ease;
-
   &::after {
     content: '';
     position: absolute;
@@ -182,9 +171,6 @@
       border-color: var(--uikit-alert-hover);
     }
   }
-  transition:
-    color 0.1s ease,
-    border-color 0.1s ease;
 
   &:hover:not(:disabled) {
     color: $btn-bordered-text--hover;
@@ -214,9 +200,6 @@
       border-color: var(--uikit-alert-hover);
     }
   }
-  transition:
-    color 0.1s ease,
-    border-color 0.1s ease;
 
   &:hover:not(:disabled) {
     color: $btn-bordacct-text--hover;
@@ -242,7 +225,6 @@
       color: var(--uikit-alert-hover);
     }
   }
-  transition: color 0.1s ease;
 
   &:hover:not(:disabled) {
     color: $btn-default-text--hover;
@@ -280,7 +262,6 @@
       color: var(--uikit-alert-hover);
     }
   }
-  transition: color 0.1s ease;
 
   &:hover:not(:disabled) {
     color: $btn-default-text--hover;
