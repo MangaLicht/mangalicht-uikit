@@ -87,7 +87,8 @@ npm run publish
 
 ---
 
-## Компоненты
+````tsx
+import { Switch } from 'mangalicht-uikit';
 
 Общий паттерн для всех компонентов формы (`Switch`, `Checkbox`, `Select`, `Input`, `MarkdownField`): поддерживается **controlled** режим (значение задаётся через `value`/`checked` + `onChange`) и, где это применимо, **uncontrolled** (через `defaultValue`/`defaultChecked`). Все компоненты пробрасывают `ref` на нативный DOM-элемент (`forwardRef`) и принимают `classNames` для дополнительных стилей поверх базовых.
 
@@ -109,7 +110,7 @@ function Example() {
     />
   )
 }
-```
+````
 
 Пропсы:
 
