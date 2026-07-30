@@ -432,6 +432,34 @@ function Example({ target }: { target: number }) {
 }
 ```
 
+### Slider
+
+Ползунок для выбора числового значения в диапазоне. Построен поверх нативного `input[type="range"]` (тот же подход, что и в `Switch`/`Checkbox`) — клавиатурная навигация, touch-драг и ARIA-семантика `slider` приходят из браузера бесплатно, кастомизируется только визуал.
+
+```tsx
+import { useState } from 'react'
+import { Slider } from 'mangalicht-uikit'
+
+function Example() {
+  const [volume, setVolume] = useState(50)
+  return <Slider min={0} max={100} value={volume} onChange={setVolume} />
+}
+```
+
+Пропсы:
+
+- `value?: number` / `defaultValue?: number` — управляемое/неуправляемое значение (по умолчанию неуправляемого — `min`)
+- `onChange?: (value: number, event?) => void`
+- `min?: number` — по умолчанию `0`
+- `max?: number` — по умолчанию `100`
+- `step?: number` — по умолчанию `1`
+- `showLabel?: boolean` — показывать подпись со значением справа (по умолчанию `true`)
+- `label?: React.ReactNode` — переопределяет содержимое подписи (по умолчанию — само `value`), например для добавления единиц измерения
+- `disabled?: boolean`
+- `classNames?: string` — на сам `<input>`, `wrapperClassName?: string` — на корневой контейнер
+- остальные нативные атрибуты `<input>` пробрасываются как есть (`{...rest}`), кроме `type`/`min`/`max`/`step`/`value` — они зафиксированы под `type="range"` и типизированы как `number`
+  Как и в `ProgressBar`, `min`/`max`/`step` — обычные пропы без кеширования при монтировании, поэтому диапазон можно менять в рантайме.
+
 ### Иконки
 
 Библиотека экспортирует набор SVG-иконок, использующихся во встроенных компонентах — их можно переиспользовать и в своей разметке:
