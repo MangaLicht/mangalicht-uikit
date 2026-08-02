@@ -1,0 +1,95 @@
+@use './Badge-vars' as *;
+
+.badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  // обрезаем блик по форме пилюли — без этого он бы прямоугольником
+  // вылезал за скруглённые края
+  overflow: hidden;
+  isolation: isolate;
+  padding: $badge-padding-y $badge-padding-x;
+  border-radius: 999px;
+  border: $badge-border-width solid transparent;
+  font-family: inherit;
+  font-size: $badge-font-size;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  user-select: none;
+
+  &[data-variant='bronze'] {
+    color: $badge-bronze;
+    border-color: $badge-bronze;
+    background-color: rgba($badge-bronze, $badge-fill-opacity);
+  }
+  &[data-variant='silver'] {
+    color: $badge-silver;
+    border-color: $badge-silver;
+    background-color: rgba($badge-silver, $badge-fill-opacity);
+  }
+  &[data-variant='gold'] {
+    color: $badge-gold;
+    border-color: $badge-gold;
+    background-color: rgba($badge-gold, $badge-fill-opacity);
+  }
+  &[data-variant='platinum'] {
+    color: $badge-platinum;
+    border-color: $badge-platinum;
+    background-color: rgba($badge-platinum, $badge-fill-opacity * 1.6);
+  }
+  &[data-variant='ruby'] {
+    color: $badge-ruby;
+    border-color: $badge-ruby;
+    background-color: rgba($badge-ruby, $badge-fill-opacity);
+  }
+  &[data-variant='diamond'] {
+    color: $badge-diamond;
+    border-color: $badge-diamond;
+    background-color: rgba($badge-diamond, $badge-fill-opacity);
+  }
+}
+
+.content {
+  position: relative;
+  // текст всегда поверх блика — блик подсвечивает фон/рамку, но не гасит читаемость
+  z-index: 1;
+}
+
+.shine {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 47%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0.55) 53%,
+    transparent 70%
+  );
+  // стартовая позиция — полностью за левым краем, чтобы не мелькнуть при монтировании
+  transform: translateX(-140%);
+  animation: uikit-badge-shine $badge-shine-duration ease-in-out infinite;
+}
+
+// быстрый пробег блика (0% → 18% времени цикла), затем долгая пауза
+// за правым краем (18% → 100%) — рывок в начале следующего витка невидим,
+// так как в этот момент блик всё равно вне видимой области
+@keyframes uikit-badge-shine {
+  0% {
+    transform: translateX(-140%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine {
+    animation: none;
+    display: none;
+  }
+}
