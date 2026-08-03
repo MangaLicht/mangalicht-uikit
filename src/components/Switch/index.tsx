@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useId, useRef, useState } from 'react'
+import React, { forwardRef, useId } from 'react'
 import styles from './Switch.module.scss'
 import { useAnimationTrigger } from '@/hooks/useAnimationTrigger'
 
