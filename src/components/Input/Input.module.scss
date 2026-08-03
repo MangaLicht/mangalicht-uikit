@@ -88,6 +88,18 @@
     color: $input-placeholder-color;
   }
 
+  // прячем нативную кнопку очистки браузера у type="search" (кружок/крестик
+  // в Chrome/Edge, "x" в старом Edge) — у нас есть своя через проп clearable,
+  // и без этого правила они дублируются
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    appearance: none;
+    display: none;
+  }
+  &::-ms-clear {
+    display: none;
+  }
+
   &:disabled {
     cursor: not-allowed;
   }
@@ -107,13 +119,21 @@
   transition: background-color var(--uikit-transition-fast, 0.18s ease);
 
   &:hover {
+    & svg {
+      color: $input-clear-icon-hover;
+    }
     background-color: $input-clear-hover-bg;
   }
 
   svg {
     width: 60%;
     height: 60%;
-  }
+    transition: color 300ms ease;
+    -webkit-transition: color 300ms ease;
+    -moz-transition: color 300ms ease;
+    -ms-transition: color 300ms ease;
+    -o-transition: color 300ms ease;
+}
 }
 
 .message {

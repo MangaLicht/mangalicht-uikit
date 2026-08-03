@@ -138,6 +138,7 @@ const spoilerExtension = {
         text: match[1],
       }
     }
+    return undefined
   },
   renderer(token: any) {
     return `<span class="${styles.spoiler}" data-spoiler="true">${token.text}</span>`

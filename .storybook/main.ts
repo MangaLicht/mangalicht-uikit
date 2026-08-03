@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import * as path from 'path';
 import type { StorybookConfig } from '@storybook/react-webpack5';
+import type { Options as SwcOptions } from '@swc/core';
 
 declare const __dirname: string;
 
@@ -9,20 +10,7 @@ const config: StorybookConfig = {
 
   addons: [
     '@storybook/addon-essentials',
-    {
-      name: "@storybook/addon-webpack5-compiler-swc",
-      options: {
-        swc: () => ({
-          jsc: {
-            transform: {
-              react: {
-                runtime: "automatic", 
-              },
-            },
-          },
-        }),
-      },
-    },
+    '@storybook/addon-webpack5-compiler-swc',
   ],
 
   framework: {
@@ -37,6 +25,31 @@ const config: StorybookConfig = {
 
   webpackFinal: async (config) => {
     config.module = config.module ?? { rules: [] };
+
+    // --- НАЧАЛО ИНТЕГРАЦИИ SVGR ---
+    // 1. Исключаем SVG из дефолтных правил Storybook для ассетов/картинок
+    config.module.rules = (config.module.rules ?? []).map((rule) => {
+      if (rule && typeof rule === 'object' && rule.test instanceof RegExp && rule.test.test('.svg')) {
+        return { ...rule, exclude: /\.svg$/ };
+      }
+      return rule;
+    });
+
+    // 2. Добавляем загрузчик SVGR для обработки SVG как React-компонентов
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            typescript: true,
+            ext: 'tsx',
+            jsxRuntime: 'automatic',
+          },
+        },
+      ],
+    });
+    // --- КОНЕЦ ИНТЕГРАЦИИ SVGR ---
 
     // Storybook уже добавляет собственные правила для *.css (в т.ч. внутри rule.oneOf).
     // Если рядом добавить ещё одно правило с тем же test, файл пройдёт по двум цепочкам
@@ -105,6 +118,25 @@ const config: StorybookConfig = {
 
     return config;
   },
+
+  // Правильное место для конфигурации @storybook/addon-webpack5-compiler-swc —
+  // этот аддон читает опции через стандартный preset-хук `swc`, экспортированный
+  // прямо из main.ts, а НЕ через `options.swc` внутри записи аддона в массиве
+  // addons (тот `options` объект этот конкретный аддон вообще не читает —
+  // отсюда и "React is not defined": runtime всегда оставался "classic").
+  swc: (swcOptions: SwcOptions): SwcOptions => ({
+    ...swcOptions,
+    jsc: {
+      ...swcOptions.jsc,
+      transform: {
+        ...swcOptions.jsc?.transform,
+        react: {
+          ...swcOptions.jsc?.transform?.react,
+          runtime: 'automatic',
+        },
+      },
+    },
+  }),
 };
 
 export default config;

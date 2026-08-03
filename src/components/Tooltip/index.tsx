@@ -100,15 +100,15 @@ export const Tooltip = ({
   if (!isValidElement(children)) return children;
 
   const trigger = cloneElement(children, {
-    onMouseEnter: (event: React.MouseEvent) => {
+    onMouseEnter: (event: React.MouseEvent<HTMLElement>) => {
       children.props.onMouseEnter?.(event);
       mouseHandlers.onMouseEnter(event);
     },
-    onMouseMove: (event: React.MouseEvent) => {
+    onMouseMove: (event: React.MouseEvent<HTMLElement>) => {
       children.props.onMouseMove?.(event);
       mouseHandlers.onMouseMove(event);
     },
-    onMouseLeave: (event: React.MouseEvent) => {
+    onMouseLeave: (event: React.MouseEvent<HTMLElement>) => {
       children.props.onMouseLeave?.(event);
       mouseHandlers.onMouseLeave(event);
     },

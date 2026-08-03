@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 import type { JSX, ReactElement, ReactNode } from 'react'
 import { validateChildren } from '@shared/utils/validateChildren'
 import { Button } from '@/components/Button'
@@ -58,7 +58,7 @@ export const Block = forwardRef<HTMLDivElement, IBlockProps>((
     const heightWrapper: string = (height != null && height > 0) ? `${height}px` : '100%'
 
     return (
-        <div ref={ref} className={styles.blockWrapper} style={{width: widthWrapper, height: heightWrapper}}>
+        <div ref={ref} className={styles.blockWrapper} style={{width: widthWrapper, height: heightWrapper}} {...rest}>
             { title && 
                 <span className={styles.titleWrapper}>
                     {variantTitle[titleStyle]}
