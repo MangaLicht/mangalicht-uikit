@@ -69,20 +69,23 @@
     &::after {
       content: '';
       position: absolute;
-      top: 55%;
+      top: 50%;
       left: 50%;
+      transform: translate(-50%, -50%);
       width: 0px;
       height: 0px;
       border-radius: 50%;
       background-color: transparent;
-      transition: all $uikit-transition-fast;
-    }
+      transition: all 0.22s cubic-bezier(0.2, 2, 0.8, 1);
+      -webkit-transition: all 0.22s cubic-bezier(0.2, 2, 0.8, 1);
+      -moz-transition: all 0.22s cubic-bezier(0.2, 2, 0.8, 1);
+      -ms-transition: all 0.22s cubic-bezier(0.2, 2, 0.8, 1);
+      -o-transition: all 0.22s cubic-bezier(0.2, 2, 0.8, 1);
+}
 
     &[data-checked='true'] {
       background-color: transparent !important;
       &::after {
-        top: 2.5px;
-        left: 2.5px;
         width: calc(var(--box-size) - rem(8) - 2px);
         height: calc(var(--box-size) - rem(8) - 2px);
         background-color: $checkbox-checked-bg-color;
