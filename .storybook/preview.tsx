@@ -1,11 +1,16 @@
-import type { Decorator, Preview } from '@storybook/react'
-import React, { useEffect } from 'react';
+import type { Decorator, Preview } from '@storybook/react';
+import { useEffect, type ReactNode } from 'react';
 // @ts-ignore: allow importing global SCSS in Storybook preview
-import '../src/shared/normalize.scss'
+import '../src/shared/normalize.scss';
 // @ts-ignore: allow importing global SCSS in Storybook preview
-import '../src/shared/global-styles.scss'
+import '../src/shared/global-styles.scss';
 // @ts-ignore: allow importing global SCSS in Storybook preview
-import '../src/shared/theme-vars.scss'
+import '../src/shared/theme-vars.scss';
+
+interface ThemeBackgroundProps {
+  theme: 'light' | 'dark';
+  children: ReactNode;
+}
 
 const ThemeBackground = ({
   theme,
@@ -25,12 +30,15 @@ const ThemeBackground = ({
   );
 };
 
-export const withTheme: Decorator = (StoryFn, context) => {
-  const theme = context.parameters.theme ?? context.globals.theme ?? 'light';
+export const withTheme: Decorator = (Story, context) => {
+  const theme =
+    (context.globals.theme as 'light' | 'dark') ??
+    (context.parameters.theme as 'light' | 'dark') ??
+    'dark';
 
   return (
     <ThemeBackground theme={theme}>
-      <StoryFn />
+      <Story />
     </ThemeBackground>
   );
 };
@@ -41,27 +49,39 @@ const preview: Preview = {
   globalTypes: {
     theme: {
       name: 'Theme',
-      description: 'Глобальная тема для компонентов кита',
+      description: 'Глобальная тема UI Kit',
       defaultValue: 'light',
       toolbar: {
         icon: 'circlehollow',
         items: [
-          { value: 'light', icon: 'circlehollow', title: 'Light' },
-          { value: 'dark', icon: 'circle', title: 'Dark' },
+          {
+            value: 'light',
+            title: 'Light',
+            icon: 'circlehollow',
+          },
+          {
+            value: 'dark',
+            title: 'Dark',
+            icon: 'circle',
+          },
         ],
-        showName: true,
       },
     },
   },
 
   parameters: {
+    layout: 'centered',
+
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
     },
-    layout: 'centered',
+
+    actions: {
+      argTypesRegex: '^on[A-Z].*',
+    },
   },
 };
 
