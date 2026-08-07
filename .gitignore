@@ -6,6 +6,9 @@ dist
 dist/
 storybook-static/
 
+# npm pack
+*.tgz
+
 # logs
 npm-debug.log*
 yarn-debug.log*
