@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { ButtonHTMLAttributes, forwardRef } from 'react'
 import styles from './Button.module.scss'
 
 export type ButtonAnimation = 'default' | 'none'
@@ -12,7 +12,7 @@ export type ButtonVariants =
   | 'transparent'
 
 export interface ButtonProps extends Omit<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  ButtonHTMLAttributes<HTMLButtonElement>,
   'children' | 'type' | 'variant'
 > {
   /** Заблокировать кнопку */
