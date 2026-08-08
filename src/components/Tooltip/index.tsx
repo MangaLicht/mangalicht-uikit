@@ -42,6 +42,13 @@ export interface TooltipProps {
   cursorLag?: number;
 }
 
+/**
+
+    TODO:
+    - исправить поведение на других элементах uikit (не отображается на других элементах кроме кнопки)
+
+*/
+
 export const Tooltip = ({
   content,
   children,

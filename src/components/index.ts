@@ -2,9 +2,9 @@ export { Switch } from '@/components/Switch'
 export type { SwitchProps } from '@/components/Switch'
 export { Button } from '@/components/Button'
 export type {
-  ButtonProps,
-  ButtonAnimation,
-  ButtonVariants,
+	ButtonProps,
+	ButtonAnimation,
+	ButtonVariants
 } from '@/components/Button'
 export { Checkbox } from '@/components/Checkbox'
 export type { CheckboxProps, CheckboxVariant } from '@/components/Checkbox'

@@ -2,8 +2,12 @@
 node_modules/
 
 # build output
-dist
 dist/
+dist/components
+dist/hooks
+dist/icons
+dist/shared
+dist
 storybook-static/
 
 # npm pack
@@ -22,3 +26,4 @@ yarn-error.log*
 
 # storybook cache
 .storybook-out/
+
