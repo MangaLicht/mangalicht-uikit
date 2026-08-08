@@ -7,7 +7,7 @@ export interface SwitchProps extends Omit<
   'checked' | 'onChange' | 'type' | 'value' | 'size'
 > {
   /** Текущее состояние переключателя */
-  checked?: boolean
+  checked: boolean
   /** Колбэк, вызываемый при переключении */
   onChange: (checked: boolean) => void
   /** Подпись рядом с переключателем */

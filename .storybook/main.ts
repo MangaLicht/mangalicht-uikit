@@ -1,142 +1,34 @@
-/// <reference types="node" />
-import * as path from 'path';
-import type { StorybookConfig } from '@storybook/react-webpack5';
-import type { Options as SwcOptions } from '@swc/core';
+import type { StorybookConfig } from '@storybook/react-vite'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-declare const __dirname: string;
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(ts|tsx)'],
+	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],
 
-  addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-webpack5-compiler-swc',
-  ],
+	addons: ['@storybook/addon-docs'],
 
-  framework: {
-    name: '@storybook/react-webpack5',
-    options: {},
-  },
+	framework: {
+		name: '@storybook/react-vite',
+		options: {}
+	},
 
-  typescript: {
-    check: false,
-    reactDocgen: 'react-docgen-typescript',
-  },
+	docs: {},
 
-  webpackFinal: async (config) => {
-    config.module = config.module ?? { rules: [] };
+	viteFinal: async config => {
+		config.resolve ??= {}
+		config.resolve.alias = {
+			...(config.resolve.alias || {}),
+			'@': path.resolve(__dirname, '../src'),
+			'@components': path.resolve(__dirname, '../src/components'),
+			'@hooks': path.resolve(__dirname, '../src/hooks'),
+			'@shared': path.resolve(__dirname, '../src/shared'),
+			'@icons': path.resolve(__dirname, '../src/icons')
+		}
 
-    // --- НАЧАЛО ИНТЕГРАЦИИ SVGR ---
-    // 1. Исключаем SVG из дефолтных правил Storybook для ассетов/картинок
-    config.module.rules = (config.module.rules ?? []).map((rule) => {
-      if (rule && typeof rule === 'object' && rule.test instanceof RegExp && rule.test.test('.svg')) {
-        return { ...rule, exclude: /\.svg$/ };
-      }
-      return rule;
-    });
+		return config
+	}
+}
 
-    // 2. Добавляем загрузчик SVGR для обработки SVG как React-компонентов
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: [
-        {
-          loader: '@svgr/webpack',
-          options: {
-            typescript: true,
-            ext: 'tsx',
-            jsxRuntime: 'automatic',
-          },
-        },
-      ],
-    });
-    // --- КОНЕЦ ИНТЕГРАЦИИ SVGR ---
-
-    // Storybook уже добавляет собственные правила для *.css (в т.ч. внутри rule.oneOf).
-    // Если рядом добавить ещё одно правило с тем же test, файл пройдёт по двум цепочкам
-    // загрузчиков сразу, и итоговый JS-модуль соберётся некорректно
-    // (например, именованные CSS-классы потеряются — styles.wrapper окажется undefined).
-    // Поэтому рекурсивно вычищаем все дефолтные css-правила и ставим свои — для *.scss.
-    const isStyleRule = (rule: any): boolean => {
-      if (!rule || typeof rule !== 'object' || !('test' in rule)) return false;
-      const test = rule.test;
-      if (!(test instanceof RegExp)) return false;
-      return (
-        test.test('styles.css') ||
-        test.test('styles.module.css') ||
-        test.test('styles.scss') ||
-        test.test('styles.module.scss')
-      );
-    };
-
-    const stripStyleRules = (rules: any[]): any[] =>
-      (rules ?? [])
-        .filter((rule) => !isStyleRule(rule))
-        .map((rule) => {
-          if (rule && typeof rule === 'object' && Array.isArray(rule.oneOf)) {
-            return { ...rule, oneOf: stripStyleRules(rule.oneOf) };
-          }
-          return rule;
-        });
-
-    config.module.rules = stripStyleRules(config.module.rules as any[]);
-
-    config.module.rules.push(
-      {
-        // файлы дизайн-токенов и прочие "обычные" стили
-        test: /\.scss$/i,
-        exclude: /\.module\.scss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
-      {
-        // CSS Modules для стилей отдельных компонентов
-        test: /\.module\.scss$/i,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                namedExport: false,
-                localIdentName: '[name]__[local]--[hash:base64:5]',
-              },
-            },
-          },
-          'sass-loader',
-        ],
-      },
-    );
-
-    config.resolve = config.resolve ?? { alias: {} };
-    config.resolve.alias = {
-      ...(config.resolve.alias ?? {}),
-      '@': path.resolve(__dirname, '../src'),
-      '@components': path.resolve(__dirname, '../src/components'),
-      '@hooks': path.resolve(__dirname, '../src/hooks'),
-      '@shared': path.resolve(__dirname, '../src/shared'),
-      '@icons': path.resolve(__dirname, '../src/icons'),
-    };
-
-    return config;
-  },
-
-  // Правильное место для конфигурации @storybook/addon-webpack5-compiler-swc —
-  // этот аддон читает опции через стандартный preset-хук `swc`, экспортированный
-  // прямо из main.ts, а НЕ через `options.swc` внутри записи аддона в массиве
-  // addons (тот `options` объект этот конкретный аддон вообще не читает —
-  // отсюда и "React is not defined": runtime всегда оставался "classic").
-  swc: (swcOptions: SwcOptions): SwcOptions => ({
-    ...swcOptions,
-    jsc: {
-      ...swcOptions.jsc,
-      transform: {
-        ...swcOptions.jsc?.transform,
-        react: {
-          ...swcOptions.jsc?.transform?.react,
-          runtime: 'automatic',
-        },
-      },
-    },
-  }),
-};
-
-export default config;
+export default config
