@@ -1,6 +1,17 @@
-import React from 'react';
+import { ButtonHTMLAttributes, useState } from 'react';
 import { Tooltip } from './index'
-import { Button } from '../Button'
+
+import { Badge } from '../Badge';
+import { Block } from '../Block';
+import { Button } from '../Button';
+import { Checkbox } from '../Checkbox';
+import { Input } from '../Input';
+import { MarkdownField } from '../MarkdownField';
+import { ProgressBar } from '../ProgressBar';
+import { Select } from '../Select';
+import { Slider } from '../Slider';
+import { Switch } from '../Switch';
+import { TabList } from '../TabList';
 
 const meta = {
   title: 'Components/Tooltip',
@@ -22,7 +33,7 @@ const meta = {
 export default meta;
 
 // простая кнопка-триггер многоразового использования в историях
-const TriggerButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+const TriggerButton = (props: ButtonHTMLAttributes<HTMLButtonElement>) => (
   <button
     {...props}
     style={{
@@ -133,4 +144,315 @@ export const MultipleTriggers = {
       </Tooltip>
     </div>
   ),
+};
+
+const tooltipContent = 'Tooltip работает на этом компоненте';
+
+export const AllComponents = {
+  name: 'All UI Kit components',
+  args: {
+    content: tooltipContent,
+    position: 'top',
+    showDelay: 300,
+    cursorLag: 100,
+  },
+
+  render: (args: React.ComponentProps<typeof Tooltip>) => {
+    const [checkboxChecked, setCheckboxChecked] = useState(false);
+    const [switchChecked, setSwitchChecked] = useState(false);
+    const [selectValue, setSelectValue] = useState<string | undefined>();
+    const [sliderValue, setSliderValue] = useState(40);
+    const [activeTab, setActiveTab] = useState('first');
+    const [inputValue, setInputValue] = useState('');
+    const [markdownValue, setMarkdownValue] = useState('');
+
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 24,
+          width: 600,
+          padding: 32,
+        }}
+      >
+        <h3 style={{ margin: 0 }}>Tooltip — проверка всех компонентов UI Kit</h3>
+
+        <p style={{ margin: 0 }}>
+          Наведи курсор на каждый компонент. Tooltip должен отображаться
+          независимо от внутренней DOM-структуры компонента.
+        </p>
+
+        {/* Badge */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 48,
+          }}
+        >
+          <strong style={{ width: 160 }}>Badge</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на Badge"
+          >
+            <Badge variant='bronze' level={67} />
+          </Tooltip>
+        </div>
+
+        {/* Block */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 80,
+          }}
+        >
+          <strong style={{ width: 160 }}>Block</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на Block"
+          >
+            <Block
+              variant="default"
+              width={220}
+              height={60}
+              title="Block"
+            />
+          </Tooltip>
+        </div>
+
+        {/* Button */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 48,
+          }}
+        >
+          <strong style={{ width: 160 }}>Button</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на Button"
+          >
+            <Button labelText="Button" />
+          </Tooltip>
+        </div>
+
+        {/* Checkbox */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 48,
+          }}
+        >
+          <strong style={{ width: 160 }}>Checkbox</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на Checkbox"
+          >
+            <Checkbox
+              checked={checkboxChecked}
+              onClick={setCheckboxChecked}
+              labelText="Checkbox"
+            />
+          </Tooltip>
+        </div>
+
+        {/* Input */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 70,
+          }}
+        >
+          <strong style={{ width: 160 }}>Input</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на Input"
+          >
+            <Input
+              value={inputValue}
+              onChange={setInputValue}
+              placeholder="Введите текст"
+            />
+          </Tooltip>
+        </div>
+
+        {/* MarkdownField */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 120,
+          }}
+        >
+          <strong style={{ width: 160 }}>MarkdownField</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на MarkdownField"
+          >
+            <MarkdownField
+              value={markdownValue}
+              onChange={setMarkdownValue}
+              placeholder="Markdown..."
+              showToolbar
+            />
+          </Tooltip>
+        </div>
+
+        {/* ProgressBar */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 48,
+          }}
+        >
+          <strong style={{ width: 160 }}>ProgressBar</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на ProgressBar"
+          >
+            <div style={{ width: 300 }}>
+              <ProgressBar
+                min={0}
+                max={100}
+                value={65}
+              />
+            </div>
+          </Tooltip>
+        </div>
+
+        {/* Select */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 48,
+          }}
+        >
+          <strong style={{ width: 160 }}>Select</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на Select"
+          >
+            <Select
+              options={[
+                { value: 'one', label: 'Первый вариант' },
+                { value: 'two', label: 'Второй вариант' },
+                { value: 'three', label: 'Третий вариант' },
+              ]}
+              value={selectValue}
+              onChange={setSelectValue}
+              placeholder="Выберите вариант"
+            />
+          </Tooltip>
+        </div>
+
+        {/* Slider */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 48,
+          }}
+        >
+          <strong style={{ width: 160 }}>Slider</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на Slider"
+          >
+            <div style={{ width: 300 }}>
+              <Slider
+                min={0}
+                max={100}
+                value={sliderValue}
+                onChange={setSliderValue}
+              />
+            </div>
+          </Tooltip>
+        </div>
+
+        {/* Switch */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 48,
+          }}
+        >
+          <strong style={{ width: 160 }}>Switch</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на Switch"
+          >
+            <Switch
+              checked={switchChecked}
+              onChange={setSwitchChecked}
+              labelText="Switch"
+            />
+          </Tooltip>
+        </div>
+
+        {/* TabList */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            minHeight: 64,
+          }}
+        >
+          <strong style={{ width: 160 }}>TabList</strong>
+
+          <Tooltip
+            {...args}
+            content="Tooltip на TabList"
+          >
+            <TabList
+              tabs={[
+                {
+                  id: 'first',
+                  label: 'Первая',
+                },
+                {
+                  id: 'second',
+                  label: 'Вторая',
+                },
+                {
+                  id: 'third',
+                  label: 'Третья',
+                },
+              ]}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+            />
+          </Tooltip>
+        </div>
+      </div>
+    );
+  },
 };

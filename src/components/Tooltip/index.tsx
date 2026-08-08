@@ -1,7 +1,7 @@
 import React, {
-  cloneElement,
   isValidElement,
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -16,12 +16,8 @@ export type TooltipPosition = 'top' | 'bottom';
 export interface TooltipProps {
   /** Содержимое подсказки — текст или произвольный React-узел */
   content: React.ReactNode;
-  /** Элемент, при наведении на который появляется подсказка */
-  children: React.ReactElement<{
-    onMouseEnter?: React.MouseEventHandler<HTMLElement>;
-    onMouseMove?: React.MouseEventHandler<HTMLElement>;
-    onMouseLeave?: React.MouseEventHandler<HTMLElement>;
-  }>;
+  /** Любой React-элемент UI Kit или обычный React-элемент */
+  children: React.ReactElement;
   /** Появляется над курсором или под курсором */
   position?: TooltipPosition;
   /** Отключить подсказку */
@@ -34,20 +30,10 @@ export interface TooltipProps {
   showDelay?: number;
   /**
    * Задержка "отставания" подсказки от курсора при движении мыши, мс.
-   * 0 (по умолчанию) — подсказка следует мгновенно, без сглаживания.
-   * Реализовано через requestAnimationFrame + экспоненциальное сглаживание
-   * (а не через CSS transition), поэтому движение остаётся плавным
-   * независимо от частоты и неравномерности событий mousemove.
+   * 0 — подсказка следует мгновенно, без сглаживания.
    */
   cursorLag?: number;
 }
-
-/**
-
-    TODO:
-    - исправить поведение на других элементах uikit (не отображается на других элементах кроме кнопки)
-
-*/
 
 export const Tooltip = ({
   content,
@@ -59,11 +45,9 @@ export const Tooltip = ({
   showDelay = 500,
   cursorLag = 100,
 }: TooltipProps) => {
-
   const [visible, setVisible] = useState(false);
   const showTimer = useRef<number | null>(null);
 
-  // применяем расчитанную позицию
   const applyPosition = useCallback(
     (el: HTMLDivElement, x: number, y: number) => {
       const top = position === 'top' ? y - offset : y + offset;
@@ -73,30 +57,33 @@ export const Tooltip = ({
     [position, offset],
   );
 
-  // плавное отставание
   const { elementRef: tooltipRef, setTarget } = useSmoothFollow<HTMLDivElement>(
     applyPosition,
     { lag: cursorLag, enabled: visible },
   );
 
-  const clearShowTimer = () => {
-    if (showTimer.current) {
+  const clearShowTimer = useCallback(() => {
+    if (showTimer.current !== null) {
       window.clearTimeout(showTimer.current);
       showTimer.current = null;
     }
-  };
+  }, []);
 
-  // сырые координаты мыши
+  useEffect(() => clearShowTimer, [clearShowTimer]);
+
   const { handlers: mouseHandlers } = useMouseTracking({
     onEnter: (x, y) => {
       if (disabled) return;
+
       setTarget(x, y, { teleport: true });
       clearShowTimer();
-      showTimer.current = window.setTimeout(() => setVisible(true), showDelay);
+      showTimer.current = window.setTimeout(() => {
+        setVisible(true);
+        showTimer.current = null;
+      }, showDelay);
     },
     onMove: (x, y) => {
-      if (disabled) return;
-      setTarget(x, y);
+      if (!disabled) setTarget(x, y);
     },
     onLeave: () => {
       clearShowTimer();
@@ -106,22 +93,30 @@ export const Tooltip = ({
 
   if (!isValidElement(children)) return children;
 
-  const trigger = cloneElement(children, {
-    onMouseEnter: (event: React.MouseEvent<HTMLElement>) => {
-      children.props.onMouseEnter?.(event);
-      mouseHandlers.onMouseEnter(event);
-    },
-    onMouseMove: (event: React.MouseEvent<HTMLElement>) => {
-      children.props.onMouseMove?.(event);
-      mouseHandlers.onMouseMove(event);
-    },
-    onMouseLeave: (event: React.MouseEvent<HTMLElement>) => {
-      children.props.onMouseLeave?.(event);
-      mouseHandlers.onMouseLeave(event);
-    },
-  });
+  /*
+   * Не клонируем children и не пытаемся пробросить mouse handlers
+   * непосредственно в UI Kit-компонент.
+   *
+   * Часть компонентов UI Kit рендерит корневой DOM-элемент внутри
+   * (например Input -> div -> input, Checkbox -> label -> input,
+   * ProgressBar -> wrapper -> track). Поэтому обработчики, добавленные
+   * через cloneElement, не попадали на реальный DOM-узел.
+   *
+   * display: contents сохраняет исходную геометрию компонента и при этом
+   * даёт Tooltip единый DOM-родитель, который получает события мыши
+   * независимо от внутренней реализации дочернего компонента.
+   */
+  const trigger = (
+    <div
+      style={{ display: 'contents' }}
+      onMouseEnter={mouseHandlers.onMouseEnter}
+      onMouseMove={mouseHandlers.onMouseMove}
+      onMouseLeave={mouseHandlers.onMouseLeave}
+    >
+      {children}
+    </div>
+  );
 
-  // разметка компонента
   return (
     <>
       {trigger}
