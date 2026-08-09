@@ -1,6 +1,6 @@
 @use './MarkdownField-vars' as *;
-@use '../../shared/_media.scss' as *;
-@use '../../shared/_mixins.scss' as *;
+@use '../../shared/media' as *;
+@use '../../shared/mixins' as *;
 .wrapper {
   display: flex;
   flex-direction: column;

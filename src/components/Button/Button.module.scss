@@ -1,5 +1,5 @@
-@use '../../shared/_computed-vars.scss' as *;
 @use './Button-vars' as *;
+@use '../../shared/mixins' as *;
 @use '../../shared/_media.scss' as *;
 
 .button {
@@ -22,21 +22,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  column-gap: $uikit-const-6rem;
+  column-gap: 0.375rem;
 
   width: 100%;
   padding: 8px 12px;
 
-  --border-radius: var(--uikit-border-radius--desktop);
-
-  @include tablet {
-    --border-radius: var(--uikit-border-radius--tablet);
-  }
-  @include mobile {
-    --border-radius: var(--uikit-border-radius--mobile);
-  }
-
-  border-radius: var(--border-radius);
+  @include adaptive-rounding(0px, 1px);
 
   text-align: center;
   font-weight: 500;

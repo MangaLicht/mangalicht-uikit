@@ -1,9 +1,7 @@
 @use './DropDown-vars' as *;
-@use '../../shared/_media.scss' as *;
+@use '../../shared/mixins' as *;
 
 .defaultTrigger {
-  --dropdown-border-radius: var(--uikit-border-radius--desktop, 4px);
-
   appearance: none;
   -webkit-appearance: none;
   margin: 0;
@@ -24,14 +22,7 @@
   height: 40px;
   padding: 0 12px;
 
-  border-radius: var(--dropdown-border-radius);
-
-  @include tablet {
-    --dropdown-border-radius: var(--uikit-border-radius--tablet);
-  }
-  @include mobile {
-    --dropdown-border-radius: var(--uikit-border-radius--mobile);
-  }
+  @include adaptive-rounding(0px);
 
   border: $dropdown-border-width solid $dropdown-trigger-border-color;
   background-color: $dropdown-trigger-bg-color;
@@ -86,7 +77,7 @@
   min-width: $dropdown-panel-min-width;
   max-width: $dropdown-panel-max-width;
   overflow-y: auto;
-  border-radius: 8px;
+  @include adaptive-rounding(4px);
   border: 0 solid $dropdown-panel-border-color;
   background-color: $dropdown-panel-bg-color;
   box-shadow: 0 8px 24px $dropdown-panel-shadow-color;
@@ -96,8 +87,8 @@
   transform: translateY(-4px);
   pointer-events: none;
   transition:
-    opacity var(--uikit-transition-fast, 0.18s ease),
-    transform var(--uikit-transition-fast, 0.18s ease);
+    opacity 0.18s ease,
+    transform 0.18s ease;
 
   &[data-open='true'] {
     opacity: 1;
@@ -125,7 +116,7 @@
 
 .item {
   list-style: none;
-  border-radius: 6px;
+  @include adaptive-rounding(8px);
   font-size: $dropdown-font-size;
   color: $dropdown-item-text-color;
   cursor: pointer;

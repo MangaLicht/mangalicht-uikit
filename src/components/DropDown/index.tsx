@@ -277,7 +277,11 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 						ref={panelRef}
 						id={isNested ? submenuId : undefined}
 						role='menu'
-						className={[styles.panel, !isNested && classNames]
+						className={[
+							styles.panel,
+							'uikit_rounded',
+							!isNested && classNames
+						]
 							.filter(Boolean)
 							.join(' ')}
 						data-open={open}

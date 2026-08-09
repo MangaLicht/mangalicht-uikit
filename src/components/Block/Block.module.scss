@@ -8,22 +8,12 @@
 }
 
 .block {
-    --matched-border-radius: var(--uikit-border-radius--desktop);
-
     width: inherit;
     height: inherit;
     padding: $block-padding;
-    border-radius: calc(var(--matched-border-radius) + $block-padding);
     overflow: hidden;
 
-    @include tablet {--matched-border-radius: var(--uikit-border-radius--tablet);}
-    @include mobile {--matched-border-radius: var(--uikit-border-radius--mobile);}
-
-    & .blockWrapper > .block {
-        border-radius: var(--uikit-border-radius--desktop) !important;
-        @include tablet {border-radius: var(--uikit-border-radius--tablet) !important;}
-        @include mobile {border-radius: var(--uikit-border-radius--mobile) !important;}
-    }
+    @include adaptive-rounding($block-padding, 1px);
 }
 
 .title {

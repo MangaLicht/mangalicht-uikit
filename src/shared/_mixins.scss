@@ -1,5 +1,20 @@
 @use 'sass:math';
 
+@mixin adaptive-rounding($padding, $min-radius: 1px) {
+  --base-radius: var(--uikit-matched-radius);
+  --padding: #{$padding};
+  --min-radius: #{$min-radius};
+  
+  --parent-radius: calc(var(--base-radius) + var(--padding));
+  border-radius: var(--parent-radius);
+
+  & * {
+    --child-radius: calc(var(--parent-radius) - var(--padding));
+    --current-radius: max(var(--child-radius), var(--min-radius));
+    border-radius: var(--current-radius) !important;
+  }
+}
+
 @mixin reset-link {
   color: inherit;
   &,
