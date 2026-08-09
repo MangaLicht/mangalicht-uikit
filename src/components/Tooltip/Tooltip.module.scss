@@ -5,7 +5,8 @@
   z-index: 1000;
   max-width: 240px;
   padding: 6px 10px;
-  border-radius: 6px;
+  --current-radius: 6px !important; // перебиваем стили из adaptive-rounding
+  border-radius: var(--current-radius);
   background-color: $tooltip-bg-color;
   color: $tooltip-text-color;
   font-size: 12px;
