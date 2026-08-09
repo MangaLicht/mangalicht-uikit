@@ -61,7 +61,8 @@
 
   // "radio" — круглая форма вместо квадратной со скруглением
   &[data-style='radio'] {
-    border-radius: 50%;
+    --current-radius: 50% !important; // перебиваем стили из adaptive-rounding
+    border-radius: var(--current-radius);
     & .checkmark {
       visibility: hidden;
     }
@@ -74,8 +75,7 @@
       transform: translate(-50%, -50%);
       width: 0px;
       height: 0px;
-      --current-radius: 50% !important; // перебиваем стили из adaptive-rounding
-      border-radius: var(--current-radius);
+      border-radius: 50%;
       background-color: transparent;
       transition: all 0.22s cubic-bezier(0.2, 2, 0.8, 1);
       -webkit-transition: all 0.22s cubic-bezier(0.2, 2, 0.8, 1);
