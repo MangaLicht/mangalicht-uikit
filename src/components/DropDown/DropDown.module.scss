@@ -82,7 +82,9 @@
   padding: 4px;
   list-style: none;
   max-height: 320px;
-  min-width: 160px;
+  width: max-content;
+  min-width: $dropdown-panel-min-width;
+  max-width: $dropdown-panel-max-width;
   overflow-y: auto;
   border-radius: 8px;
   border: 0 solid $dropdown-panel-border-color;

@@ -123,7 +123,7 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 			useAnchoredPosition<HTMLUListElement>(triggerRef, {
 				open,
 				offset: 4,
-				matchWidth: !isNested && width === undefined,
+				matchWidth: false,
 				placement: isNested ? 'right-start' : 'bottom-start'
 			})
 
