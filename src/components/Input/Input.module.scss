@@ -17,26 +17,18 @@
 }
 
 .fieldWrapper {
-  --input-border-radius: var(--uikit-border-radius--desktop, 6px);
+  @include adaptive-rounding(0px);
 
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  border-radius: var(--input-border-radius);
   border: $input-border-width solid $input-border-color;
   background-color: $input-bg-color;
   transition:
     border-color var(--uikit-transition-fast, 0.18s ease),
     box-shadow var(--uikit-transition-fast, 0.18s ease);
-
-  @include tablet {
-    --input-border-radius: var(--uikit-border-radius--tablet);
-  }
-  @include mobile {
-    --input-border-radius: var(--uikit-border-radius--mobile);
-  }
 
   &:hover:not([data-disabled='true']) {
     border-color: $input-border-color--hover;

@@ -1,3 +1,5 @@
+@use './media' as *;
+
 :root {
   --c-white: #ffffff;
   --c-grey-50: #e4e5e7;
@@ -32,6 +34,9 @@
   --c-neutral-light-500: rgb(228, 229, 231, 0.5);
 
   // Borders
+  --uikit-matched-radius: var(--uikit-border-radius--desktop);
+  @include tablet {--uikit-matched-radius: var(--uikit-border-radius--tablet);}
+  @include mobile {--uikit-matched-radius: var(--uikit-border-radius--mobile);}
   --uikit-border-radius--desktop: 6px;
   --uikit-border-radius--tablet: 8px;
   --uikit-border-radius--mobile: 12px;

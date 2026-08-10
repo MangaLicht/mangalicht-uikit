@@ -1,53 +1,141 @@
 @use './Badge-vars' as *;
 
+@keyframes uikit-badge-shine {
+  0% {
+    transform: rotate(-20deg) translateX(-60px);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-20deg) translateX(100px);
+  }
+}
+@keyframes uikit-badge-border-shine {
+  0% {
+    transform: rotate(30deg);
+    opacity: 0;
+  }
+  60% {
+    opacity: 100;
+  }
+  85% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(-180deg);
+  }
+}
+
+@mixin shine(
+  $bg-color, 
+  $blur: 10px, 
+  $width: 20px, 
+  $shine-width: 10px,
+  $glow-width: 10px,
+  $shine-blur: 1px,
+  $glow-color: #fff,
+  $shine-color: white
+  ) {
+  & > .shine::before {
+  content: '';
+  position: absolute;
+  background: $shine-color;
+  width: $shine-width;
+  height: 100px;
+  box-shadow: 0 0 $glow-width $glow-color;
+  z-index: -1;
+  filter: blur($shine-blur);
+  --webkit-filter: blur($shine-blur);
+  opacity: 0.9;
+  top: -100%;
+  transform: rotate(-20deg) translateX(-30px);
+  animation: uikit-badge-shine $badge-shine-duration ease-in-out infinite;
+}
+  &[data-shine="true"]::before {
+    --blur-level: $blur;
+    content: '';
+    position: absolute;
+    top: -98%;
+    width: $width;
+    height: 100px;
+    z-index: -2;
+    background: whitesmoke;
+    box-shadow: 0 0 10px #fff;
+    filter: blur($blur);
+    --webkit-filter: blur($blur);
+    opacity: 0;
+    transform: rotate(-30deg);
+    animation: uikit-badge-border-shine $badge-shine-duration ease-in-out infinite;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0.125rem;
+    border-radius: inherit;
+    background-color: $bg-color;
+    z-index: -2;
+  }
+}
+
 .badge {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  // обрезаем блик по форме пилюли — без этого он бы прямоугольником
-  // вылезал за скруглённые края
   overflow: hidden;
   isolation: isolate;
-  padding: $badge-padding-y $badge-padding-x;
-  border-radius: 999px;
+  box-sizing: border-box;
   border: $badge-border-width solid transparent;
+  padding: $badge-padding-y $badge-padding-x;
+  --current-radius: 999px !important; // перебиваем стили из adaptive-rounding
+  border-radius: var(--current-radius);
   font-family: inherit;
   font-size: $badge-font-size;
   font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
   user-select: none;
+  transform: translateZ(0); 
 
   &[data-variant='bronze'] {
     color: $badge-bronze;
-    border-color: $badge-bronze;
-    background-color: rgba($badge-bronze, $badge-fill-opacity);
+    border: 0 solid $badge-bronze;
+    background-color: $badge-bronze;
+    @include shine($badge-bronze-bg, 12px, 10px, 10px, 10px, 4px, 
+    rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
   }
   &[data-variant='silver'] {
     color: $badge-silver;
-    border-color: $badge-silver;
-    background-color: rgba($badge-silver, $badge-fill-opacity);
+    border: 0 solid $badge-silver;
+    background-color: $badge-silver;
+    @include shine($badge-silver-bg, 4px, 20px);
   }
   &[data-variant='gold'] {
     color: $badge-gold;
-    border-color: $badge-gold;
-    background-color: rgba($badge-gold, $badge-fill-opacity);
+    border: 0 solid $badge-gold;
+    background-color: $badge-gold;
+    @include shine($badge-gold-bg, 1px, 10px);
   }
   &[data-variant='platinum'] {
     color: $badge-platinum;
-    border-color: $badge-platinum;
-    background-color: rgba($badge-platinum, $badge-fill-opacity * 1.6);
+    border: 0 solid $badge-platinum;
+    background-color: $badge-platinum;
+    @include shine($badge-platinum-bg, 1px, 5px, 5px, 8px);
   }
   &[data-variant='ruby'] {
     color: $badge-ruby;
-    border-color: $badge-ruby;
-    background-color: rgba($badge-ruby, $badge-fill-opacity);
+    border: 0 solid $badge-ruby;
+    background-color: $badge-ruby;
+    @include shine($badge-ruby-bg, 5px, 14px, 10px, 20px, 1px, #fcc2c2, #fff);
   }
   &[data-variant='diamond'] {
     color: $badge-diamond;
-    border-color: $badge-diamond;
-    background-color: rgba($badge-diamond, $badge-fill-opacity);
+    border: 0 solid $badge-diamond;
+    background-color: $badge-diamond;
+    @include shine($badge-diamond-bg, 1px, 20px, 10px, 8px, 1px, #96d9ff, #ffffff);
   }
 }
 
@@ -55,36 +143,6 @@
   position: relative;
   // текст всегда поверх блика — блик подсвечивает фон/рамку, но не гасит читаемость
   z-index: 1;
-}
-
-.shine {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    100deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.55) 47%,
-    rgba(255, 255, 255, 0.85) 50%,
-    rgba(255, 255, 255, 0.55) 53%,
-    transparent 70%
-  );
-  // стартовая позиция — полностью за левым краем, чтобы не мелькнуть при монтировании
-  transform: translateX(-140%);
-  animation: uikit-badge-shine $badge-shine-duration ease-in-out infinite;
-}
-
-// быстрый пробег блика (0% → 18% времени цикла), затем долгая пауза
-// за правым краем (18% → 100%) — рывок в начале следующего витка невидим,
-// так как в этот момент блик всё равно вне видимой области
-@keyframes uikit-badge-shine {
-  0% {
-    transform: translateX(-140%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

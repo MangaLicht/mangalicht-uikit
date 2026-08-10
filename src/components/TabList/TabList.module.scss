@@ -1,5 +1,6 @@
-@use '../../shared/_media.scss' as *;
 @use './_TabList-vars.scss' as *;
+@use '../../shared/media' as *;
+@use '../../shared/mixins' as *;
 
 .tabList {
   position: relative;
@@ -8,21 +9,12 @@
 }
 
 .tabsContainer {
-  --border-radius: var(--uikit-border-radius--desktop);
-  --border-radius-inner: calc(var(--border-radius) - 2px);
-
-  @include tablet {
-    --border-radius: var(--uikit-border-radius--tablet);
-  }
-  @include mobile {
-    --border-radius: var(--uikit-border-radius--mobile);
-  }
+  @include adaptive-rounding(2px);
 
   display: inline-flex;
   width: 100%;
   gap: 2px;
   padding: 2px;
-  border-radius: var(--border-radius);
   &[data-variant='block'] {
     background-color: $tab-container-bg;
   }
@@ -33,7 +25,6 @@
   z-index: 1;
 
   & button {
-    border-radius: var(--border-radius-inner) !important;
 
     &:not([class*='activeTab'])::after {
       content: '';

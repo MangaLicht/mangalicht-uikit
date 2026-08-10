@@ -1,10 +1,7 @@
 @use './Select-vars' as *;
-@use '../../shared/_media.scss' as *;
+@use '../../shared/mixins' as *;
 
 .trigger {
-  // служебная переменная для адаптации скугленья углов
-  --select-border-radius: var(--uikit-border-radius--desktop, 4px);
-
 /*сброс браузерных стилей*/
   appearance: none;
   -webkit-appearance: none;
@@ -27,14 +24,7 @@
   height: 40px;
   padding: 0 12px;
 
-  border-radius: var(--select-border-radius);
-
-  @include tablet {
-    --select-border-radius: var(--uikit-border-radius--tablet);
-  }
-  @include mobile {
-    --select-border-radius: var(--uikit-border-radius--mobile);
-  }
+  @include adaptive-rounding(0px);
 
   border: $select-border-width solid $select-trigger-border-color;
   background-color: $select-trigger-bg-color;
@@ -101,7 +91,7 @@
   list-style: none;
   max-height: 240px;
   overflow-y: auto;
-  border-radius: 8px;
+  @include adaptive-rounding(4px);
   border: 0 solid $select-panel-border-color;
   background-color: $select-panel-bg-color;
   box-shadow: 0 8px 24px $select-panel-shadow-color;
