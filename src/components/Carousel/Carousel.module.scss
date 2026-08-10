@@ -57,7 +57,8 @@
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 50%;
+    --current-radius: 50% !important; // перебиваем стили из adaptive-rounding
+    border-radius: var(--current-radius);
     aspect-ratio: 1 / 1;
     transform: translateY(-50%);
     color: $carousel-arrow-color;
