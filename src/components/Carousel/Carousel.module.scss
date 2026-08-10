@@ -25,13 +25,8 @@
     display: flex;
     width: max-content;
     height: 100%;
-    cursor: grab;
     will-change: transform;
     border-radius: inherit;
-
-    &:active {
-        cursor: grabbing;
-    }
 }
 
 .slide {
@@ -41,10 +36,12 @@
     overflow: hidden;
     position: relative;
     cursor: pointer;
+    user-select: none;
 
     transition: width $carousel-transition-time $carousel-transition-function;
 
     &[data-active='true'] {
+        user-select: text;
         cursor: default;
     }
 }
