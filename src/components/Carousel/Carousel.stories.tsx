@@ -53,7 +53,7 @@ const demoSlides = [
 					<h2 style={{ fontSize: 28, margin: '0 0 12px' }}>
 						Тестовый слайд 2
 					</h2>
-					<Button labelText='Получить' variant='highlight' />
+					<Button labelText='Читать' variant='highlight' />
 				</div>
 			</div>
 		)
@@ -66,7 +66,7 @@ const demoSlides = [
 					<h2 style={{ fontSize: 28, margin: '0 0 12px' }}>
 						Тестовый слайд 3
 					</h2>
-					<Button labelText='Установить' variant='highlight' />
+					<Button labelText='Читать' variant='highlight' />
 				</div>
 			</div>
 		)
