@@ -22,30 +22,17 @@ export interface CarouselProps extends IUIKitProps {
 	onSlideChange?: (index: number) => void
 	autoPlayInterval?: number
 	showArrows?: boolean
+	showDots?: boolean
 	height?: number
 	collapsedWidth?: number
 	gap?: number
 }
 
-/**
-Количество физических копий массива.
-При 3 слайдах получится:
-1 2 3 | 1 2 3 | 1 2 3 | 1 2 3 | 1 2 3
-            ↑
-         рабочая зона
-*/
 const COPIES = 5
 const CENTER_COPY = Math.floor(COPIES / 2)
 
-/**
-Должно совпадать с transition duration
-в Carousel.module.scss.
-*/
 const TRANSITION_DURATION = 400
 
-/**
-Нормализация индекса.
-*/
 const normalizeIndex = (index: number, count: number) => {
 	if (count <= 0) {
 		return 0
@@ -62,6 +49,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 			onSlideChange,
 			autoPlayInterval,
 			showArrows = true,
+			showDots = true,
 			height,
 			collapsedWidth = 86,
 			gap = 6,
@@ -71,34 +59,17 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 	) => {
 		const realCount = slides.length
 
-		/**
-		 * ------------------------------------------------------------
-		 * DOM refs
-		 * ------------------------------------------------------------
-		 */
 		const containerRef = useRef<HTMLDivElement | null>(null)
 		const trackRef = useRef<HTMLDivElement | null>(null)
 
-		/**
-		 * ------------------------------------------------------------
-		 * Transition refs
-		 * ------------------------------------------------------------
-		 */
 		const isTransitioningRef = useRef(false)
 		const transitionTimeoutRef = useRef<number | null>(null)
 
-		/**
-		 * Используется для ожидания reset.
-		 */
 		const resetFrameRef = useRef<number | null>(null)
 		const resetSecondFrameRef = useRef<number | null>(null)
 
-		/**
-		 * ------------------------------------------------------------
-		 * Controlled / uncontrolled
-		 * ------------------------------------------------------------
-		 */
 		const isControlled = activeIndex !== undefined
+
 		const initialIndex = normalizeIndex(
 			isControlled ? (activeIndex ?? 0) : defaultActiveIndex,
 			realCount
@@ -108,40 +79,9 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 			? normalizeIndex(activeIndex ?? 0, realCount)
 			: internalIndex
 
-		/**
-		 * ------------------------------------------------------------
-		 * Physical position
-		 * ------------------------------------------------------------
-		 *
-		 * ВАЖНО:
-		 *
-		 * displayPosition — физическая позиция
-		 * в расширенном массиве.
-		 *
-		 * Например:
-		 *
-		 * 0 1 2 | 3 4 5 | 6 7 8 | 9 10 11 | 12 13 14
-		 *
-		 * 1 2 3 | 1 2 3 | 1 2 3 | 1  2  3 | 1  2  3
-		 *                 ↑
-		 *               центр
-		 */
 		const initialPosition = CENTER_COPY * realCount + initialIndex
 		const [displayPosition, setDisplayPosition] = useState(initialPosition)
-
-		/**
-		 * Во время reset:
-		 *
-		 * - track transition = none
-		 * - slide width transition = none
-		 */
 		const [isResetting, setIsResetting] = useState(false)
-
-		/**
-		 * ------------------------------------------------------------
-		 * Container width
-		 * ------------------------------------------------------------
-		 */
 		const [containerWidth, setContainerWidth] = useState(0)
 
 		useLayoutEffect(() => {
@@ -729,6 +669,18 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 							<ChevronIcon />
 						</button>
 					</>
+				) : null}
+				{showDots ? (
+					<div className={styles.dots}>
+						{slides.map((slide, index) => (
+							<div
+								key={slide.id}
+								className={styles.dot}
+								aria-current={index === currentIndex}
+								data-active={index === currentIndex}
+							/>
+						))}
+					</div>
 				) : null}
 			</div>
 		)

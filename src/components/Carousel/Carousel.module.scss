@@ -38,6 +38,8 @@
     cursor: pointer;
     user-select: none;
 
+    text-wrap-mode: nowrap;
+
     transition: width $carousel-transition-time $carousel-transition-function;
 
     &[data-active='true'] {
@@ -64,8 +66,14 @@
     @include tablet-above {
         opacity: 0;
     }
-    @include tablet {opacity: 1;}
-    @include mobile {opacity: 1;}
+
+    @include tablet {
+        opacity: 1;
+    }
+
+    @include mobile {
+        opacity: 1;
+    }
 
     transition: all 300ms ease;
     cursor: pointer;
@@ -99,5 +107,29 @@
 
     &[data-side='next'] svg {
         transform: rotate(-90deg);
+    }
+}
+
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background-color: $carousel-dot-bg;
+    transition:
+        background-color 0.18s ease,
+        transform 0.18s ease;
+
+    &[data-active='true'] {
+        background-color: $carousel-dot-bg-active;
+        transform: scale(1.3);
     }
 }
