@@ -54,7 +54,7 @@
   transform: rotate(-20deg) translateX(-30px);
   animation: uikit-badge-shine $badge-shine-duration ease-in-out infinite;
 }
-  &::before {
+  &[data-shine="true"]::before {
     --blur-level: $blur;
     content: '';
     position: absolute;
@@ -73,10 +73,8 @@
   &::after {
     content: '';
     position: absolute;
-    height: 100%;
-    width: 100%;
-    transform: scaleY(90%) scaleX(96%);
-    border-radius: 989px;
+    inset: 0.125rem;
+    border-radius: inherit;
     background-color: $bg-color;
     z-index: -2;
   }
@@ -87,10 +85,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  // обрезаем блик по форме пилюли — без этого он бы прямоугольником
-  // вылезал за скруглённые края
   overflow: hidden;
   isolation: isolate;
+  box-sizing: border-box;
+  border: $badge-border-width solid transparent;
   padding: $badge-padding-y $badge-padding-x;
   --current-radius: 999px !important; // перебиваем стили из adaptive-rounding
   border-radius: var(--current-radius);
@@ -100,14 +98,14 @@
   line-height: 1.2;
   white-space: nowrap;
   user-select: none;
-
-  //animation: uikit-badge-shine $badge-shine-duration ease-in-out infinite;
+  transform: translateZ(0); 
 
   &[data-variant='bronze'] {
     color: $badge-bronze;
     border: 0 solid $badge-bronze;
     background-color: $badge-bronze;
-    @include shine($badge-bronze-bg, 12px, 10px, 10px, 10px, 4px);
+    @include shine($badge-bronze-bg, 12px, 10px, 10px, 10px, 4px, 
+    rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
   }
   &[data-variant='silver'] {
     color: $badge-silver;

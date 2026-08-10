@@ -45,6 +45,7 @@ export const Badge = ({
 		<span
 			className={[styles.badge, classNames].filter(Boolean).join(' ')}
 			data-variant={variant}
+			data-shine={shine}
 		>
 			{shine ? (
 				<span className={styles.shine} aria-hidden='true' />
