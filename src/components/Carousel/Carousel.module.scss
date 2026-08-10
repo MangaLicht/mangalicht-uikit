@@ -1,0 +1,106 @@
+@use './_Carousel-vars.scss' as *;
+@use '../../shared/mixins' as *;
+@use '../../shared/media' as *;
+
+.carousel {
+    position: relative;
+    width: 100%;
+}
+
+.viewport {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+
+    @include adaptive-rounding(0px);
+
+    @include tablet-above {
+        &:hover~.arrow {
+            opacity: 1;
+        }
+    }
+}
+
+.track {
+    display: flex;
+    width: max-content;
+    height: 100%;
+    cursor: grab;
+    will-change: transform;
+    border-radius: inherit;
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+.slide {
+    flex-shrink: 0;
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+
+    transition: width $carousel-transition-time $carousel-transition-function;
+
+    &[data-active='true'] {
+        cursor: default;
+    }
+}
+
+.arrow {
+    position: absolute;
+    display: inline-flex;
+    width: 32px;
+    top: 50%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    transform: translateY(-50%);
+    color: $carousel-arrow-color;
+    background-color: $carousel-arrow-bg;
+
+    @include tablet-above {
+        opacity: 0;
+    }
+    @include tablet {opacity: 1;}
+    @include mobile {opacity: 1;}
+
+    transition: all 300ms ease;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    --padding: 14px;
+
+    &[data-side='prev'] {
+        left: var(--padding);
+    }
+
+    &[data-side='next'] {
+        right: var(--padding);
+    }
+
+    &:hover {
+        background-color: $carousel-arrow-bg-hover;
+    }
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    &[data-side='prev'] svg {
+        transform: rotate(90deg);
+    }
+
+    &[data-side='next'] svg {
+        transform: rotate(-90deg);
+    }
+}
