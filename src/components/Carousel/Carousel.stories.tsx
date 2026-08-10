@@ -38,7 +38,7 @@ const demoSlides = [
 							margin: '0 0 12px'
 						}}
 					>
-						Тестовый слайд 1
+						Тест карусели
 					</h2>
 					<Button labelText='Подробнее' variant='bordered' />
 				</div>
@@ -51,7 +51,7 @@ const demoSlides = [
 			<div style={slideStyle('#41295a', '#2F0743')}>
 				<div>
 					<h2 style={{ fontSize: 28, margin: '0 0 12px' }}>
-						Тестовый слайд 2
+						Поколение Нова
 					</h2>
 					<Button labelText='Читать' variant='highlight' />
 				</div>
@@ -64,7 +64,7 @@ const demoSlides = [
 			<div style={slideStyle('#3a1c71', '#d76d77')}>
 				<div>
 					<h2 style={{ fontSize: 28, margin: '0 0 12px' }}>
-						Тестовый слайд 3
+						Миры Этерии
 					</h2>
 					<Button labelText='Читать' variant='highlight' />
 				</div>
