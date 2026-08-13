@@ -23,7 +23,7 @@ const useExpandableCardContext = () => {
 
     if (!context) {
         throw new Error(
-            'ExpandableCard.* components must be used inside <ExpandableCard>.',
+            'ExpandableCard.ExpandableElenent must be used inside <ExpandableCard>.',
         )
     }
 
@@ -50,50 +50,45 @@ export interface ExpandableCardProps
     disabled?: boolean
 }
 
-export interface ExpandableCardSlotProps
+export interface ExpandableElenentProps
     extends HTMLAttributes<HTMLDivElement> {
     children?: ReactNode
+    initialClassName?: string
+    expandedClassName?: string
 }
 
-type ExpandableCardSlotComponent = FunctionComponent<ExpandableCardSlotProps>
+export type ExpandableElenentComponent = FunctionComponent<ExpandableElenentProps>
 
-const createSlot = (
-    slotClassName: string,
-): ExpandableCardSlotComponent => {
-    const Slot: ExpandableCardSlotComponent = ({
-        className,
-        children,
-        style,
-        ...props
-    }) => {
-        const { transitionDuration } = useExpandableCardContext()
+const ExpandableElenent: ExpandableElenentComponent = ({
+    className,
+    children,
+    style,
+    initialClassName,
+    expandedClassName,
+    ...props
+}) => {
+    const { expanded, transitionDuration } = useExpandableCardContext()
 
-        return (
-            <div
-                {...props}
-                className={cx(slotClassName, className)}
-                style={{
-                    ...style,
-                    transitionDuration,
-                }}
-            >
-                {children}
-            </div>
-        )
-    }
-
-    return Slot
+    return (
+        <div
+            {...props}
+            className={cx(
+                styles.element,
+                expanded ? expandedClassName : initialClassName,
+                className,
+            )}
+            style={{
+                ...style,
+                transitionDuration,
+            }}
+        >
+            {children}
+        </div>
+    )
 }
 
-const Icon = createSlot(styles.icon)
-const Title = createSlot(styles.title)
-const Subtitle = createSlot(styles.subtitle)
-const Collapsed = createSlot(styles.collapsedContent)
-const CollapsedFooter = createSlot(styles.collapsedFooter)
-const Action = createSlot(styles.action)
-const Content = createSlot(styles.content)
-const Footer = createSlot(styles.footer)
-const Free = createSlot(styles.free)
+ExpandableElenent.displayName = 'ExpandableCard.ExpandableElenent'
+
 
 const ExpandableCardBase = ({
     children,
@@ -203,47 +198,12 @@ const ExpandableCardBase = ({
 
 export interface ExpandableCardComponent
     extends FunctionComponent<ExpandableCardProps> {
-    Icon: ExpandableCardSlotComponent
-    Title: ExpandableCardSlotComponent
-    Subtitle: ExpandableCardSlotComponent
-    Collapsed: ExpandableCardSlotComponent
-    CollapsedFooter: ExpandableCardSlotComponent
-    Action: ExpandableCardSlotComponent
-    Content: ExpandableCardSlotComponent
-    Footer: ExpandableCardSlotComponent
-    Free: ExpandableCardSlotComponent
+    ExpandableElenent: ExpandableElenentComponent
 }
 
 export const ExpandableCard = ExpandableCardBase as ExpandableCardComponent
 
 ExpandableCard.displayName = 'ExpandableCard'
-ExpandableCard.Icon = Icon
-ExpandableCard.Icon.displayName = 'ExpandableCard.Icon'
-ExpandableCard.Title = Title
-ExpandableCard.Title.displayName = 'ExpandableCard.Title'
-ExpandableCard.Subtitle = Subtitle
-ExpandableCard.Subtitle.displayName = 'ExpandableCard.Subtitle'
-ExpandableCard.Collapsed = Collapsed
-ExpandableCard.Collapsed.displayName = 'ExpandableCard.Collapsed'
-ExpandableCard.CollapsedFooter = CollapsedFooter
-ExpandableCard.CollapsedFooter.displayName = 'ExpandableCard.CollapsedFooter'
-ExpandableCard.Action = Action
-ExpandableCard.Action.displayName = 'ExpandableCard.Action'
-ExpandableCard.Content = Content
-ExpandableCard.Content.displayName = 'ExpandableCard.Content'
-ExpandableCard.Footer = Footer
-ExpandableCard.Footer.displayName = 'ExpandableCard.Footer'
-ExpandableCard.Free = Free
-ExpandableCard.Free.displayName = 'ExpandableCard.Free'
+ExpandableCard.ExpandableElenent = ExpandableElenent
 
-export {
-    Icon as ExpandableCardIcon,
-    Title as ExpandableCardTitle,
-    Subtitle as ExpandableCardSubtitle,
-    Collapsed as ExpandableCardCollapsed,
-    CollapsedFooter as ExpandableCardCollapsedFooter,
-    Action as ExpandableCardAction,
-    Content as ExpandableCardContent,
-    Footer as ExpandableCardFooter,
-    Free as ExpandableCardFree,
-}
+export { ExpandableElenent }

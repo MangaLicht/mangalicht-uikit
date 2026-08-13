@@ -1,278 +1,70 @@
 @use './ExpandableCard-vars' as *;
 
 .wrapper {
-    position: relative;
-    width: $card-width;
-    height: $card-height;
-    flex: 0 0 $card-width;
-    overflow: visible;
-    isolation: isolate;
+	position: relative;
+	width: $card-width;
+	height: $card-height;
+	flex: 0 0 $card-width;
+	overflow: visible;
+	isolation: isolate;
 }
 
 .card {
-    position: absolute;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    width: $card-width;
-    height: $card-height;
-    transform: translate(-50%, -50%);
-    transform-origin: center;
-    overflow: hidden;
+	position: absolute;
+	z-index: 1;
+	top: 50%;
+	left: 50%;
+	width: $card-width;
+	height: $card-height;
+	transform: translate(-50%, -50%);
+	transform-origin: center;
+	overflow: hidden;
+	box-sizing: border-box;
 
-    border-radius: $border-radius;
-    background: $background;
-    color: $text-primary;
-    box-shadow: 0 8px 28px rgb(0 0 0 / 0%);
+	border-radius: $border-radius;
+	background: $background;
+	color: $text-primary;
+	box-shadow:
+		0px 20px 40px -8px $shadow,
+		0px 4px 12px 0px $shadow;
 
-    transition:
-        width $card-transition-duration $ease,
-        height $card-transition-duration $ease,
-        box-shadow $card-transition-duration ease,
-        border-radius $card-transition-duration ease;
+	transition:
+		width $card-transition-duration $ease,
+		height $card-transition-duration $ease,
+		border-radius $card-transition-duration $ease,
+		box-shadow $card-transition-duration $ease;
 
-    &.expanded {
-        z-index: 100;
-        width: $card-expanded-width;
-        height: $card-expanded-height;
-        box-shadow: 0 18px 50px rgb(0 0 0 / 35%);
-    }
+	&.expanded {
+		z-index: 100;
+		width: $card-expanded-width;
+		height: $card-expanded-height;
+		box-shadow:
+			0px 20px 40px -8px $shadow,
+			0px 4px 12px 0px $shadow;
+	}
 }
 
 /*
- * Все slot-компоненты являются обычными DOM-элементами.
- * Поэтому пользователь может помещать внутрь карточки практически
- * любой React-контент, не расширяя API ExpandableCard новыми props.
+ * Единственный дочерний элемент ExpandableCard.
+ *
+ * Геометрия, позиционирование, размеры, opacity, transform и любые другие
+ * состояния задаются снаружи через initialClassName / expandedClassName.
+ * Сам компонент отвечает только за переключение классов и длительность
+ * перехода.
  */
-
-.icon {
-    position: absolute;
-    z-index: 3;
-    top: 16px;
-    left: 16px;
-    width: 64px;
-    height: 64px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
-    border-radius: 8px;
-
-    transition:
-        top $card-transition-duration $ease,
-        left $card-transition-duration $ease,
-        width $card-transition-duration $ease,
-        height $card-transition-duration $ease,
-        border-radius $card-transition-duration ease;
-
-    .card.expanded & {
-        top: 20px;
-        left: 20px;
-        width: 54px;
-        height: 54px;
-        border-radius: 7px;
-    }
-
-    > * {
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
-
-    svg,
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-}
-
-.title {
-    position: absolute;
-    z-index: 2;
-    top: 92px;
-    left: 16px;
-    right: 16px;
-
-    overflow: hidden;
-
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.2;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    transition:
-        top $card-transition-duration $ease,
-        left $card-transition-duration $ease,
-        right $card-transition-duration $ease,
-        font-size $card-transition-duration ease;
-
-    .card.expanded & {
-        top: 22px;
-        left: 86px;
-        right: 92px;
-        font-size: 14px;
-    }
-}
-
-.subtitle {
-    position: absolute;
-    z-index: 2;
-    top: 116px;
-    left: 16px;
-    right: 16px;
-
-    overflow: hidden;
-
-    font-size: 13px;
-    line-height: 1.35;
-    color: $text-secondary;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    transition:
-        top $card-transition-duration $ease,
-        left $card-transition-duration $ease,
-        right $card-transition-duration $ease;
-
-    .card.expanded & {
-        top: 44px;
-        left: 86px;
-        right: 92px;
-    }
-}
-
-.collapsedContent {
-    position: absolute;
-    z-index: 1;
-    top: 148px;
-    right: 16px;
-    bottom: 16px;
-    left: 16px;
-
-    transition:
-        opacity calc($card-transition-duration * 0.65) ease,
-        transform $card-transition-duration $ease;
-
-    .card.expanded & {
-        opacity: 0;
-        transform: translateY(10px);
-        pointer-events: none;
-    }
-}
-
-.collapsedFooter {
-    position: absolute;
-    z-index: 2;
-    right: 16px;
-    bottom: 16px;
-    left: 16px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    transition:
-        opacity calc($card-transition-duration * 0.45) ease,
-        transform $card-transition-duration $ease;
-
-    .card.expanded & {
-        opacity: 0;
-        transform: translateY(10px);
-        pointer-events: none;
-    }
-}
-
-.action {
-    position: absolute;
-    z-index: 4;
-    top: 20px;
-    right: 20px;
-    width: 80px;
-
-    opacity: 0;
-    transform: translateY(-6px) scale(0.96);
-    pointer-events: none;
-
-    transition:
-        opacity calc($card-transition-duration * 0.7) ease,
-        transform $card-transition-duration $ease;
-
-    .card.expanded & {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        pointer-events: auto;
-    }
-}
-
-.content {
-    position: absolute;
-    z-index: 1;
-    top: 84px;
-    right: 20px;
-    bottom: 70px;
-    left: 20px;
-
-    overflow: hidden;
-
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-
-    transition:
-        opacity calc($card-transition-duration * 0.8) ease,
-        transform $card-transition-duration $ease;
-    transition-delay: 40ms;
-
-    .card.expanded & {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-}
-
-.footer {
-    position: absolute;
-    z-index: 2;
-    right: 20px;
-    bottom: 20px;
-    left: 20px;
-
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-
-    transition:
-        opacity calc($card-transition-duration * 0.7) ease,
-        transform $card-transition-duration $ease;
-    transition-delay: 80ms;
-
-    .card.expanded & {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-}
-
-.free {
-    position: relative;
-    z-index: 1;
+.element {
+	transition-property:
+		top, right, bottom, left, width, min-width, max-width, height,
+		min-height, max-height, margin, padding, gap, opacity, transform,
+		border-radius, font-size, line-height, letter-spacing, flex-basis,
+		grid-template-columns, grid-template-rows;
+	transition-timing-function: $ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .card,
-    .icon,
-    .title,
-    .subtitle,
-    .collapsedContent,
-    .collapsedFooter,
-    .action,
-    .content,
-    .footer {
-        transition-duration: 1ms !important;
-        transition-delay: 0ms !important;
-    }
+	.card,
+	.element {
+		transition-duration: 1ms !important;
+		transition-delay: 0ms !important;
+	}
 }

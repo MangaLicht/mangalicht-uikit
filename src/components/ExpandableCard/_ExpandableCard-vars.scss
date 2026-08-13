@@ -1,12 +1,15 @@
-$card-width: 166px;
-$card-height: 220px;
-$card-expanded-width: 318px;
-$card-expanded-height: 398px;
+$card-width: 200px;
+$card-height: 340px;
+$card-expanded-width: 650px;
+$card-expanded-height: 640px;
 $card-transition-duration: 360ms;
 
-$border-radius: 10px;
-$background: #2c2f35;
-$text-primary: #fff;
-$text-secondary: rgb(255 255 255 / 70%);
+$border-radius: 16px;
+$background: var(--uikit-bg-block);
+$text-primary: var(--uikit-text-main);
+$text-secondary: var(--uikit-text-muted);
+$border-color: var(--uikit-border);
+$accent: var(--uikit-accent);
+$shadow: var(--uikit-block-shadow);
 
 $ease: cubic-bezier(0.22, 1, 0.36, 1);

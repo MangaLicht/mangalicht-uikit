@@ -147,20 +147,7 @@ const spoilerExtension = {
 
 marked.use({ extensions: [spoilerExtension] })
 
-/**
-MarkdownField — многострочное поле ввода с поддержкой markdown:
-тулбар форматирования, переключатель "Написать / Превью" и
-авто-расширение по высоте (useAutosizeTextarea) — ширина поля не
-меняется, длинный текст переносится по словам, а контейнер растёт
-вниз вслед за контентом.
-Использует тот же useValidation, что и Input, так что правила
-(required/minLength/maxLength/pattern/validate) задаются одинаково
-для обоих вариантов поля.
-Превью рендерится через marked (парсинг markdown → HTML) и
-прогоняется через DOMPurify перед вставкой в DOM — исходный текст
-контролируется пользователем, поэтому непросанитайзенный HTML
-вставлять нельзя ни при каких условиях.
-*/
+
 export const MarkdownField = forwardRef<HTMLTextAreaElement, MarkdownFieldProps>(
   (
     {

@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { ExpandableCard } from './index'
 import { Button } from '../Button'
+import { Block } from '../Block'
+import { BookmarkIcon } from '../../icons/Bookmark'
+// @ts-ignore: allow importing global SCSS in Storybook preview
+import styles from './ExpandableCard.stories.module.scss'
 
 const meta = {
 	title: 'Components/ExpandableCard',
@@ -14,76 +18,106 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-const GearIcon = () => (
-	<svg viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'>
-		<rect width='64' height='64' rx='8' fill='#07183D' />
-		<path d='M15 32 47 14 37 32l10 18-32-18Z' fill='#39A9FF' />
-	</svg>
+const ActionSection = () => (
+	<div className={styles.actionSection}>
+		{/* Cover */}
+		<ExpandableCard.ExpandableElenent
+			initialClassName={styles.coverInitial}
+			expandedClassName={styles.coverExpanded}
+		>
+			<div className={styles.cover}>
+				<span>Обложка</span>
+			</div>
+		</ExpandableCard.ExpandableElenent>
+		{/* Action Buttons */}
+		<ExpandableCard.ExpandableElenent
+			initialClassName={styles.readButtonInitial}
+			expandedClassName={styles.readButtonExpanded}
+		>
+			<div className={styles.actionSection}>
+				<Button variant='highlight' labelText='Начать читать' />
+				<div className={styles.otherActionsSection}>
+					<Button variant='default' labelText='К тайтлу' />
+					<Button
+						variant='default'
+						iconStart={<BookmarkIcon />}
+						aria-label='Добавить в закладки'
+					/>
+				</div>
+			</div>
+		</ExpandableCard.ExpandableElenent>
+	</div>
 )
 
-export const Flexible: Story = {
+export const Reference: Story = {
 	render: () => (
-		<ExpandableCard showDelay={700}>
-			<ExpandableCard.Icon>
-				<GearIcon />
-			</ExpandableCard.Icon>
-
-			<ExpandableCard.Title>TITLE NAME</ExpandableCard.Title>
-
-			<ExpandableCard.Subtitle>
-				TITLE DESCRIPTION HERE
-			</ExpandableCard.Subtitle>
-
-			<ExpandableCard.Action>
-				<Button variant='highlight' labelText='Читать' />
-			</ExpandableCard.Action>
-
-			<ExpandableCard.Content>
-				<div
-					style={{
-						display: 'flex',
-						height: '100%',
-						flexDirection: 'column',
-						gap: 10
-					}}
+		<div className={styles.story}>
+			<ExpandableCard
+				width={162}
+				height={313}
+				expandedWidth={612}
+				expandedHeight={532}
+				showDelay={700}
+				animationDuration={360}
+			>
+				{/* Action Section */}
+				<ExpandableCard.ExpandableElenent
+					initialClassName={styles.actionSectionInitial}
+					expandedClassName={styles.actionSectionExpanded}
 				>
-					<p style={{ margin: 0, fontSize: 13, lineHeight: 1.35 }}>
-						Здесь будет короткое описание тайтла и всё такое дааа...
-					</p>
-
-					<div
-						style={{
-							flex: 1,
-							minHeight: 0,
-							borderRadius: 4,
-							background: '#07183D',
-							display: 'grid',
-							placeItems: 'center'
-						}}
-					></div>
-				</div>
-			</ExpandableCard.Content>
-
-			<ExpandableCard.Footer>
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						gap: 10
-					}}
+					<ActionSection />
+				</ExpandableCard.ExpandableElenent>
+				{/* Title */}
+				<ExpandableCard.ExpandableElenent
+					initialClassName={styles.titleInitial}
+					expandedClassName={styles.titleExpanded}
 				>
-					<strong style={{ fontSize: 24 }}>0+</strong>
+					Поколение Нова
+				</ExpandableCard.ExpandableElenent>
+				{/* Description */}
+				<ExpandableCard.ExpandableElenent
+					initialClassName={styles.descriptionInitial}
+					expandedClassName={styles.descriptionExpanded}
+				>
+					<Block variant='outlined' classNames={styles.description}>
+						<p className={styles.descriptionText}>
+							==description field here==
+						</p>
 
-					<div>
-						<div style={{ fontWeight: 700 }}>
-							Для всех возрастов
-						</div>
-						<div style={{ fontSize: 11, opacity: 0.65 }}>
-							Покупки из приложения
-						</div>
+						<p className={styles.descriptionText}>
+							Здесь располагается длинное описание тайтла. Блок
+							намеренно содержит достаточно текста, чтобы показать
+							вертикальную прокрутку внутри карточки.
+						</p>
+
+						<p className={styles.descriptionText}>
+							Дополнительный текст нужен для проверки поведения
+							scrollbar при переполнении содержимого.
+						</p>
+
+						<p className={styles.descriptionText}>
+							Еще один абзац описания тайтла, который находится
+							ниже видимой области.
+						</p>
+
+						<p className={styles.descriptionText}>
+							Конец демонстрационного описания.
+						</p>
+					</Block>
+				</ExpandableCard.ExpandableElenent>
+
+				<ExpandableCard.ExpandableElenent
+					initialClassName={styles.tagsInitial}
+					expandedClassName={styles.tagsExpanded}
+				>
+					<div className={styles.tags}>
+						<span className={styles.tag}>Постапокалипсис</span>
+						<span className={styles.tag}>Повседневность</span>
+						<span className={styles.tag}>Драма</span>
+						<span className={styles.tag}>+ ещё</span>
 					</div>
-				</div>
-			</ExpandableCard.Footer>
-		</ExpandableCard>
+				</ExpandableCard.ExpandableElenent>
+			</ExpandableCard>
+		</div>
 	)
 }

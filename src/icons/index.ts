@@ -3,12 +3,13 @@
 export { ChevronIcon } from './Chevron'
 export { SearchIcon } from './Search'
 export { CloseIcon } from './Close'
+export { BookmarkIcon } from './Bookmark'
 export {
-  BoldIcon,
-  ItalicIcon,
-  LinkIcon,
-  ListIcon,
-  CodeIcon,
-  EyeIcon,
-  PencilIcon,
+	BoldIcon,
+	ItalicIcon,
+	LinkIcon,
+	ListIcon,
+	CodeIcon,
+	EyeIcon,
+	PencilIcon
 } from './Markdown'
