@@ -21,6 +21,8 @@
 	overflow: hidden;
 	box-sizing: border-box;
 
+	touch-action: manipulation;
+
 	border-radius: $border-radius;
 	background: $background;
 	color: $text-primary;
