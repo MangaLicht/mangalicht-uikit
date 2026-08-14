@@ -10,6 +10,22 @@
 	font-family: inherit;
 }
 
+.container {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-width: 0;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	width: 100%;
+}
+
 .label {
 	font-size: 13px;
 	font-weight: 500;
@@ -18,28 +34,33 @@
 
 .fieldWrapper {
 	--md-border-radius: var(--uikit-border-radius--desktop, 6px);
-	position: relative;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+	min-width: 0;
 	box-sizing: border-box;
+	border: $md-border-width solid $md-border-color--normal;
 	border-radius: var(--md-border-radius);
-	border: $md-border-width solid $md-border-color;
 	background-color: $md-bg-color;
-	transition: border-color var(--uikit-transition-fast, 0.18s ease);
+	overflow: hidden;
+	transition:
+		border-color var(--uikit-transition-fast, 0.18s ease),
+		background-color var(--uikit-transition-fast, 0.18s ease),
+		opacity var(--uikit-transition-fast, 0.18s ease);
 
 	@include tablet {
-		--md-border-radius: var(--uikit-border-radius--tablet);
+		--md-border-radius: var(--uikit-border-radius--tablet, 6px);
 	}
 
 	@include mobile {
-		--md-border-radius: var(--uikit-border-radius--mobile);
+		--md-border-radius: var(--uikit-border-radius--mobile, 6px);
 	}
 
 	&:hover:not([data-disabled='true']) {
 		border-color: $md-border-color--hover;
 	}
 
+	&[data-focus='true'],
 	&:focus-within {
 		border-color: $md-border-color--focus;
 	}
@@ -52,6 +73,56 @@
 		opacity: 0.5;
 		cursor: not-allowed;
 	}
+}
+
+.toolbar {
+	position: fixed;
+	z-index: 1100;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	padding: 6px;
+	border: 1px solid $md-toolbar-border-color;
+
+	@include adaptive-rounding(6px);
+
+	background-color: $md-toolbar-bg-color;
+	box-shadow: $md-toolbar-shadow;
+	pointer-events: auto;
+	white-space: nowrap;
+
+	will-change: left, top;
+}
+
+.toolbarButton {
+	flex: 0 0 28px;
+	width: 28px;
+	min-width: 28px;
+	height: 28px;
+
+	padding: 0;
+	border-radius: 4px;
+
+	&:focus-visible {
+		outline-offset: 1px;
+	}
+
+	svg {
+		width: 14px;
+		height: 14px;
+	}
+
+	span {
+		line-height: 1;
+	}
+}
+
+.toolbarDivider {
+	flex: 0 0 1px;
+	width: 1px;
+	height: 18px;
+	margin: 0 2px;
+	background-color: $md-toolbar-border-color;
 }
 
 .textarea {
@@ -69,6 +140,9 @@
 	background: transparent;
 	word-break: break-word;
 	overflow-wrap: break-word;
+	scrollbar-width: thin;
+	scrollbar-behavior: smooth;
+	scrollbar-color: var(--uikit-primary) transparent;
 
 	&::placeholder {
 		color: $md-placeholder-color;
@@ -79,64 +153,14 @@
 	}
 }
 
-.toolbar {
-	position: fixed;
-	z-index: 1100;
-	display: flex;
-	align-items: center;
-	gap: 2px;
-	padding: 6px;
-	border: 1px solid $md-toolbar-border-color;
-	border-radius: 6px;
-	background-color: $md-toolbar-bg-color;
-	box-shadow: $md-toolbar-shadow;
-	pointer-events: auto;
-	white-space: nowrap;
-
-	will-change: left, top;
-}
-
-.toolbarButton {
-	@include reset-button;
-	@include flex-center;
-	flex-shrink: 0;
-	width: 28px;
-	height: 28px;
-	border-radius: 4px;
-	color: $md-toolbar-icon-color;
-	cursor: pointer;
-	transition:
-		color var(--uikit-transition-fast, 0.18s ease),
-		background-color var(--uikit-transition-fast, 0.18s ease);
-
-	svg {
-		width: 14px;
-		height: 14px;
-	}
-
-	&:hover:not(:disabled) {
-		color: $md-toolbar-icon-color--hover;
-		background-color: $md-toolbar-hover-bg;
-	}
-
-	&:disabled {
-		cursor: not-allowed;
-		opacity: 0.5;
-	}
-}
-
-.spoilerIcon {
-	font-size: 12px;
-	font-weight: 600;
-	font-style: italic;
-}
-
 .preview {
+	min-width: 0;
 	padding: 10px 12px;
 	font-size: $md-font-size;
 	line-height: 1.5;
 	color: $md-text-color;
 	word-break: break-word;
+	overflow-wrap: break-word;
 
 	:global {
 		strong,
@@ -235,9 +259,11 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 12px;
+	min-height: 17px;
 }
 
 .message {
+	min-width: 0;
 	font-size: 12px;
 	line-height: 1.4;
 	color: $md-hint-color;
@@ -250,6 +276,7 @@
 .counter {
 	flex-shrink: 0;
 	font-size: 12px;
+	line-height: 1.4;
 	color: $md-counter-color;
 
 	&[data-over='true'] {
