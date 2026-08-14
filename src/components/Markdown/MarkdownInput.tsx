@@ -799,6 +799,57 @@ export const MarkdownInput = memo(
 				[history.setValue, updateSelection]
 			)
 
+			const restoreSelectionAfterHistoryChange = useCallback(() => {
+				const textarea = textareaRef.current
+				const selection = selectionRef.current
+
+				if (!textarea || !selection) {
+					return
+				}
+
+				requestAnimationFrame(() => {
+					const currentTextarea = textareaRef.current
+
+					if (!currentTextarea) {
+						return
+					}
+
+					/**
+					 * После undo/redo длина текста могла измениться.
+					 * Поэтому ограничиваем selection актуальной длиной value.
+					 */
+					const start = Math.min(
+						selection.start,
+						currentTextarea.value.length
+					)
+
+					const end = Math.min(
+						selection.end,
+						currentTextarea.value.length
+					)
+
+					const nextSelection = {
+						start: Math.min(start, end),
+						end: Math.max(start, end)
+					}
+
+					selectionRef.current = nextSelection
+
+					currentTextarea.focus()
+
+					currentTextarea.setSelectionRange(
+						nextSelection.start,
+						nextSelection.end
+					)
+
+					/**
+					 * Пересчитываем положение toolbar относительно
+					 * нового содержимого textarea.
+					 */
+					updateSelection()
+				})
+			}, [updateSelection])
+
 			const handleUndo = useCallback(() => {
 				if (!history.canUndo) {
 					return
@@ -806,13 +857,17 @@ export const MarkdownInput = memo(
 
 				history.undo()
 
-				selectionRef.current = null
-				setSelectionRect(null)
-
-				requestAnimationFrame(() => {
-					textareaRef.current?.focus()
-				})
-			}, [history.canUndo, history.undo])
+				/**
+				 * Не очищаем selectionRef и selectionRect.
+				 *
+				 * Toolbar должен остаться открыт после Undo.
+				 */
+				restoreSelectionAfterHistoryChange()
+			}, [
+				history.canUndo,
+				history.undo,
+				restoreSelectionAfterHistoryChange
+			])
 
 			const handleRedo = useCallback(() => {
 				if (!history.canRedo) {
@@ -821,13 +876,15 @@ export const MarkdownInput = memo(
 
 				history.redo()
 
-				selectionRef.current = null
-				setSelectionRect(null)
-
-				requestAnimationFrame(() => {
-					textareaRef.current?.focus()
-				})
-			}, [history.canRedo, history.redo])
+				/**
+				 * Toolbar должен остаться открыт после Redo.
+				 */
+				restoreSelectionAfterHistoryChange()
+			}, [
+				history.canRedo,
+				history.redo,
+				restoreSelectionAfterHistoryChange
+			])
 
 			/**
 			 * Markdown formatting.
