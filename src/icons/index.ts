@@ -13,3 +13,5 @@ export {
 	EyeIcon,
 	PencilIcon
 } from './Markdown'
+export { UndoIcon } from './Undo'
+export { RedoIcon } from './Redo'

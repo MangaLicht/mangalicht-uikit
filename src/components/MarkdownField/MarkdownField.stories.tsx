@@ -1,93 +1,76 @@
-import React, { useState } from 'react';
-import { MarkdownField } from './index';
+import type { Meta, StoryObj } from '@storybook/react'
+import { useState } from 'react'
+import { MarkdownField, type MarkdownFieldProps } from './index'
+import { MarkdownInput, type MarkdownInputProps } from './MarkdownInput'
 
 const meta = {
   title: 'Components/MarkdownField',
-  component: MarkdownField,
-  argTypes: {
-    disabled: { control: 'boolean' },
-    showToolbar: { control: 'boolean' },
-    showPreviewToggle: { control: 'boolean' },
-    showCounter: { control: 'boolean' },
-    label: { control: 'text' },
-    hint: { control: 'text' },
-    placeholder: { control: 'text' },
+  component: MarkdownInput,
+  parameters: {
+    layout: 'centered',
   },
-};
+} satisfies Meta<typeof MarkdownInput>
 
-export default meta;
+export default meta
 
-/** Управляемый пример с реальным состоянием React — для интерактивных историй */
-const ControlledMarkdownField = (args: React.ComponentProps<typeof MarkdownField>) => {
-  const [value, setValue] = useState(args.value ?? args.defaultValue ?? '');
+type Story = StoryObj<typeof meta>
+
+const ControlledInput = (args: MarkdownInputProps) => {
+  const [value, setValue] = useState(args.value ?? args.defaultValue ?? '')
+
   return (
-    // ширина фиксирована контейнером-стори — растёт только высота поля
-    <div style={{ width: 420 }}>
-      <MarkdownField
+    <div style={{ width: 520 }}>
+      <MarkdownInput
         {...args}
         value={value}
+        // Убираем ручной setValue здесь, так как history внутри сам вызывает onChange
         onChange={(next) => {
-          setValue(next);
-          args.onChange?.(next);
+          setValue(next)
+          args.onChange?.(next)
+        }}
+        onToolbarAction={(action) => {
+          console.log(`Toolbar action: ${action}`)
+          args.onToolbarAction?.(action)
         }}
       />
     </div>
-  );
-};
+  )
+}
 
-export const Default = {
-  render: ControlledMarkdownField,
+export const Input: Story = {
+  render: ControlledInput,
   args: {
-    label: 'Описание',
-    placeholder: 'Поддерживается **markdown**: списки, ссылки, код...',
+    placeholder: 'Выделите текст — появится плавающий тулбар',
+    defaultValue: 'Выделите **любой фрагмент текста** и попробуйте форматирование.',
   },
-};
+}
 
-/** Демонстрация авто-расширения — контейнер растёт вниз по мере ввода, ширина не меняется */
-export const AutoGrow = {
-  render: ControlledMarkdownField,
+export const InputWithHistory: Story = {
+  render: ControlledInput,
   args: {
-    label: 'Комментарий',
-    defaultValue:
-      'Начните печатать длинный текст, и поле начнёт расти вниз, оставаясь той же ширины — так же ' +
-      'как это устроено в GitHub Issues или Slack. Можно попробовать вставить несколько абзацев подряд, ' +
-      'чтобы увидеть, как контейнер подстраивается под контент.',
-    minRows: 3,
-    maxRows: 12,
+    defaultValue: 'Введите несколько изменений, затем используйте Ctrl/Cmd + Z и Ctrl/Cmd + Shift + Z.',
   },
-};
+}
 
-/** Обязательное поле с ограничением длины и счётчиком символов */
-export const WithValidation = {
-  render: ControlledMarkdownField,
+export const Preview: Story = {
+  render: (args) => (
+    <div style={{ width: 520 }}>
+      <MarkdownField {...(args as MarkdownFieldProps)} />
+    </div>
+  ),
   args: {
-    label: 'Отзыв',
-    placeholder: 'Расскажите о вашем опыте...',
-    rules: {
-      required: 'Напишите хотя бы пару слов',
-      minLength: { value: 10, message: 'Слишком коротко — минимум 10 символов' },
-      maxLength: { value: 280, message: 'Слишком длинно — максимум 280 символов' },
-    },
-    validateOn: 'change',
-    showCounter: true,
+    markdown:
+      '# Заголовок\n\nЭто **жирный текст**, _курсив_ и `inline code`.\n\n- Первый пункт\n- Второй пункт\n\n[Ссылка](https://example.com)',
   },
-};
+}
 
-export const WithoutToolbar = {
-  render: ControlledMarkdownField,
+export const PreviewWithSpoiler: Story = {
+  render: (args) => (
+    <div style={{ width: 520 }}>
+      <MarkdownField {...(args as MarkdownFieldProps)} />
+    </div>
+  ),
   args: {
-    label: 'Заметка',
-    showToolbar: false,
-    showPreviewToggle: false,
-    placeholder: 'Просто авто-растущее поле, без markdown-тулбара',
+    markdown: 'Обычный текст и [spoiler]скрытая информация[/spoiler].',
   },
-};
-
-export const Disabled = {
-  render: ControlledMarkdownField,
-  args: {
-    label: 'Поле недоступно',
-    defaultValue: 'Этот текст нельзя редактировать',
-    disabled: true,
-  },
-};
+}
