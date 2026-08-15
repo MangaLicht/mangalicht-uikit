@@ -1,5 +1,5 @@
-export { MarkdownField } from './MarkdownField'
-export type { MarkdownFieldProps } from './MarkdownField'
+export { MarkdownPreview } from './MarkdownPreview'
+export type { MarkdownPreviewProps } from './MarkdownPreview'
 export { MarkdownInput } from './MarkdownInput'
 export type { MarkdownInputProps, MarkdownToolbarAction } from './MarkdownInput'
 export { MarkdownComment } from './MarkdownComment'

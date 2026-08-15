@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
-import { MarkdownField, type MarkdownFieldProps } from './index'
-import { MarkdownInput, type MarkdownInputProps } from './MarkdownInput'
+import { MarkdownPreview, type MarkdownPreviewProps } from './index'
+import { MarkdownInput, type MarkdownInputProps } from './index'
 
 const meta = {
-	title: 'Components/Markdown/MarkdownField',
+	title: 'Components/Markdown/Markdown',
 	component: MarkdownInput,
 	parameters: {
 		layout: 'centered'
@@ -57,7 +57,7 @@ export const InputWithHistory: Story = {
 export const Preview: Story = {
 	render: args => (
 		<div style={{ width: 520 }}>
-			<MarkdownField {...(args as MarkdownFieldProps)} />
+			<MarkdownPreview {...(args as MarkdownPreviewProps)} />
 		</div>
 	),
 	args: {
@@ -69,7 +69,7 @@ export const Preview: Story = {
 export const PreviewWithSpoiler: Story = {
 	render: args => (
 		<div style={{ width: 520 }}>
-			<MarkdownField {...(args as MarkdownFieldProps)} />
+			<MarkdownPreview {...(args as MarkdownPreviewProps)} />
 		</div>
 	),
 	args: {

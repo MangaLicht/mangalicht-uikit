@@ -31,7 +31,7 @@ import {
 import { UndoIcon } from '@/icons/Undo'
 import { RedoIcon } from '@/icons/Redo'
 
-import styles from './MarkdownField.module.scss'
+import styles from './Markdown.module.scss'
 
 export type MarkdownToolbarAction =
 	| 'bold'
