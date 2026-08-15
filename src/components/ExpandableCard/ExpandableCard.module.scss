@@ -1,0 +1,70 @@
+@use './ExpandableCard-vars' as *;
+
+.wrapper {
+	position: relative;
+	width: $card-width;
+	height: $card-height;
+	flex: 0 0 $card-width;
+	overflow: visible;
+	isolation: isolate;
+}
+
+.card {
+	position: absolute;
+	z-index: 1;
+	top: 50%;
+	left: 50%;
+	width: $card-width;
+	height: $card-height;
+	transform: translate(-50%, -50%);
+	transform-origin: center;
+	overflow: hidden;
+	box-sizing: border-box;
+
+	touch-action: manipulation;
+
+	border-radius: $border-radius;
+	background: $background;
+	color: $text-primary;
+	box-shadow: 0px 4px 16px -2px $shadow;
+
+	transition:
+		width $card-transition-duration $ease,
+		height $card-transition-duration $ease,
+		border-radius $card-transition-duration $ease,
+		box-shadow $card-transition-duration $ease;
+
+	&.expanded {
+		z-index: 100;
+		width: $card-expanded-width;
+		height: $card-expanded-height;
+		box-shadow:
+			0px 20px 40px -8px $shadow,
+			0px 4px 12px 0px $shadow;
+	}
+}
+
+/*
+ * Единственный дочерний элемент ExpandableCard.
+ *
+ * Геометрия, позиционирование, размеры, opacity, transform и любые другие
+ * состояния задаются снаружи через initialClassName / expandedClassName.
+ * Сам компонент отвечает только за переключение классов и длительность
+ * перехода.
+ */
+.element {
+	transition-property:
+		top, right, bottom, left, width, min-width, max-width, height,
+		min-height, max-height, margin, padding, gap, opacity, transform,
+		border-radius, font-size, line-height, letter-spacing, flex-basis,
+		grid-template-columns, grid-template-rows;
+	transition-timing-function: $ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.card,
+	.element {
+		transition-duration: 1ms !important;
+		transition-delay: 0ms !important;
+	}
+}
