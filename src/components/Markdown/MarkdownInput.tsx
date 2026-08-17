@@ -93,11 +93,273 @@ interface SelectionRange {
 	end: number
 }
 
+type MarkdownInlineAction = Extract<
+	MarkdownToolbarAction,
+	'bold' | 'italic' | 'strike' | 'code' | 'spoiler'
+>
+
+export interface MarkdownActiveStyles {
+	bold: boolean
+	italic: boolean
+	strike: boolean
+	code: boolean
+	spoiler: boolean
+}
+
+interface MarkdownSpan {
+	start: number
+	end: number
+	contentStart: number
+	contentEnd: number
+	action: MarkdownInlineAction
+	marker: string
+	closeMarker?: string
+	composite?: boolean
+}
+
+const EMPTY_MARKDOWN_ACTIVE_STYLES: MarkdownActiveStyles = {
+	bold: false,
+	italic: false,
+	strike: false,
+	code: false,
+	spoiler: false
+}
+
+const rangesOverlap = (
+	aStart: number,
+	aEnd: number,
+	bStart: number,
+	bEnd: number
+): boolean => aStart < bEnd && bStart < aEnd
+
+const rangeIsInside = (
+	start: number,
+	end: number,
+	spanStart: number,
+	spanEnd: number
+): boolean => {
+	if (start === end) {
+		return start >= spanStart && start <= spanEnd
+	}
+
+	return start >= spanStart && end <= spanEnd
+}
+
+/**
+ * Ищет пары одинаковых Markdown-разделителей.
+ *
+ * Поиск выполняется без тяжёлого markdown-parser: для toolbar нам
+ * достаточно знать границы inline-ноды вокруг текущего selection/cursor.
+ */
+const collectDelimitedSpans = (
+	value: string,
+	marker: string,
+	action: MarkdownInlineAction,
+	composite = false
+): MarkdownSpan[] => {
+	const spans: MarkdownSpan[] = []
+	let cursor = 0
+
+	while (cursor < value.length) {
+		const start = value.indexOf(marker, cursor)
+		if (start === -1) break
+
+		const contentStart = start + marker.length
+		const end = value.indexOf(marker, contentStart)
+		if (end === -1) break
+
+		// Не считаем пустые пары вроде **** активным форматированием.
+		if (end > contentStart) {
+			spans.push({
+				start,
+				end: end + marker.length,
+				contentStart,
+				contentEnd: end,
+				action,
+				marker,
+				closeMarker: marker,
+				composite
+			})
+		}
+
+		cursor = end + marker.length
+	}
+
+	return spans
+}
+
+const collectPairedSpans = (
+	value: string,
+	open: string,
+	close: string,
+	action: MarkdownInlineAction
+): MarkdownSpan[] => {
+	const spans: MarkdownSpan[] = []
+	let cursor = 0
+
+	while (cursor < value.length) {
+		const start = value.indexOf(open, cursor)
+		if (start === -1) break
+
+		const contentStart = start + open.length
+		const end = value.indexOf(close, contentStart)
+		if (end === -1) break
+
+		if (end > contentStart) {
+			spans.push({
+				start,
+				end: end + close.length,
+				contentStart,
+				contentEnd: end,
+				action,
+				marker: open,
+				closeMarker: close
+			})
+		}
+
+		cursor = end + close.length
+	}
+
+	return spans
+}
+
+const getMarkdownSpans = (value: string): MarkdownSpan[] => {
+	const composite = [
+		...collectDelimitedSpans(value, '***', 'bold', true),
+		...collectDelimitedSpans(value, '___', 'bold', true)
+	]
+
+	const regular: MarkdownSpan[] = [
+		...collectDelimitedSpans(value, '**', 'bold'),
+		...collectDelimitedSpans(value, '__', 'bold'),
+		...collectDelimitedSpans(value, '*', 'italic'),
+		...collectDelimitedSpans(value, '_', 'italic'),
+		...collectDelimitedSpans(value, '~~', 'strike'),
+		...collectDelimitedSpans(value, '`', 'code'),
+		...collectDelimitedSpans(value, '||', 'spoiler'),
+		// Поддерживаем существующий синтаксис проекта параллельно с ||...||.
+		...collectPairedSpans(value, '[spoiler]', '[/spoiler]', 'spoiler')
+	].filter(span =>
+		!composite.some(compositeSpan =>
+			rangesOverlap(
+				span.start,
+				span.end,
+				compositeSpan.start,
+				compositeSpan.end
+			)
+		)
+	)
+
+	return [...composite, ...regular]
+}
+
+/**
+ * Определяет активные inline-стили для выделения или позиции курсора.
+ *
+ * Поддерживаются два сценария: 
+ * - выделены только буквы: `***слово***`, selection = `слово`;
+ * - выделена вся конструкция: selection = `***слово***`.
+ *
+ * При cursor selectionStart === selectionEnd проверяется попадание курсора
+ * внутрь content-range соответствующей Markdown-ноды.
+ */
+const getActiveMarkdownStyles = (
+	value: string,
+	start: number,
+	end: number
+): MarkdownActiveStyles => {
+	if (!value || start < 0 || end < start) {
+		return EMPTY_MARKDOWN_ACTIVE_STYLES
+	}
+
+	const spans = getMarkdownSpans(value)
+	const active: MarkdownActiveStyles = {
+		bold: false,
+		italic: false,
+		strike: false,
+		code: false,
+		spoiler: false
+	}
+
+	for (const span of spans) {
+		if (
+			rangeIsInside(start, end, span.start, span.end) ||
+			(start === end
+				? start >= span.contentStart && start <= span.contentEnd
+				: rangesOverlap(start, end, span.contentStart, span.contentEnd))
+		) {
+			active[span.action] = true
+
+			if (span.composite) {
+				active.bold = true
+				active.italic = true
+			}
+		}
+	}
+
+	return active
+}
+
+const findActiveMarkdownSpan = (
+	value: string,
+	start: number,
+	end: number,
+	action: MarkdownInlineAction
+): MarkdownSpan | null => {
+	const spans = getMarkdownSpans(value)
+
+	return (
+		spans.find(
+			span =>
+				(span.action === action || (span.composite && (action === 'bold' || action === 'italic'))) &&
+				(rangeIsInside(start, end, span.start, span.end) ||
+					(start === end
+						? start >= span.contentStart && start <= span.contentEnd
+						: rangesOverlap(
+							start,
+							end,
+							span.contentStart,
+							span.contentEnd
+						)))
+		) ?? null
+	)
+}
+
+/**
+ * Удаляет конкретный inline-маркер, не затрагивая остальные стили.
+ *
+ * Для `***text***`:
+ * - toggle bold -> `*text*`
+ * - toggle italic -> `**text**`
+ */
+const unwrapMarkdownSpan = (
+	value: string,
+	span: MarkdownSpan,
+	action: MarkdownInlineAction
+): string => {
+	if (span.composite) {
+		const markerChar = span.marker.charAt(0)
+		const marker = markerChar.repeat(action === 'bold' ? 1 : 2)
+		const content = value.slice(span.contentStart, span.contentEnd)
+
+		return (
+			value.slice(0, span.start) +
+			marker +
+			content +
+			marker +
+			value.slice(span.end)
+		)
+	}
+
+	return value.slice(0, span.start) + value.slice(span.contentStart, span.contentEnd) + value.slice(span.end)
+}
+
 interface FloatingToolbarProps {
 	selectionRect: SelectionRect | null
 	canUndo: boolean
 	canRedo: boolean
 	disabled: boolean
+	activeStyles: MarkdownActiveStyles
 	onUndo: () => void
 	onRedo: () => void
 	onAction: (action: MarkdownToolbarAction) => void
@@ -114,10 +376,6 @@ const getSelectionRect = (
 ): SelectionRect | null => {
 	const start = textarea.selectionStart
 	const end = textarea.selectionEnd
-
-	if (start === end) {
-		return null
-	}
 
 	const value = textarea.value
 	const computed = window.getComputedStyle(textarea)
@@ -213,6 +471,7 @@ const FloatingToolbar = memo(
 		canUndo,
 		canRedo,
 		disabled,
+		activeStyles,
 		onUndo,
 		onRedo,
 		onAction
@@ -366,7 +625,11 @@ const FloatingToolbar = memo(
 
 				<Button
 					variant='ghost'
-					classNames={styles.toolbarButton}
+					classNames={[
+						styles.toolbarButton,
+						activeStyles.bold ? styles.toolbarButtonActive : ''
+					].filter(Boolean).join(' ')}
+					aria-pressed={activeStyles.bold}
 					aria-label='Жирный'
 					title='Жирный'
 					iconStart={<BoldIcon />}
@@ -376,7 +639,11 @@ const FloatingToolbar = memo(
 
 				<Button
 					variant='ghost'
-					classNames={styles.toolbarButton}
+					classNames={[
+						styles.toolbarButton,
+						activeStyles.italic ? styles.toolbarButtonActive : ''
+					].filter(Boolean).join(' ')}
+					aria-pressed={activeStyles.italic}
 					aria-label='Курсив'
 					title='Курсив'
 					iconStart={<ItalicIcon />}
@@ -386,7 +653,11 @@ const FloatingToolbar = memo(
 
 				<Button
 					variant='ghost'
-					classNames={styles.toolbarButton}
+					classNames={[
+						styles.toolbarButton,
+						activeStyles.strike ? styles.toolbarButtonActive : ''
+					].filter(Boolean).join(' ')}
+					aria-pressed={activeStyles.strike}
 					aria-label='Зачёркнутый'
 					title='Зачёркнутый'
 					labelText='S'
@@ -396,7 +667,11 @@ const FloatingToolbar = memo(
 
 				<Button
 					variant='ghost'
-					classNames={styles.toolbarButton}
+					classNames={[
+						styles.toolbarButton,
+						activeStyles.code ? styles.toolbarButtonActive : ''
+					].filter(Boolean).join(' ')}
+					aria-pressed={activeStyles.code}
 					aria-label='Код'
 					title='Код'
 					iconStart={<CodeIcon />}
@@ -406,7 +681,11 @@ const FloatingToolbar = memo(
 
 				<Button
 					variant='ghost'
-					classNames={styles.toolbarButton}
+					classNames={[
+						styles.toolbarButton,
+						activeStyles.spoiler ? styles.toolbarButtonActive : ''
+					].filter(Boolean).join(' ')}
+					aria-pressed={activeStyles.spoiler}
 					aria-label='Спойлер'
 					title='Спойлер'
 					iconStart={<EyeIcon />}
@@ -469,9 +748,58 @@ const applyMarkdownAction = (
 	value: string,
 	start: number,
 	end: number,
-	action: MarkdownToolbarAction
+	action: MarkdownToolbarAction,
+	active: boolean
 ) => {
 	const selected = value.slice(start, end)
+
+	if (active && ['bold', 'italic', 'strike', 'code', 'spoiler'].includes(action)) {
+		const span = findActiveMarkdownSpan(
+			value,
+			start,
+			end,
+			action as MarkdownInlineAction
+		)
+
+		if (span) {
+			const nextValue = unwrapMarkdownSpan(value, span, action as MarkdownInlineAction)
+			const openRemoved = span.composite
+				? action === 'bold'
+					? 2
+					: 1
+				: span.marker.length
+			const closeRemoved = span.composite
+				? action === 'bold'
+					? 2
+					: 1
+				: span.closeMarker?.length ?? span.marker.length
+
+			const mapPosition = (position: number): number => {
+				if (position <= span.start) {
+					return position
+				}
+
+				if (position < span.contentStart) {
+					return span.start
+				}
+
+				if (position <= span.contentEnd) {
+					return position - openRemoved
+				}
+
+				return position - openRemoved - closeRemoved
+			}
+
+			const selectionStart = mapPosition(start)
+			const selectionEnd = mapPosition(end)
+
+			return {
+				value: nextValue,
+				selectionStart,
+				selectionEnd
+			}
+		}
+	}
 
 	let replacement = selected
 
@@ -493,6 +821,7 @@ const applyMarkdownAction = (
 			break
 
 		case 'spoiler':
+			// Сохраняем синтаксис, который уже поддерживает MarkdownPreview.
 			replacement = `[spoiler]${selected}[/spoiler]`
 			break
 
@@ -592,6 +921,10 @@ export const MarkdownInput = memo(
 				maxRows
 			})
 
+			const [activeStyles, setActiveStyles] = useState<MarkdownActiveStyles>(
+				EMPTY_MARKDOWN_ACTIVE_STYLES
+			)
+
 			const updateSelection = useCallback(() => {
 				const textarea = textareaRef.current
 
@@ -601,8 +934,17 @@ export const MarkdownInput = memo(
 				const end = textarea.selectionEnd
 
 				if (start === end) {
-					selectionRef.current = null
-					setSelectionRect(null)
+					const nextActiveStyles = getActiveMarkdownStyles(
+						textarea.value,
+						start,
+						end
+					)
+
+					selectionRef.current = { start, end }
+					setActiveStyles(nextActiveStyles)
+
+					const hasActiveStyle = Object.values(nextActiveStyles).some(Boolean)
+					setSelectionRect(hasActiveStyle ? getSelectionRect(textarea) : null)
 					return
 				}
 
@@ -610,6 +952,8 @@ export const MarkdownInput = memo(
 					start,
 					end
 				}
+
+				setActiveStyles(getActiveMarkdownStyles(textarea.value, start, end))
 
 				const rect = getSelectionRect(textarea)
 
@@ -904,7 +1248,10 @@ export const MarkdownInput = memo(
 
 					const { start, end } = selection
 
-					if (start === end) {
+					const isActive =
+						activeStyles[action as keyof MarkdownActiveStyles] ?? false
+
+					if (start === end && !isActive) {
 						return
 					}
 
@@ -912,7 +1259,8 @@ export const MarkdownInput = memo(
 						history.value,
 						start,
 						end,
-						action
+						action,
+						isActive
 					)
 
 					/**
@@ -966,6 +1314,7 @@ export const MarkdownInput = memo(
 							selectionRect={selectionRect}
 							canUndo={Boolean(history.canUndo)}
 							canRedo={Boolean(history.canRedo)}
+							activeStyles={activeStyles}
 							disabled={disabled || readOnly}
 							onUndo={handleUndo}
 							onRedo={handleRedo}

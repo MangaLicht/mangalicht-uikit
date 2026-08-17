@@ -283,3 +283,8 @@
 		color: $md-counter-color--over;
 	}
 }
+
+.toolbarButtonActive {
+	background-color: var(--uikit-accent) !important;
+	color: var(--c-white) !important;
+}
