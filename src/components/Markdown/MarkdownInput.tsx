@@ -239,15 +239,16 @@ const getMarkdownSpans = (value: string): MarkdownSpan[] => {
 		...collectDelimitedSpans(value, '||', 'spoiler'),
 		// Поддерживаем существующий синтаксис проекта параллельно с ||...||.
 		...collectPairedSpans(value, '[spoiler]', '[/spoiler]', 'spoiler')
-	].filter(span =>
-		!composite.some(compositeSpan =>
-			rangesOverlap(
-				span.start,
-				span.end,
-				compositeSpan.start,
-				compositeSpan.end
+	].filter(
+		span =>
+			!composite.some(compositeSpan =>
+				rangesOverlap(
+					span.start,
+					span.end,
+					compositeSpan.start,
+					compositeSpan.end
+				)
 			)
-		)
 	)
 
 	return [...composite, ...regular]
@@ -256,7 +257,7 @@ const getMarkdownSpans = (value: string): MarkdownSpan[] => {
 /**
  * Определяет активные inline-стили для выделения или позиции курсора.
  *
- * Поддерживаются два сценария: 
+ * Поддерживаются два сценария:
  * - выделены только буквы: `***слово***`, selection = `слово`;
  * - выделена вся конструкция: selection = `***слово***`.
  *
@@ -273,6 +274,7 @@ const getActiveMarkdownStyles = (
 	}
 
 	const spans = getMarkdownSpans(value)
+
 	const active: MarkdownActiveStyles = {
 		bold: false,
 		italic: false,
@@ -282,18 +284,61 @@ const getActiveMarkdownStyles = (
 	}
 
 	for (const span of spans) {
-		if (
-			rangeIsInside(start, end, span.start, span.end) ||
-			(start === end
-				? start >= span.contentStart && start <= span.contentEnd
-				: rangesOverlap(start, end, span.contentStart, span.contentEnd))
-		) {
+		/**
+		 * Курсор.
+		 *
+		 * Если выделения нет, сохраняем прежнее поведение:
+		 * курсор внутри содержимого Markdown-ноды
+		 * делает соответствующий Toggle активным.
+		 */
+		if (start === end) {
+			const cursorInsideContent =
+				start >= span.contentStart && start <= span.contentEnd
+
+			if (!cursorInsideContent) {
+				continue
+			}
+
 			active[span.action] = true
 
 			if (span.composite) {
 				active.bold = true
 				active.italic = true
 			}
+
+			continue
+		}
+
+		/**
+		 * Есть выделение.
+		 *
+		 * Toggle считается активным только тогда,
+		 * когда выделена ВСЯ Markdown-конструкция:
+		 *
+		 * **text**
+		 * ~~text~~
+		 * `text`
+		 * [spoiler]text[/spoiler]
+		 *
+		 * В частности, выделение только содержимого:
+		 *
+		 * **text
+		 *   ^^^^
+		 *
+		 * больше не считается активным.
+		 */
+		const entireMarkdownSpanSelected =
+			start <= span.start && end >= span.end
+
+		if (!entireMarkdownSpanSelected) {
+			continue
+		}
+
+		active[span.action] = true
+
+		if (span.composite) {
+			active.bold = true
+			active.italic = true
 		}
 	}
 
@@ -311,16 +356,18 @@ const findActiveMarkdownSpan = (
 	return (
 		spans.find(
 			span =>
-				(span.action === action || (span.composite && (action === 'bold' || action === 'italic'))) &&
+				(span.action === action ||
+					(span.composite &&
+						(action === 'bold' || action === 'italic'))) &&
 				(rangeIsInside(start, end, span.start, span.end) ||
 					(start === end
 						? start >= span.contentStart && start <= span.contentEnd
 						: rangesOverlap(
-							start,
-							end,
-							span.contentStart,
-							span.contentEnd
-						)))
+								start,
+								end,
+								span.contentStart,
+								span.contentEnd
+							)))
 		) ?? null
 	)
 }
@@ -351,7 +398,11 @@ const unwrapMarkdownSpan = (
 		)
 	}
 
-	return value.slice(0, span.start) + value.slice(span.contentStart, span.contentEnd) + value.slice(span.end)
+	return (
+		value.slice(0, span.start) +
+		value.slice(span.contentStart, span.contentEnd) +
+		value.slice(span.end)
+	)
 }
 
 interface FloatingToolbarProps {
@@ -628,7 +679,9 @@ const FloatingToolbar = memo(
 					classNames={[
 						styles.toolbarButton,
 						activeStyles.bold ? styles.toolbarButtonActive : ''
-					].filter(Boolean).join(' ')}
+					]
+						.filter(Boolean)
+						.join(' ')}
 					aria-pressed={activeStyles.bold}
 					aria-label='Жирный'
 					title='Жирный'
@@ -642,7 +695,9 @@ const FloatingToolbar = memo(
 					classNames={[
 						styles.toolbarButton,
 						activeStyles.italic ? styles.toolbarButtonActive : ''
-					].filter(Boolean).join(' ')}
+					]
+						.filter(Boolean)
+						.join(' ')}
 					aria-pressed={activeStyles.italic}
 					aria-label='Курсив'
 					title='Курсив'
@@ -656,7 +711,9 @@ const FloatingToolbar = memo(
 					classNames={[
 						styles.toolbarButton,
 						activeStyles.strike ? styles.toolbarButtonActive : ''
-					].filter(Boolean).join(' ')}
+					]
+						.filter(Boolean)
+						.join(' ')}
 					aria-pressed={activeStyles.strike}
 					aria-label='Зачёркнутый'
 					title='Зачёркнутый'
@@ -670,7 +727,9 @@ const FloatingToolbar = memo(
 					classNames={[
 						styles.toolbarButton,
 						activeStyles.code ? styles.toolbarButtonActive : ''
-					].filter(Boolean).join(' ')}
+					]
+						.filter(Boolean)
+						.join(' ')}
 					aria-pressed={activeStyles.code}
 					aria-label='Код'
 					title='Код'
@@ -684,7 +743,9 @@ const FloatingToolbar = memo(
 					classNames={[
 						styles.toolbarButton,
 						activeStyles.spoiler ? styles.toolbarButtonActive : ''
-					].filter(Boolean).join(' ')}
+					]
+						.filter(Boolean)
+						.join(' ')}
 					aria-pressed={activeStyles.spoiler}
 					aria-label='Спойлер'
 					title='Спойлер'
@@ -753,7 +814,10 @@ const applyMarkdownAction = (
 ) => {
 	const selected = value.slice(start, end)
 
-	if (active && ['bold', 'italic', 'strike', 'code', 'spoiler'].includes(action)) {
+	if (
+		active &&
+		['bold', 'italic', 'strike', 'code', 'spoiler'].includes(action)
+	) {
 		const span = findActiveMarkdownSpan(
 			value,
 			start,
@@ -762,7 +826,11 @@ const applyMarkdownAction = (
 		)
 
 		if (span) {
-			const nextValue = unwrapMarkdownSpan(value, span, action as MarkdownInlineAction)
+			const nextValue = unwrapMarkdownSpan(
+				value,
+				span,
+				action as MarkdownInlineAction
+			)
 			const openRemoved = span.composite
 				? action === 'bold'
 					? 2
@@ -772,7 +840,7 @@ const applyMarkdownAction = (
 				? action === 'bold'
 					? 2
 					: 1
-				: span.closeMarker?.length ?? span.marker.length
+				: (span.closeMarker?.length ?? span.marker.length)
 
 			const mapPosition = (position: number): number => {
 				if (position <= span.start) {
@@ -921,9 +989,8 @@ export const MarkdownInput = memo(
 				maxRows
 			})
 
-			const [activeStyles, setActiveStyles] = useState<MarkdownActiveStyles>(
-				EMPTY_MARKDOWN_ACTIVE_STYLES
-			)
+			const [activeStyles, setActiveStyles] =
+				useState<MarkdownActiveStyles>(EMPTY_MARKDOWN_ACTIVE_STYLES)
 
 			const updateSelection = useCallback(() => {
 				const textarea = textareaRef.current
@@ -943,8 +1010,11 @@ export const MarkdownInput = memo(
 					selectionRef.current = { start, end }
 					setActiveStyles(nextActiveStyles)
 
-					const hasActiveStyle = Object.values(nextActiveStyles).some(Boolean)
-					setSelectionRect(hasActiveStyle ? getSelectionRect(textarea) : null)
+					const hasActiveStyle =
+						Object.values(nextActiveStyles).some(Boolean)
+					setSelectionRect(
+						hasActiveStyle ? getSelectionRect(textarea) : null
+					)
 					return
 				}
 
@@ -953,7 +1023,9 @@ export const MarkdownInput = memo(
 					end
 				}
 
-				setActiveStyles(getActiveMarkdownStyles(textarea.value, start, end))
+				setActiveStyles(
+					getActiveMarkdownStyles(textarea.value, start, end)
+				)
 
 				const rect = getSelectionRect(textarea)
 
@@ -1249,7 +1321,8 @@ export const MarkdownInput = memo(
 					const { start, end } = selection
 
 					const isActive =
-						activeStyles[action as keyof MarkdownActiveStyles] ?? false
+						activeStyles[action as keyof MarkdownActiveStyles] ??
+						false
 
 					if (start === end && !isActive) {
 						return

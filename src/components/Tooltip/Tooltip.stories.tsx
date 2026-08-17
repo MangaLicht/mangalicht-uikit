@@ -1,7 +1,6 @@
 import { ButtonHTMLAttributes, useState } from 'react'
 import { Tooltip } from './index'
 
-import { Badge } from '../Badge'
 import { Block } from '../Block'
 import { Button } from '../Button'
 import { Checkbox } from '../Checkbox'
@@ -186,22 +185,6 @@ export const AllComponents = {
 					отображаться независимо от внутренней DOM-структуры
 					компонента.
 				</p>
-
-				{/* Badge */}
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						gap: 16,
-						minHeight: 48
-					}}
-				>
-					<strong style={{ width: 160 }}>Badge</strong>
-
-					<Tooltip {...args} content='Tooltip на Badge'>
-						<Badge variant='bronze' level={67} />
-					</Tooltip>
-				</div>
 
 				{/* Block */}
 				<div
