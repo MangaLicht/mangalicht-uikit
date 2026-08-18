@@ -11,6 +11,15 @@ export type ButtonVariants =
 	| 'ghost'
 	| 'transparent'
 
+const STYLE_TO_CLASS: Record<ButtonVariants, string> = {
+	default: styles.default,
+	highlight: styles.highlight,
+	bordered: styles.bordered,
+	borderedAccent: styles.borderedAccent,
+	ghost: styles.ghost,
+	transparent: styles.transparent
+}
+
 export interface ButtonProps extends Omit<
 	ButtonHTMLAttributes<HTMLButtonElement>,
 	'children' | 'type' | 'variant'
@@ -35,15 +44,6 @@ export interface ButtonProps extends Omit<
 	iconEnd?: React.ReactNode
 	/** Режимы анимации */
 	animation?: ButtonAnimation
-}
-
-const STYLE_TO_CLASS: Record<ButtonVariants, string> = {
-	default: styles.default,
-	highlight: styles.highlight,
-	bordered: styles.bordered,
-	borderedAccent: styles.borderedAccent,
-	ghost: styles.ghost,
-	transparent: styles.transparent
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

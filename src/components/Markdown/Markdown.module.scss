@@ -101,7 +101,8 @@
 	height: 28px;
 
 	padding: 0;
-	border-radius: 4px;
+	--current-radius: 4px !important; // перебиваем стили из adaptive-rounding
+	border-radius: var(--current-radius);
 
 	&:focus-visible {
 		outline-offset: 1px;
@@ -282,4 +283,9 @@
 	&[data-over='true'] {
 		color: $md-counter-color--over;
 	}
+}
+
+.toolbarButtonActive {
+	background-color: var(--uikit-accent) !important;
+	color: var(--c-white) !important;
 }

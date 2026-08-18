@@ -1,0 +1,51 @@
+@use './SimpleBadge-vars' as *;
+
+.badge {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	isolation: isolate;
+	box-sizing: border-box;
+	--current-radius: 999px !important; // перебиваем стили из adaptive-rounding
+	border-radius: var(--current-radius);
+	transform: translateZ(0);
+}
+
+.content {
+	margin: $content-margin;
+	font-family: inherit;
+	font-size: $badge-font-size;
+	font-weight: 500;
+	line-height: 1.2;
+	white-space: nowrap;
+	user-select: none;
+}
+
+.primary {
+	color: var(--uikit-text-main);
+	background-color: var(--uikit-primary);
+}
+
+.destructive {
+	$text-color: color-mix(
+		in srgb,
+		var(--uikit-alert),
+		var(--uikit-text-main) 90%
+	);
+
+	color: $text-color;
+	background-color: var(--uikit-alert);
+}
+
+.outline {
+	color: var(--uikit-primary);
+	border: 2px solid var(--uikit-primary);
+}
+
+.positive {
+	color: var(--c-black);
+	font-weight: 700;
+	background-color: var(--uikit-positive);
+}
