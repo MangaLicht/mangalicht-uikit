@@ -30,3 +30,5 @@ export const SimpleBadge = ({
 		</span>
 	)
 }
+
+SimpleBadge.displayName = 'SimpleBadge'
