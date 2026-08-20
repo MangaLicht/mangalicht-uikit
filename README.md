@@ -302,7 +302,7 @@ positive
 ```tsx
 import { SimpleBadge } from 'mangalicht-uikit'
 
-<SimpleBadge variant='gold' label='Example' />
+<SimpleBadge variant='primary' label='Example' />
 ```
 
 ---
