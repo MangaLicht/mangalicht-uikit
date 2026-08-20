@@ -267,9 +267,9 @@ src/shared/_utils.scss
 
 ## Badge
 
-В public API `Badge` — это `ProfileLevelBadge`.
-
 Поддерживаемые варианты:
+
+ProfileLevelBadge variants:
 
 ```text
 bronze
@@ -283,19 +283,27 @@ diamond
 Пример:
 
 ```tsx
-import { Badge } from 'mangalicht-uikit'
+import { ProfileLevelBadge } from 'mangalicht-uikit'
 
-<Badge variant='gold' level={10} />
+<ProfileLevelBadge variant='gold' level={10} />
 ```
 
-Исходники:
+SimpleBadge variants:
 
 ```text
-src/components/Badge/ProfileLevel/
-src/components/Badge/Simple/
+primary
+destructive
+outline
+positive
 ```
 
-`SimpleBadge` существует в исходниках, но в текущем корневом public API отдельно не экспортируется.
+Пример:
+
+```tsx
+import { SimpleBadge } from 'mangalicht-uikit'
+
+<SimpleBadge variant='gold' label='Example' />
+```
 
 ---
 
