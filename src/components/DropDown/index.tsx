@@ -13,7 +13,7 @@ import React, {
 import { createPortal } from 'react-dom'
 import { getPortalRoot } from '@shared/utils/portalRoot'
 import { useAnchoredPosition } from '@hooks/useAnchoredPosition'
-import { ChevronIcon } from '@icons/Chevron'
+import { ChevronDown } from 'lucide-react'
 import { DropDownContext } from './context'
 import styles from './DropDown.module.scss'
 
@@ -216,7 +216,7 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 							className={styles.itemChevron}
 							data-expanded={open}
 						>
-							<ChevronIcon />
+							<ChevronDown aria-hidden='true' />
 						</span>
 					</span>
 				</li>
@@ -230,36 +230,25 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 				>
 					<span>{triggerLabel}</span>
 					<span className={styles.chevron} data-open={open}>
-						<ChevronIcon />
+						<ChevronDown aria-hidden='true' />
 					</span>
 				</button>
 			)
 			const triggerSource = trigger ?? defaultTrigger
-			if (isValidElement(triggerSource)) {
-				const sourceProps = triggerSource.props as React.ButtonHTMLAttributes<HTMLButtonElement> & {
-					onClick?: React.MouseEventHandler<HTMLButtonElement>
-				}
-
-				triggerNode = cloneElement(triggerSource as React.ReactElement<any>, {
-					ref: setTriggerRef,
-					onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
-						// Сначала сохраняем поведение самого trigger (в том числе Toggle),
-						// затем переключаем состояние DropDown. Не заменяем обработчик
-						// trigger — это важно для составных компонентов.
-						sourceProps.onClick?.(event)
-
-						if (!event.defaultPrevented) {
+			triggerNode = isValidElement(triggerSource)
+				? cloneElement(triggerSource as React.ReactElement<any>, {
+						ref: setTriggerRef,
+						onClick: (event: React.MouseEvent) => {
+							;(triggerSource.props as any).onClick?.(event)
 							toggleOpen()
-						}
-					},
-					'aria-haspopup': 'menu',
-					'aria-expanded': open,
-					'data-open': open,
-					disabled: disabled || sourceProps.disabled
-				})
-			} else {
-				triggerNode = triggerSource
-			}
+						},
+						'aria-haspopup': 'menu',
+						'aria-expanded': open,
+						'data-open': open,
+						disabled:
+							disabled || (triggerSource.props as any).disabled
+					})
+				: triggerSource
 		}
 
 		const contextValue = useMemo(

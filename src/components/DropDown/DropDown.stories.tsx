@@ -2,7 +2,6 @@ import React from 'react';
 import { DropDown } from './';
 import { DropDownItem } from './';
 import { Button } from '../Button';
-import { Toggle } from '../Toggle';
 
 const meta = {
   title: 'Components/DropDown',
@@ -45,27 +44,6 @@ export const WithCustomTrigger = {
  * внутри DropDownItem формирует раскрываемое подменю с отступом по
  * уровню — без единого ручного указания глубины.
  */
-
-
-export const WithToggleTrigger = {
-  name: 'With Toggle trigger',
-  render: () => (
-    <DropDown
-      trigger={
-        <Toggle
-          defaultChecked={false}
-          labelText="Форматирование"
-          activeVariant="highlight"
-        />
-      }
-    >
-      <DropDownItem label="Жирный" onClick={() => console.log('Жирный')} />
-      <DropDownItem label="Курсив" onClick={() => console.log('Курсив')} />
-      <DropDownItem label="Подчёркнутый" onClick={() => console.log('Подчёркнутый')} />
-    </DropDown>
-  ),
-};
-
 export const NestedItems = {
   name: 'Nested submenu (3 levels)',
   render: () => (

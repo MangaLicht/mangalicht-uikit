@@ -4,7 +4,9 @@ import { Button, type ButtonProps } from '@/components/Button'
 
 import styles from './Toggle.module.scss'
 
-export interface ToggleProps extends ButtonProps {
+export interface ToggleProps extends Omit<ButtonProps, 'onClick'> {
+	/** Внешний обработчик клика. Выполняется после переключения Toggle. */
+	onClick?: React.MouseEventHandler<HTMLButtonElement>
 	/**
 	 * Состояние Toggle.
 	 *
@@ -80,7 +82,7 @@ export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
 
 		const handleClick = useCallback(
 			(event: React.MouseEvent<HTMLButtonElement>) => {
-				if (disabled || toggleDisabled) {
+				if (disabled) {
 					return
 				}
 
@@ -93,14 +95,7 @@ export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
 				onCheckedChange?.(nextChecked, event)
 				onClick?.(event)
 			},
-			[
-				checked,
-				disabled,
-				isControlled,
-				onCheckedChange,
-				onClick,
-				toggleDisabled
-			]
+			[checked, disabled, isControlled, onCheckedChange, onClick]
 		)
 
 		const buttonClassName = [

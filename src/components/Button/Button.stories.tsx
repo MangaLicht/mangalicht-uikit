@@ -1,5 +1,5 @@
-import React from 'react'
 import { Button } from './index'
+import { Plus, ArrowRight } from 'lucide-react'
 
 const meta = {
   title: 'Components/Button',
@@ -60,13 +60,13 @@ export const WithIcon = {
       <Button
         labelText="Добавить"
         variant="default"
-        iconStart={<PlusIcon />}
+        iconStart={<Plus aria-hidden="true" />}
         onClick={() => {}}
       />
       <Button
         labelText="Продолжить"
         variant="bordered"
-        iconEnd={<ArrowRightIcon />}
+        iconEnd={<ArrowRight aria-hidden="true" />}
         onClick={() => {}}
       />
     </div>
@@ -94,26 +94,3 @@ export const AllVariants = {
   ),
 };
 
-const PlusIcon = () => (
-  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M8 2v12M2 8h12"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
-  </svg>
-);
-
-const ArrowRightIcon = () => React.createElement(
-  'svg',
-  { viewBox: '0 0 16 16', xmlns: 'http://www.w3.org/2000/svg' },
-  React.createElement('path', {
-    d: 'M3 8h10M9 4l4 4-4 4',
-    stroke: 'currentColor',
-    strokeWidth: '2',
-    strokeLinecap: 'round',
-    strokeLinejoin: 'round',
-    fill: 'none',
-  }),
-);

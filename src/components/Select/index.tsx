@@ -10,7 +10,7 @@ import { createPortal } from 'react-dom'
 import { getPortalRoot } from '@shared/utils/portalRoot'
 import { useClickOutside } from '@hooks/useClickOutside'
 import { useAnchoredPosition } from '@hooks/useAnchoredPosition'
-import { ChevronIcon } from '@icons/Chevron'
+import { ChevronDown } from 'lucide-react'
 import styles from './Select.module.scss'
 
 export interface SelectOption {
@@ -217,7 +217,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 						{selectedOption ? selectedOption.label : placeholder}
 					</span>
 					<span className={styles.chevron} data-open={open}>
-						<ChevronIcon />
+						<ChevronDown aria-hidden='true' />
 					</span>
 				</button>
 

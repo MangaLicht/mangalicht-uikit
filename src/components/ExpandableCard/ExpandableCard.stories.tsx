@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { ExpandableCard } from './index'
 import { Button } from '../Button'
 import { Block } from '../Block'
-import { BookmarkIcon } from '../../icons/Bookmark'
+import { Bookmark } from 'lucide-react'
 // @ts-ignore: allow importing global SCSS in Storybook preview
 import styles from './ExpandableCard.stories.module.scss'
 
@@ -40,7 +40,7 @@ const ActionSection = () => (
 					<Button variant='default' labelText='К тайтлу' />
 					<Button
 						variant='default'
-						iconStart={<BookmarkIcon />}
+						iconStart={<Bookmark aria-hidden='true' />}
 						aria-label='Добавить в закладки'
 					/>
 				</div>

@@ -15,14 +15,11 @@ export type { TooltipProps, TooltipPosition } from '@/components/Tooltip'
 export { Select } from '@/components/Select'
 export type { SelectProps, SelectOption } from '@/components/Select'
 export { Block } from '@/components/Block'
-export {
-	ProfileLevelBadge,
-	type PLBadgeProps,
-	type PLBadgeVariant,
-	SimpleBadge,
-	type SimpleBadgeProps,
-	type SimpleBadgeVariant
-} from '@/components/Badge'
+export { ProfileLevelBadge as Badge } from '@/components/Badge/ProfileLevel/ProfileLevelBadge'
+export type {
+	PLBadgeProps as BadgeProps,
+	PLBadgeVariant as BadgeVariant
+} from '@/components/Badge/ProfileLevel/ProfileLevelBadge'
 export type { IBlockProps, BlockVariant, TitleStyle } from '@/components/Block'
 export { Input } from '@/components/Input'
 export type { InputProps } from '@/components/Input'

@@ -7,7 +7,7 @@ import React, {
 	useRef,
 	useState
 } from 'react'
-import { ChevronIcon } from '@icons/Chevron'
+import { ChevronDown } from 'lucide-react'
 import styles from './Carousel.module.scss'
 
 export interface CarouselSlide {
@@ -656,7 +656,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 							aria-label='Предыдущий слайд'
 							onClick={movePrev}
 						>
-							<ChevronIcon />
+							<ChevronDown aria-hidden='true' />
 						</button>
 
 						<button
@@ -666,7 +666,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 							aria-label='Следующий слайд'
 							onClick={moveNext}
 						>
-							<ChevronIcon />
+							<ChevronDown aria-hidden='true' />
 						</button>
 					</>
 				) : null}

@@ -18,18 +18,21 @@ import { useAutosizeTextarea } from '@/hooks/useAutosizeTextarea'
 import { useHistoryBuffer } from '@/hooks/useHistoryBuffer'
 import { useSmoothFollow } from '@/hooks/useSmoothFollow'
 
-import { Button } from '@components/Button'
 import {
-	BoldIcon,
-	ItalicIcon,
-	LinkIcon,
-	ListIcon,
-	CodeIcon,
-	EyeIcon
-} from '@/icons/Markdown'
+	Bold,
+	Code2,
+	Eye,
+	Italic,
+	Link2,
+	List,
+	ListOrdered,
+	Quote,
+	Redo2,
+	Strikethrough,
+	Undo2
+} from 'lucide-react'
 
-import { UndoIcon } from '@/icons/Undo'
-import { RedoIcon } from '@/icons/Redo'
+import { Button } from '@components/Button'
 
 import styles from './Markdown.module.scss'
 
@@ -656,7 +659,7 @@ const FloatingToolbar = memo(
 					disabled={!canUndo}
 					aria-label='Отменить'
 					title='Отменить — Ctrl/Cmd + Z'
-					iconStart={<UndoIcon />}
+					iconStart={<Undo2 aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={onUndo}
 				/>
@@ -667,7 +670,7 @@ const FloatingToolbar = memo(
 					disabled={!canRedo}
 					aria-label='Повторить'
 					title='Повторить — Ctrl/Cmd + Shift + Z'
-					iconStart={<RedoIcon />}
+					iconStart={<Redo2 aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={onRedo}
 				/>
@@ -685,7 +688,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.bold}
 					aria-label='Жирный'
 					title='Жирный'
-					iconStart={<BoldIcon />}
+					iconStart={<Bold aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('bold')}
 				/>
@@ -701,7 +704,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.italic}
 					aria-label='Курсив'
 					title='Курсив'
-					iconStart={<ItalicIcon />}
+					iconStart={<Italic aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('italic')}
 				/>
@@ -717,7 +720,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.strike}
 					aria-label='Зачёркнутый'
 					title='Зачёркнутый'
-					labelText='S'
+					iconStart={<Strikethrough aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('strike')}
 				/>
@@ -733,7 +736,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.code}
 					aria-label='Код'
 					title='Код'
-					iconStart={<CodeIcon />}
+					iconStart={<Code2 aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('code')}
 				/>
@@ -749,7 +752,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.spoiler}
 					aria-label='Спойлер'
 					title='Спойлер'
-					iconStart={<EyeIcon />}
+					iconStart={<Eye aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('spoiler')}
 				/>
@@ -759,7 +762,7 @@ const FloatingToolbar = memo(
 					classNames={styles.toolbarButton}
 					aria-label='Ссылка'
 					title='Ссылка'
-					iconStart={<LinkIcon />}
+					iconStart={<Link2 aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('link')}
 				/>
@@ -769,7 +772,7 @@ const FloatingToolbar = memo(
 					classNames={styles.toolbarButton}
 					aria-label='Цитата'
 					title='Цитата'
-					labelText='❝'
+					iconStart={<Quote aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('quote')}
 				/>
@@ -779,7 +782,7 @@ const FloatingToolbar = memo(
 					classNames={styles.toolbarButton}
 					aria-label='Маркированный список'
 					title='Маркированный список'
-					iconStart={<ListIcon />}
+					iconStart={<List aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('unordered-list')}
 				/>
@@ -789,7 +792,7 @@ const FloatingToolbar = memo(
 					classNames={styles.toolbarButton}
 					aria-label='Нумерованный список'
 					title='Нумерованный список'
-					labelText='1.'
+					iconStart={<ListOrdered aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('ordered-list')}
 				/>
