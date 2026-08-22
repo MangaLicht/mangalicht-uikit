@@ -1,9 +1,5 @@
 .toggle {
-	/*
-	 * Toggle использует всю визуальную основу Button.
-	 * Здесь находятся только изменения, связанные
-	 * именно с состоянием toggle.
-	 */
+	transition: background 100ms ease !important;
 
 	&[data-checked='true'] {
 		/*

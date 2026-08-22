@@ -4,7 +4,7 @@ import { Button, type ButtonProps } from '@/components/Button'
 
 import styles from './Toggle.module.scss'
 
-export interface ToggleProps extends Omit<ButtonProps, 'onClick'> {
+export interface ToggleProps extends ButtonProps {
 	/**
 	 * Состояние Toggle.
 	 *
@@ -61,6 +61,7 @@ export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
 			toggleDisabled = false,
 
 			classNames,
+			onClick,
 
 			variant = 'ghost',
 
@@ -90,8 +91,16 @@ export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
 				}
 
 				onCheckedChange?.(nextChecked, event)
+				onClick?.(event)
 			},
-			[checked, disabled, isControlled, onCheckedChange, toggleDisabled]
+			[
+				checked,
+				disabled,
+				isControlled,
+				onCheckedChange,
+				onClick,
+				toggleDisabled
+			]
 		)
 
 		const buttonClassName = [

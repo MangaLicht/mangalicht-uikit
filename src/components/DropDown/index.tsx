@@ -235,20 +235,31 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 				</button>
 			)
 			const triggerSource = trigger ?? defaultTrigger
-			triggerNode = isValidElement(triggerSource)
-				? cloneElement(triggerSource as React.ReactElement<any>, {
-						ref: setTriggerRef,
-						onClick: (event: React.MouseEvent) => {
-							;(triggerSource.props as any).onClick?.(event)
+			if (isValidElement(triggerSource)) {
+				const sourceProps = triggerSource.props as React.ButtonHTMLAttributes<HTMLButtonElement> & {
+					onClick?: React.MouseEventHandler<HTMLButtonElement>
+				}
+
+				triggerNode = cloneElement(triggerSource as React.ReactElement<any>, {
+					ref: setTriggerRef,
+					onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
+						// Сначала сохраняем поведение самого trigger (в том числе Toggle),
+						// затем переключаем состояние DropDown. Не заменяем обработчик
+						// trigger — это важно для составных компонентов.
+						sourceProps.onClick?.(event)
+
+						if (!event.defaultPrevented) {
 							toggleOpen()
-						},
-						'aria-haspopup': 'menu',
-						'aria-expanded': open,
-						'data-open': open,
-						disabled:
-							disabled || (triggerSource.props as any).disabled
-					})
-				: triggerSource
+						}
+					},
+					'aria-haspopup': 'menu',
+					'aria-expanded': open,
+					'data-open': open,
+					disabled: disabled || sourceProps.disabled
+				})
+			} else {
+				triggerNode = triggerSource
+			}
 		}
 
 		const contextValue = useMemo(
