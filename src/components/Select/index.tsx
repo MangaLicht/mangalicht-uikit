@@ -11,10 +11,7 @@ import { ChevronDown } from 'lucide-react'
 import { getPortalRoot } from '@shared/utils/portalRoot'
 import { useClickOutside } from '@hooks/useClickOutside'
 import { useAnchoredPosition } from '@hooks/useAnchoredPosition'
-import {
-	ScrollArea,
-	type ScrollAreaHandle
-} from '@components/ScrollArea'
+import { ScrollArea, type ScrollAreaHandle } from '@components/ScrollArea'
 import styles from './Select.module.scss'
 
 export interface SelectOption {
@@ -92,18 +89,25 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 
 			const handleScroll = (event: Event) => {
 				const target = event.target
-				if (target instanceof Node && panelRef.current?.contains(target)) {
+				if (
+					target instanceof Node &&
+					panelRef.current?.contains(target)
+				) {
 					return
 				}
 				setOpen(false)
 			}
 
 			window.addEventListener('scroll', handleScroll, true)
-			return () => window.removeEventListener('scroll', handleScroll, true)
+			return () =>
+				window.removeEventListener('scroll', handleScroll, true)
 		}, [open])
 
-		const selectedIndex = options.findIndex(option => option.value === currentValue)
-		const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : undefined
+		const selectedIndex = options.findIndex(
+			option => option.value === currentValue
+		)
+		const selectedOption =
+			selectedIndex >= 0 ? options[selectedIndex] : undefined
 
 		const commitValue = useCallback(
 			(nextValue: string) => {
@@ -131,7 +135,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 			if (disabled) return
 
 			if (!open) {
-				if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
+				if (
+					['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)
+				) {
 					event.preventDefault()
 					openMenu()
 				}
@@ -141,11 +147,15 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 			switch (event.key) {
 				case 'ArrowDown':
 					event.preventDefault()
-					setHighlightedIndex(index => findNextEnabled(options, index, 1))
+					setHighlightedIndex(index =>
+						findNextEnabled(options, index, 1)
+					)
 					break
 				case 'ArrowUp':
 					event.preventDefault()
-					setHighlightedIndex(index => findNextEnabled(options, index, -1))
+					setHighlightedIndex(index =>
+						findNextEnabled(options, index, -1)
+					)
 					break
 				case 'Home':
 					event.preventDefault()
@@ -153,7 +163,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 					break
 				case 'End':
 					event.preventDefault()
-					setHighlightedIndex(findNextEnabled(options, options.length, -1))
+					setHighlightedIndex(
+						findNextEnabled(options, options.length, -1)
+					)
 					break
 				case 'Enter':
 				case ' ': {
@@ -238,7 +250,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 					ref={setTriggerRef}
 					type='button'
 					style={{ minWidth: `${minWidth}px` }}
-					className={[styles.trigger, classNames].filter(Boolean).join(' ')}
+					className={[styles.trigger, classNames]
+						.filter(Boolean)
+						.join(' ')}
 					disabled={disabled}
 					aria-haspopup='listbox'
 					aria-expanded={open}
@@ -254,7 +268,10 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 					onKeyDown={handleTriggerKeyDown}
 					{...rest}
 				>
-					<span className={styles.valueText} data-placeholder={!selectedOption}>
+					<span
+						className={styles.valueText}
+						data-placeholder={!selectedOption}
+					>
 						{selectedOption ? selectedOption.label : placeholder}
 					</span>
 					<span className={styles.chevron} data-open={open}>
