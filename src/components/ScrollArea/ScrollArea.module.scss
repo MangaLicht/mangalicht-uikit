@@ -2,37 +2,16 @@
 
 .root {
 	position: relative;
+
 	width: 100%;
 	height: 100%;
+
 	min-width: 0;
 	min-height: 0;
-	box-sizing: border-box;
+
+	overflow: hidden;
+
 	--scroll-area-scrollbar-size: #{$scroll-area-size};
-
-	/* ScrollArea is the only scrollable element. */
-	scrollbar-width: none;
-	-ms-overflow-style: none;
-
-	&::-webkit-scrollbar {
-		width: 0;
-		height: 0;
-		display: none;
-		background: transparent;
-	}
-
-	&[data-axis='vertical'] {
-		overflow-x: hidden;
-		overflow-y: auto;
-	}
-
-	&[data-axis='horizontal'] {
-		overflow-x: auto;
-		overflow-y: hidden;
-	}
-
-	&[data-axis='both'] {
-		overflow: auto;
-	}
 
 	&[data-visible-mode='none'] {
 		.verticalTrack,
@@ -57,32 +36,83 @@
 		}
 	}
 
-	&[data-vertical-overflow='false'] .verticalTrack,
-	&[data-horizontal-overflow='false'] .horizontalTrack {
-		opacity: 0 !important;
-		visibility: hidden !important;
-		pointer-events: none;
+	&[data-vertical-overflow='false'] {
+		.verticalTrack {
+			opacity: 0 !important;
+			visibility: hidden !important;
+			pointer-events: none;
+		}
+	}
+
+	&[data-horizontal-overflow='false'] {
+		.horizontalTrack {
+			opacity: 0 !important;
+			visibility: hidden !important;
+			pointer-events: none;
+		}
+	}
+}
+
+.viewport {
+	width: 100%;
+	height: 100%;
+
+	min-width: 0;
+	min-height: 0;
+
+	box-sizing: border-box;
+
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+
+		width: 0;
+		height: 0;
+	}
+
+	.root[data-axis='vertical'] & {
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+
+	.root[data-axis='horizontal'] & {
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+
+	.root[data-axis='both'] & {
+		overflow: auto;
 	}
 }
 
 .content {
 	min-width: 100%;
 	min-height: 100%;
+
 	box-sizing: border-box;
 }
 
 .verticalTrack,
 .horizontalTrack {
 	position: absolute;
+
 	z-index: 2;
+
 	padding: $scroll-area-track-padding;
+
 	box-sizing: border-box;
+
 	background: $scroll-area-track-background;
+
 	opacity: 1;
 	visibility: visible;
+
 	transition:
 		opacity $scroll-area-transition,
 		visibility $scroll-area-transition;
+
 	pointer-events: none;
 }
 
@@ -90,6 +120,7 @@
 	top: 0;
 	right: 0;
 	bottom: 0;
+
 	width: calc(
 		var(--scroll-area-scrollbar-size) + #{$scroll-area-track-padding * 2}
 	);
@@ -99,6 +130,7 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
+
 	height: calc(
 		var(--scroll-area-scrollbar-size) + #{$scroll-area-track-padding * 2}
 	);
@@ -107,27 +139,37 @@
 .root[data-axis='both'] {
 	.verticalTrack {
 		bottom: calc(
-			var(--scroll-area-scrollbar-size) + #{$scroll-area-track-padding * 2}
+			var(--scroll-area-scrollbar-size) + #{$scroll-area-track-padding *
+				2}
 		);
 	}
 
 	.horizontalTrack {
 		right: calc(
-			var(--scroll-area-scrollbar-size) + #{$scroll-area-track-padding * 2}
+			var(--scroll-area-scrollbar-size) + #{$scroll-area-track-padding *
+				2}
 		);
 	}
 }
 
 .thumb {
 	position: absolute;
+
 	top: $scroll-area-track-padding;
 	left: $scroll-area-track-padding;
+
 	box-sizing: border-box;
+
 	border-radius: $scroll-area-thumb-radius;
+
 	background: $scroll-area-thumb-color;
+
 	cursor: grab;
+
 	pointer-events: auto;
+
 	touch-action: none;
+
 	transition: background-color $scroll-area-transition;
 
 	&:hover,
@@ -142,6 +184,7 @@
 
 	&:focus-visible {
 		outline: 1px solid var(--uikit-accent);
+
 		outline-offset: 1px;
 	}
 }
