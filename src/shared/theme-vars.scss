@@ -90,6 +90,7 @@
 	--uikit-text-ghost: var(--c-neutral-dark-300);
 	--uikit-block-shadow: var(--c-neutral-dark-100);
 	--uikit-neutral-mask: var(--c-neutral-light-200);
+	--uikit-neutral-bg-mask: var(--c-neutral-dark-200);
 	--uikit-neutral-accent-mask: var(--c-neutral-dark-100);
 }
 :root[data-theme='dark'] {
@@ -134,5 +135,6 @@
 	--uikit-text-ghost: var(--c-neutral-light-300);
 	--uikit-block-shadow: var(--c-neutral-light-100);
 	--uikit-neutral-mask: var(--c-neutral-light-300);
+	--uikit-neutral-bg-mask: var(--c-neutral-light-200);
 	--uikit-neutral-accent-mask: var(--c-neutral-light-200);
 }
