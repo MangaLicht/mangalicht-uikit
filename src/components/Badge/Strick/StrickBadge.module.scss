@@ -1,9 +1,9 @@
 @use '../../../shared/mixins' as *;
 
-$strik-color: var(--uikit-yellow);
-$strik-glow: rgba(253, 130, 49, 0.95);
-$strik-bg: color-mix(in srgb, $strik-color 10%, var(--uikit-bg-block, #fff));
-$strik-animation-glow-size: 8px;
+$strick-color: var(--uikit-yellow);
+$strick-glow: rgba(253, 130, 49, 0.95);
+$strick-bg: color-mix(in srgb, $strick-color 10%, var(--uikit-bg-block, #fff));
+$strick-animation-glow-size: 8px;
 
 .badge {
 	display: flex;
@@ -13,11 +13,10 @@ $strik-animation-glow-size: 8px;
 	box-sizing: border-box;
 	padding: rem(2) rem(6);
 	width: 100%;
-	border: 2px solid $strik-color;
-	--current-radius: 999px !important; // перебиваем стили из adaptive-rounding
-	border-radius: var(--current-radius);
-	background: $strik-bg;
-	color: $strik-color;
+	border: 2px solid $strick-color;
+	@include keep-radius(999px);
+	background: $strick-bg;
+	color: $strick-color;
 	font-family: inherit;
 	font-size: 20px;
 	font-weight: 700;
@@ -77,8 +76,8 @@ $strik-animation-glow-size: 8px;
 	40% {
 		color: white;
 		transform: scale(1.4);
-		filter: drop-shadow(0 0 $strik-animation-glow-size * 0.5 $strik-glow)
-			drop-shadow(0 0 $strik-animation-glow-size * 1.2 $strik-glow);
+		filter: drop-shadow(0 0 $strick-animation-glow-size * 0.5 $strick-glow)
+			drop-shadow(0 0 $strick-animation-glow-size * 1.2 $strick-glow);
 	}
 }
 
