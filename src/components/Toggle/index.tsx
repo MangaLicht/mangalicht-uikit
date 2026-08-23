@@ -2,8 +2,6 @@ import React, { forwardRef, useCallback, useState } from 'react'
 
 import { Button, type ButtonProps } from '@/components/Button'
 
-import styles from './Toggle.module.scss'
-
 export interface ToggleProps extends Omit<ButtonProps, 'onClick'> {
 	/** Внешний обработчик клика. Выполняется после переключения Toggle. */
 	onClick?: React.MouseEventHandler<HTMLButtonElement>
@@ -98,25 +96,12 @@ export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
 			[checked, disabled, isControlled, onCheckedChange, onClick]
 		)
 
-		const buttonClassName = [
-			styles.toggle,
-
-			checked ? styles.checked : '',
-
-			checked ? activeClassName : '',
-
-			classNames
-		]
-			.filter(Boolean)
-			.join(' ')
-
 		return (
 			<Button
 				ref={ref}
 				{...rest}
 				disabled={disabled || toggleDisabled}
 				variant={checked ? activeVariant : variant}
-				classNames={buttonClassName}
 				aria-pressed={checked}
 				data-checked={checked}
 				onClick={handleClick}
