@@ -45,7 +45,14 @@ export {
 	type ProgressFill
 } from '@/components/ProgressBar'
 export { Slider, type SliderProps } from '@/components/Slider'
-export { ScrollArea, type ScrollAreaProps, type ScrollAreaHandle, type ScrollAreaRef, type ScrollAreaAxis, type ScrollAreaVisibleMode } from '@/components/ScrollArea'
+export {
+	ScrollArea,
+	type ScrollAreaProps,
+	type ScrollAreaHandle,
+	type ScrollAreaRef,
+	type ScrollAreaAxis,
+	type ScrollAreaVisibleMode
+} from '@/components/ScrollArea'
 export {
 	DropDown,
 	DropDownItem,
@@ -66,3 +73,4 @@ export {
 	type ExpandableElementComponent
 } from '@/components/ExpandableCard'
 export { Image, type ImageProps, type ImageSource } from '@components/Image'
+export { AlertDialog, type AlertDialogProps } from '@/components/AlertDialog'
