@@ -15,6 +15,11 @@
 	}
 }
 
+@mixin keep-radius($radius) {
+	--current-radius: #{$radius} !important;
+	border-radius: var(--current-radius);
+}
+
 @mixin safari-only {
 	// Проверка уникального селектора, специфичного для Safari 14+
 	@supports (background: -webkit-named-image(i)) {

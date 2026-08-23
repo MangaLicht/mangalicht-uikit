@@ -3,6 +3,7 @@
 $dialog-bg: var(--uikit-bg-block);
 $content-bg: color-mix(in srgb, var(--uikit-text-main), transparent 96%);
 $border: var(--uikit-block-border);
+$dialog-padding: 8px;
 
 .overlay {
 	position: fixed;
@@ -33,7 +34,8 @@ $border: var(--uikit-block-border);
 	overflow: hidden;
 
 	border: 1px solid $border;
-	border-radius: 14px;
+
+	@include adaptive-rounding($dialog-padding, 1px);
 
 	background: $dialog-bg;
 
@@ -67,9 +69,10 @@ $border: var(--uikit-block-border);
 	justify-content: flex-end;
 	gap: 8px;
 
-	padding: 12px 16px;
+	padding: $dialog-padding;
 
 	border-top: 1px solid $border;
+	@include keep-radius(0px);
 
 	background: $content-bg;
 }
