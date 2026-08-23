@@ -1,46 +1,67 @@
-export { Switch } from '@/components/Switch'
-export type { SwitchProps } from '@/components/Switch'
-export { Toggle } from '@/components/Toggle'
-export type { ToggleProps } from '@/components/Toggle'
-export { Button } from '@/components/Button'
-export type {
-	ButtonProps,
-	ButtonAnimation,
-	ButtonVariants
+export { Switch, type SwitchProps } from '@/components/Switch'
+export { Toggle, type ToggleProps } from '@/components/Toggle'
+export {
+	Button,
+	type ButtonProps,
+	type ButtonVariants,
+	type ButtonAnimation
 } from '@/components/Button'
-export { Checkbox } from '@/components/Checkbox'
-export type { CheckboxProps, CheckboxVariant } from '@/components/Checkbox'
-export { Tooltip } from '@/components/Tooltip'
-export type { TooltipProps, TooltipPosition } from '@/components/Tooltip'
-export { Select } from '@/components/Select'
-export type { SelectProps, SelectOption } from '@/components/Select'
-export { Block } from '@/components/Block'
-export { ProfileLevelBadge as Badge } from '@/components/Badge/ProfileLevel/ProfileLevelBadge'
-export type {
-	PLBadgeProps as BadgeProps,
-	PLBadgeVariant as BadgeVariant
-} from '@/components/Badge/ProfileLevel/ProfileLevelBadge'
-export type { IBlockProps, BlockVariant, TitleStyle } from '@/components/Block'
-export { Input } from '@/components/Input'
-export type { InputProps } from '@/components/Input'
+export {
+	Checkbox,
+	type CheckboxProps,
+	type CheckboxVariant
+} from '@/components/Checkbox'
+export {
+	Tooltip,
+	type TooltipProps,
+	type TooltipPosition
+} from '@/components/Tooltip'
+export {
+	Select,
+	type SelectProps,
+	type SelectOption
+} from '@/components/Select'
+export * from '@/components/Badge'
+export type * from '@/components/Badge'
 export * from '@/components/Markdown'
 export type * from '@/components/Markdown'
+export {
+	Block,
+	type IBlockProps,
+	type BlockVariant,
+	type TitleStyle
+} from '@/components/Block'
+export { Input, type InputProps } from '@/components/Input'
 export type { ValidationRules, ValidateOn } from '@/hooks/useValidation'
-export { TabList } from '@/components/TabList'
-export type { TabListProps, TabItem } from '@/components/TabList'
-export { ProgressBar } from '@/components/ProgressBar'
-export type { ProgressBarProps, ProgressFill } from '@/components/ProgressBar'
-export { Slider } from '@/components/Slider'
-export type { SliderProps } from '@/components/Slider'
-export { DropDown } from '@/components/DropDown'
-export type { DropDownProps } from '@/components/DropDown'
-export { DropDownItem } from '@/components/DropDown'
-export type { DropDownItemProps } from '@/components/DropDown'
-export { Carousel } from '@/components/Carousel'
-export type { CarouselProps, CarouselSlide } from '@/components/Carousel'
-export { ExpandableCard, ExpandableElenent } from '@/components/ExpandableCard'
-export type {
-	ExpandableCardProps,
-	ExpandableElenentProps
+export {
+	TabList,
+	type TabListProps,
+	type TabVariant,
+	type TabItem
+} from '@/components/TabList'
+export {
+	ProgressBar,
+	type ProgressBarProps,
+	type ProgressFill
+} from '@/components/ProgressBar'
+export { Slider, type SliderProps } from '@/components/Slider'
+export {
+	DropDown,
+	DropDownItem,
+	type DropDownProps,
+	type DropDownItemProps
+} from '@/components/DropDown'
+export {
+	Carousel,
+	type CarouselProps,
+	type CarouselSlide
+} from '@/components/Carousel'
+export {
+	ExpandableCard,
+	ExpandableElement,
+	type ExpandableCardProps,
+	type ExpandableElementProps,
+	type ExpandableCardComponent,
+	type ExpandableElementComponent
 } from '@/components/ExpandableCard'
 export { Image, type ImageProps, type ImageSource } from '@components/Image'

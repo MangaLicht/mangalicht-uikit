@@ -3,7 +3,7 @@ import { Flame } from 'lucide-react'
 
 import styles from './StrikBadge.module.scss'
 
-export interface StrikBadgeProps {
+export interface StrickBadgeProps {
 	/** Текущее значение серии. */
 	value: number | string
 
@@ -20,31 +20,25 @@ export interface StrikBadgeProps {
 	children?: ReactNode
 }
 
-export const StrikBadge = ({
+export const StrickBadge = ({
 	value,
 	animated = true,
 	classNames,
 	ariaLabel,
 	children
-}: StrikBadgeProps) => {
+}: StrickBadgeProps) => {
 	return (
 		<span
 			className={[styles.badge, classNames].filter(Boolean).join(' ')}
 			aria-label={ariaLabel ?? `Серия: ${value}`}
 		>
 			<span
-				className={[
-					styles.icon,
-					animated ? styles.iconAnimated : ''
-				]
+				className={[styles.icon, animated ? styles.iconAnimated : '']
 					.filter(Boolean)
 					.join(' ')}
 				aria-hidden='true'
 			>
-				<Flame
-					size={42}
-					strokeWidth={2.6}
-				/>
+				<Flame size={42} strokeWidth={2.6} />
 			</span>
 
 			<span className={styles.value}>{value}</span>
@@ -56,4 +50,4 @@ export const StrikBadge = ({
 	)
 }
 
-StrikBadge.displayName = 'StrikBadge'
+StrickBadge.displayName = 'StrickBadge'
