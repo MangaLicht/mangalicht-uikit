@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { StrikBadge } from '../Strik/StrikBadge'
+import { StrickBadge } from '../Strick/StrickBadge'
 
 const meta = {
-	title: 'Components/Badge/StrikBadge',
-	component: StrikBadge,
+	title: 'Components/Badge/StrickBadge',
+	component: StrickBadge,
 	parameters: {
 		layout: 'centered'
 	},
@@ -12,7 +12,7 @@ const meta = {
 		value: 10,
 		animated: true
 	}
-} satisfies Meta<typeof StrikBadge>
+} satisfies Meta<typeof StrickBadge>
 
 export default meta
 

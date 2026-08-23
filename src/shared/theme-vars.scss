@@ -49,80 +49,80 @@
 }
 
 :root[data-theme='light'] {
-	--uikit-bg-main: var(--c-white) !important;
-	--uikit-primary: var(--c-grey-200) !important;
+	--uikit-bg-main: var(--c-white);
+	--uikit-primary: var(--c-grey-200);
 	--uikit-primary-hover: color-mix(
 		in srgb,
 		var(--c-grey-200),
 		var(--c-neutral-light-200) 20%
-	) !important;
-	--uikit-secondary: var(--c-white) !important;
-	--uikit-bg-block: var(--c-grey-50) !important;
-	--uikit-bg-block-inner: var(--c-white) !important;
-	--uikit-border: var(--c-grey-300) !important;
-	--uikit-accent: var(--c-accent-light) !important;
+	);
+	--uikit-secondary: var(--c-white);
+	--uikit-bg-block: var(--c-grey-50);
+	--uikit-bg-block-inner: var(--c-white);
+	--uikit-border: var(--c-grey-300);
+	--uikit-accent: var(--c-accent-light);
 	--uikit-accent-hover: color-mix(
 		in srgb,
 		var(--c-accent-light),
 		var(--c-neutral-light-200) 20%
-	) !important;
-	--uikit-alert: var(--c-alert-light) !important;
+	);
+	--uikit-alert: var(--c-alert-light);
 	--uikit-alert-hover: color-mix(
 		in srgb,
 		var(--c-alert-light),
 		var(--c-neutral-light-200) 20%
-	) !important;
-	--uikit-positive: var(--c-green-light) !important;
+	);
+	--uikit-positive: var(--c-green-light);
 	--uikit-positive-hover: color-mix(
 		in srgb,
 		var(--c-green-light),
 		var(--c-neutral-light-200) 20%
-	) !important;
-	--uikit-yellow: var(--c-yellow-light) !important;
-	--uikit-bg-tooltip: var(--c-white) !important;
-	--uikit-text-main: var(--c-black) !important;
-	--uikit-text-muted: var(--c-grey-800) !important;
-	--uikit-text-ghost: var(--c-neutral-dark-300) !important;
-	--uikit-block-shadow: var(--c-neutral-dark-100) !important;
-	--uikit-neutral-mask: var(--c-neutral-light-200) !important;
-	--uikit-neutral-accent-mask: var(--c-neutral-dark-100) !important;
+	);
+	--uikit-yellow: var(--c-yellow-light);
+	--uikit-bg-tooltip: var(--c-white);
+	--uikit-text-main: var(--c-black);
+	--uikit-text-muted: var(--c-grey-800);
+	--uikit-text-ghost: var(--c-neutral-dark-300);
+	--uikit-block-shadow: var(--c-neutral-dark-100);
+	--uikit-neutral-mask: var(--c-neutral-light-200);
+	--uikit-neutral-accent-mask: var(--c-neutral-dark-100);
 }
 :root[data-theme='dark'] {
-	--uikit-bg-main: var(--c-black) !important;
-	--uikit-primary: var(--c-grey-500) !important;
+	--uikit-bg-main: var(--c-black);
+	--uikit-primary: var(--c-grey-500);
 	--uikit-primary-hover: color-mix(
 		in srgb,
 		var(--c-grey-300),
 		var(--c-white) 3%
-	) !important;
-	--uikit-secondary: var(--c-grey-600) !important;
-	--uikit-bg-block: var(--c-grey-700) !important;
-	--uikit-bg-block-inner: var(--c-grey-800) !important;
-	--uikit-border: var(--c-grey-850) !important;
-	--uikit-accent: var(--c-accent-dark) !important;
+	);
+	--uikit-secondary: var(--c-grey-600);
+	--uikit-bg-block: var(--c-grey-700);
+	--uikit-bg-block-inner: var(--c-grey-800);
+	--uikit-border: var(--c-grey-850);
+	--uikit-accent: var(--c-accent-dark);
 	--uikit-accent-hover: color-mix(
 		in srgb,
 		var(--c-accent-dark),
 		var(--c-white) 40%
-	) !important;
-	--uikit-alert: var(--c-alert-dark) !important;
+	);
+	--uikit-alert: var(--c-alert-dark);
 	--uikit-alert-hover: color-mix(
 		in srgb,
 		var(--c-alert-dark),
 		var(--c-white) 40%
-	) !important;
-	--uikit-positive: var(--c-green-dark) !important;
+	);
+	--uikit-positive: var(--c-green-dark);
 	--uikit-positive-hover: color-mix(
 		in srgb,
 		var(--c-green-dark),
 		var(--c-white) 40%
-	) !important;
-	--uikit-yellow: var(--c-yellow-dark) !important;
-	--uikit-bg-tooltip: var(--c-grey-800) !important;
-	--uikit-text-main: var(--c-white) !important;
-	--uikit-text-muted: var(--c-grey-100) !important;
-	--uikit-text-ghost: var(--c-neutral-light-300) !important;
-	--uikit-block-shadow: var(--c-neutral-light-100) !important;
-	--uikit-neutral-mask: var(--c-neutral-light-300) !important;
-	--uikit-neutral-accent-mask: var(--c-neutral-light-200) !important;
+	);
+	--uikit-yellow: var(--c-yellow-dark);
+	--uikit-bg-tooltip: var(--c-grey-800);
+	--uikit-text-main: var(--c-white);
+	--uikit-text-muted: var(--c-grey-100);
+	--uikit-text-ghost: var(--c-neutral-light-300);
+	--uikit-block-shadow: var(--c-neutral-light-100);
+	--uikit-neutral-mask: var(--c-neutral-light-300);
+	--uikit-neutral-accent-mask: var(--c-neutral-light-200);
 }

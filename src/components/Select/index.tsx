@@ -7,10 +7,14 @@ import React, {
 	useState
 } from 'react'
 import { createPortal } from 'react-dom'
+import { ChevronDown } from 'lucide-react'
 import { getPortalRoot } from '@shared/utils/portalRoot'
 import { useClickOutside } from '@hooks/useClickOutside'
 import { useAnchoredPosition } from '@hooks/useAnchoredPosition'
-import { ChevronDown } from 'lucide-react'
+import {
+	ScrollArea,
+	type ScrollAreaHandle
+} from '@components/ScrollArea'
 import styles from './Select.module.scss'
 
 export interface SelectOption {
@@ -23,39 +27,17 @@ export interface SelectProps extends Omit<
 	React.ButtonHTMLAttributes<HTMLButtonElement>,
 	'value' | 'defaultValue' | 'onChange' | 'children' | 'type'
 > {
-	/** Список опций */
 	options: SelectOption[]
-	/** Текущее значение — если передано, компонент становится управляемым */
 	value?: string
-	/** Начальное значение для неуправляемого использования */
 	defaultValue?: string
-	/** Колбэк выбора, получает value выбранной опции */
 	onChange?: (value: string) => void
-	/** Заблокировать select */
 	disabled?: boolean
-	/** Дополнительный className для кастомных стилей */
 	classNames?: string
-	/** Текст-заглушка, когда ничего не выбрано */
 	placeholder?: string
-	/** name для скрытого input, полезно для нативных форм */
 	name?: string
-	/** ручное указание минимальной ширины контейнера */
 	minWidth?: number
 }
 
-/**
- * Select — кастомный выпадающий список, построенный на архитектурных
- * паттернах остального кита:
- *  - forwardRef + controlled/uncontrolled гибрид (как Checkbox)
- *  - {...rest} проброс нативных атрибутов button (как Button/Switch —
- *    например, чтобы Tooltip мог навесить обработчики через cloneElement)
- *  - выпадающая панель рендерится в портал document.body,
- *    чтобы не резалась overflow/z-index родителей
- *  - позиционирование и закрытие по клику вне вынесены в переиспользуемые
- *    хуки useAnchoredPosition / useClickOutside
- *  - доступность: паттерн collapsible listbox с aria-activedescendant —
- *    фокус остаётся на триггере, стрелки/Enter/Escape работают с клавиатуры
- */
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 	(
 		{
@@ -74,16 +56,16 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 	) => {
 		const generatedId = useId()
 		const listboxId = `uikit-select-listbox-${generatedId}`
-
 		const isControlled = value !== undefined
 		const [internalValue, setInternalValue] = useState(defaultValue)
 		const currentValue = isControlled ? value : internalValue
-
 		const [open, setOpen] = useState(false)
 		const [highlightedIndex, setHighlightedIndex] = useState(-1)
 
 		const triggerRef = useRef<HTMLButtonElement | null>(null)
-		// мёржим внешний ref (forwardRef) с внутренним, нужным для позиционирования
+		const panelRef = useRef<HTMLDivElement | null>(null)
+		const scrollAreaRef = useRef<ScrollAreaHandle | null>(null)
+
 		const setTriggerRef = useCallback(
 			(node: HTMLButtonElement | null) => {
 				triggerRef.current = node
@@ -93,40 +75,47 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 			[forwardedRef]
 		)
 
-		const { panelRef, style: panelStyle } =
-			useAnchoredPosition<HTMLUListElement>(triggerRef, {
+		const { style: panelStyle } = useAnchoredPosition<HTMLDivElement>(
+			triggerRef,
+			{
 				open,
 				offset: 4,
-				matchWidth: true
-			})
+				matchWidth: true,
+				panelRef
+			}
+		)
 
 		useClickOutside([triggerRef, panelRef], () => setOpen(false), open)
 
-		// закрываем при скролле страницы (кроме скролла внутри самой панели —
-		// список опций может быть длиннее max-height и скроллиться сам по себе)
 		useEffect(() => {
 			if (!open) return undefined
+
 			const handleScroll = (event: Event) => {
-				if (panelRef.current?.contains(event.target as Node)) return
+				const target = event.target
+				if (target instanceof Node && panelRef.current?.contains(target)) {
+					return
+				}
 				setOpen(false)
 			}
+
 			window.addEventListener('scroll', handleScroll, true)
-			return () =>
-				window.removeEventListener('scroll', handleScroll, true)
-		}, [open, panelRef])
+			return () => window.removeEventListener('scroll', handleScroll, true)
+		}, [open])
 
-		const selectedIndex = options.findIndex(o => o.value === currentValue)
-		const selectedOption =
-			selectedIndex >= 0 ? options[selectedIndex] : undefined
+		const selectedIndex = options.findIndex(option => option.value === currentValue)
+		const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : undefined
 
-		const commitValue = (nextValue: string) => {
-			if (!isControlled) setInternalValue(nextValue)
-			onChange?.(nextValue)
-			setOpen(false)
-			triggerRef.current?.focus()
-		}
+		const commitValue = useCallback(
+			(nextValue: string) => {
+				if (!isControlled) setInternalValue(nextValue)
+				onChange?.(nextValue)
+				setOpen(false)
+				triggerRef.current?.focus()
+			},
+			[isControlled, onChange]
+		)
 
-		const openMenu = () => {
+		const openMenu = useCallback(() => {
 			if (disabled) return
 			setOpen(true)
 			setHighlightedIndex(
@@ -134,7 +123,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 					? selectedIndex
 					: findNextEnabled(options, -1, 1)
 			)
-		}
+		}, [disabled, options, selectedIndex])
 
 		const handleTriggerKeyDown = (
 			event: React.KeyboardEvent<HTMLButtonElement>
@@ -142,9 +131,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 			if (disabled) return
 
 			if (!open) {
-				if (
-					['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)
-				) {
+				if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
 					event.preventDefault()
 					openMenu()
 				}
@@ -154,11 +141,11 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 			switch (event.key) {
 				case 'ArrowDown':
 					event.preventDefault()
-					setHighlightedIndex(i => findNextEnabled(options, i, 1))
+					setHighlightedIndex(index => findNextEnabled(options, index, 1))
 					break
 				case 'ArrowUp':
 					event.preventDefault()
-					setHighlightedIndex(i => findNextEnabled(options, i, -1))
+					setHighlightedIndex(index => findNextEnabled(options, index, -1))
 					break
 				case 'Home':
 					event.preventDefault()
@@ -166,9 +153,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 					break
 				case 'End':
 					event.preventDefault()
-					setHighlightedIndex(
-						findNextEnabled(options, options.length, -1)
-					)
+					setHighlightedIndex(findNextEnabled(options, options.length, -1))
 					break
 				case 'Enter':
 				case ' ': {
@@ -186,15 +171,74 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 			}
 		}
 
+		useEffect(() => {
+			if (!open || selectedIndex < 0) return
+
+			const frame = requestAnimationFrame(() => {
+				const option = document.getElementById(
+					`${listboxId}-option-${selectedIndex}`
+				)
+				const container = panelRef.current
+
+				if (!option || !container || !scrollAreaRef.current) return
+
+				const optionTop = option.offsetTop
+				const optionBottom = optionTop + option.offsetHeight
+				const visibleTop = container.scrollTop
+				const visibleBottom = visibleTop + container.clientHeight
+
+				if (optionTop < visibleTop) {
+					scrollAreaRef.current.scrollTo({ top: optionTop })
+				} else if (optionBottom > visibleBottom) {
+					scrollAreaRef.current.scrollTo({
+						top: optionBottom - container.clientHeight
+					})
+				}
+			})
+
+			return () => cancelAnimationFrame(frame)
+		}, [listboxId, open, selectedIndex])
+
+		const panel = open ? (
+			<ScrollArea
+				ref={scrollAreaRef}
+				elementRef={panelRef}
+				id={listboxId}
+				role='listbox'
+				classNames={styles.panel}
+				style={panelStyle}
+				axis='vertical'
+				visibleMode='scroll'
+			>
+				{options.map((option, index) => (
+					<div
+						key={option.value}
+						id={`${listboxId}-option-${index}`}
+						role='option'
+						aria-selected={option.value === currentValue}
+						aria-disabled={option.disabled}
+						className={styles.option}
+						data-highlighted={index === highlightedIndex}
+						data-selected={option.value === currentValue}
+						data-disabled={option.disabled}
+						onMouseEnter={() => setHighlightedIndex(index)}
+						onClick={() => {
+							if (!option.disabled) commitValue(option.value)
+						}}
+					>
+						{option.label}
+					</div>
+				))}
+			</ScrollArea>
+		) : null
+
 		return (
 			<>
 				<button
 					ref={setTriggerRef}
 					type='button'
 					style={{ minWidth: `${minWidth}px` }}
-					className={[styles.trigger, classNames]
-						.filter(Boolean)
-						.join(' ')}
+					className={[styles.trigger, classNames].filter(Boolean).join(' ')}
 					disabled={disabled}
 					aria-haspopup='listbox'
 					aria-expanded={open}
@@ -210,10 +254,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 					onKeyDown={handleTriggerKeyDown}
 					{...rest}
 				>
-					<span
-						className={styles.valueText}
-						data-placeholder={!selectedOption}
-					>
+					<span className={styles.valueText} data-placeholder={!selectedOption}>
 						{selectedOption ? selectedOption.label : placeholder}
 					</span>
 					<span className={styles.chevron} data-open={open}>
@@ -230,37 +271,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 					/>
 				) : null}
 
-				{createPortal(
-					<ul
-						ref={panelRef}
-						id={listboxId}
-						role='listbox'
-						className={styles.panel}
-						data-open={open}
-						style={panelStyle}
-					>
-						{options.map((option, index) => (
-							<li
-								key={option.value}
-								id={`${listboxId}-option-${index}`}
-								role='option'
-								aria-selected={option.value === currentValue}
-								className={styles.option}
-								data-highlighted={index === highlightedIndex}
-								data-selected={option.value === currentValue}
-								data-disabled={option.disabled}
-								onMouseEnter={() => setHighlightedIndex(index)}
-								onClick={() =>
-									!option.disabled &&
-									commitValue(option.value)
-								}
-							>
-								{option.label}
-							</li>
-						))}
-					</ul>,
-					getPortalRoot()
-				)}
+				{panel && typeof document !== 'undefined'
+					? createPortal(panel, getPortalRoot())
+					: null}
 			</>
 		)
 	}
@@ -275,8 +288,8 @@ function findNextEnabled(
 ): number {
 	const len = options.length
 	for (let step = 1; step <= len; step += 1) {
-		const idx = (from + dir * step + len) % len
-		if (!options[idx]?.disabled) return idx
+		const index = (from + dir * step + len) % len
+		if (!options[index]?.disabled) return index
 	}
 	return from
 }

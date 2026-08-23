@@ -91,69 +91,25 @@
 	padding: 4px;
 	list-style: none;
 	max-height: 240px;
-	overflow-y: auto;
+	box-sizing: border-box;
 	@include adaptive-rounding(4px);
 	border: 0 solid $select-panel-border-color;
 	background-color: $select-panel-bg-color;
 	box-shadow: 0 8px 24px $select-panel-shadow-color;
-	box-sizing: border-box;
+	overscroll-behavior: contain;
 
-	opacity: 0;
-	transform: translateY(-4px);
-	pointer-events: none;
-	transition:
-		opacity var(--uikit-transition-fast, 0.18s ease),
-		transform var(--uikit-transition-fast, 0.18s ease);
+	opacity: 1;
+	transform: translateY(0);
+	pointer-events: auto;
 
-	&[data-open='true'] {
-		opacity: 1;
-		transform: translateY(0);
-		pointer-events: auto;
-	}
+	/* Native scrollbar is owned by ScrollArea and is intentionally absent. */
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 
-	scroll-behavior: smooth;
-
-	@include firefox-only {
-		scrollbar-width: thin;
-		scrollbar-color: var(--uikit-primary) transparent;
-	}
-
-	@include safari-only {
-		&::-webkit-scrollbar {
-			width: 8px;
-			height: 4px;
-		}
-		&::-webkit-scrollbar-track {
-			background: transparent;
-			border-radius: 0px;
-			margin: 8px;
-		}
-		&::-webkit-scrollbar-thumb {
-			background: $select-panel-scroll-thumb-color;
-			border-radius: 999px;
-		}
-		&::-webkit-scrollbar-thumb:hover {
-			background: $select-panel-scroll-thumb-color--hover;
-		}
-	}
-
-	@include chromium-only {
-		&::-webkit-scrollbar {
-			width: 8px;
-			height: 4px;
-		}
-		&::-webkit-scrollbar-track {
-			background: transparent;
-			border-radius: 0px;
-			margin: 8px;
-		}
-		&::-webkit-scrollbar-thumb {
-			background: $select-panel-scroll-thumb-color;
-			border-radius: 999px;
-		}
-		&::-webkit-scrollbar-thumb:hover {
-			background: $select-panel-scroll-thumb-color--hover;
-		}
+	&::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
 	}
 }
 

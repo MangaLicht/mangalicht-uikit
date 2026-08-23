@@ -1,8 +1,9 @@
+import type { IUIKitProps } from '@shared/types/IUIKitProps'
+import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import React, {
 	forwardRef,
 	useCallback,
 	useEffect,
-	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState
@@ -84,7 +85,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 		const [isResetting, setIsResetting] = useState(false)
 		const [containerWidth, setContainerWidth] = useState(0)
 
-		useLayoutEffect(() => {
+		useIsomorphicLayoutEffect(() => {
 			const node = containerRef.current
 			if (!node) {
 				return undefined
@@ -262,7 +263,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 		 * useLayoutEffect гарантирует, что DOM уже обновлён
 		 * до выполнения этой части.
 		 */
-		useLayoutEffect(() => {
+		useIsomorphicLayoutEffect(() => {
 			if (!isResetting) {
 				return undefined
 			}

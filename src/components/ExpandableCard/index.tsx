@@ -26,7 +26,7 @@ const useExpandableCardContext = () => {
 
 	if (!context) {
 		throw new Error(
-			'ExpandableCard.ExpandableElenent must be used inside <ExpandableCard>.'
+			'ExpandableCard.ExpandableElement must be used inside <ExpandableCard>.'
 		)
 	}
 
@@ -98,7 +98,7 @@ const ExpandableElement: ExpandableElementComponent = ({
 	)
 }
 
-ExpandableElement.displayName = 'ExpandableCard.ExpandableElenent'
+ExpandableElement.displayName = 'ExpandableCard.ExpandableElement'
 
 const MOBILE_DOUBLE_TAP_DELAY = 320
 
@@ -393,13 +393,13 @@ const ExpandableCardBase = ({
 }
 
 export interface ExpandableCardComponent extends FunctionComponent<ExpandableCardProps> {
-	ExpandableElenent: ExpandableElementComponent
+	ExpandableElement: ExpandableElementComponent
 }
 
 export const ExpandableCard = ExpandableCardBase as ExpandableCardComponent
 
 ExpandableCard.displayName = 'ExpandableCard'
 
-ExpandableCard.ExpandableElenent = ExpandableElement
+ExpandableCard.ExpandableElement = ExpandableElement
 
 export { ExpandableElement }

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Flame } from 'lucide-react'
 
-import styles from './StrikBadge.module.scss'
+import styles from './StrickBadge.module.scss'
 
 export interface StrickBadgeProps {
 	/** Текущее значение серии. */

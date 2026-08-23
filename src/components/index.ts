@@ -45,6 +45,7 @@ export {
 	type ProgressFill
 } from '@/components/ProgressBar'
 export { Slider, type SliderProps } from '@/components/Slider'
+export { ScrollArea, type ScrollAreaProps, type ScrollAreaHandle, type ScrollAreaRef, type ScrollAreaAxis, type ScrollAreaVisibleMode } from '@/components/ScrollArea'
 export {
 	DropDown,
 	DropDownItem,

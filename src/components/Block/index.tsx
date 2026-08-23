@@ -1,3 +1,4 @@
+import type { IUIKitProps } from '@shared/types/IUIKitProps'
 import { forwardRef } from 'react'
 import type { JSX, ReactElement, ReactNode } from 'react'
 import { validateChildren } from '@shared/utils/validateChildren'

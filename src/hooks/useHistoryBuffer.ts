@@ -5,164 +5,68 @@ export interface UseHistoryBufferOptions<T> {
 	defaultValue: T
 	onChange?: (value: T) => void
 	maxSize?: number
-
-	/**
-	 * Для строк history boundary создаётся после завершения
-	 * логического блока:
-	 *
-	 * - пробел;
-	 * - Enter;
-	 * - знак препинания;
-	 * - закрывающий разделитель.
-	 */
 	commitOnDelimiter?: boolean
 }
 
 export interface UseHistoryBufferResult<T> {
 	value: T
-
-	/**
-	 * Изменить текущее значение.
-	 *
-	 * Последовательные изменения внутри одного логического
-	 * блока не создают отдельные history entries.
-	 */
 	setValue: (value: T) => void
-
-	/**
-	 * Принудительно завершить текущий логический блок.
-	 *
-	 * Используется для действий, которые не являются обычным
-	 * вводом текста: Markdown formatting, paste actions и т.д.
-	 */
 	commit: () => void
-
 	undo: () => void
 	redo: () => void
-
 	canUndo: boolean
 	canRedo: boolean
-
 	reset: (value: T) => void
 }
 
 const DEFAULT_DELIMITER = /[\s.,!?;:()[\]{}'"`«»„“—–-]$/u
+const DEFAULT_HISTORY_SIZE = 100
 
-const MAX_HISTORY_SIZE = 1
+const endsWithDelimiter = (value: string): boolean =>
+	DEFAULT_DELIMITER.test(value)
 
-/**
- * Проверяет, является ли значение завершённым логическим блоком.
- */
-const endsWithDelimiter = (value: string): boolean => {
-	return DEFAULT_DELIMITER.test(value)
-}
-
-/**
- * Определяет момент перехода через history boundary.
- *
- * Важно:
- *
- * "hello"
- * "hello "
- *
- * -> commit
- *
- * Но:
- *
- * "hello "
- * "hello  "
- *
- * -> новый commit не создаём.
- *
- * Это предотвращает появление пустых промежуточных history entries
- * при нескольких пробелах подряд.
- */
 const reachedDelimiter = (
 	previousValue: string,
 	nextValue: string
 ): boolean => {
-	if (!nextValue || !endsWithDelimiter(nextValue)) {
-		return false
-	}
-
+	if (!nextValue || !endsWithDelimiter(nextValue)) return false
 	return !endsWithDelimiter(previousValue)
 }
 
 /**
- * History buffer с группировкой пользовательского ввода.
- *
- * Пример:
- *
- * "" → "H" → "He" → "Hel" → "Hell" → "Hello"
- *
- * history:
- * []
- *
- * После пробела:
- *
- * "Hello "
- *
- * history:
- * [""]
- *
- * После второго слова:
- *
- * "Hello world "
- *
- * history:
- * ["", "Hello "]
- *
- * Undo:
- *
- * "Hello world " → "Hello "
- *
- * Следующий Undo:
- *
- * "Hello " → ""
+ * History buffer с группировкой строкового ввода по логическим блокам.
+ * Пока пользователь печатает слово, значение обновляется локально,
+ * но новая history entry появляется только после delimiter.
  */
 export function useHistoryBuffer<T>({
 	value: controlledValue,
 	defaultValue,
 	onChange,
-	maxSize = 100,
+	maxSize = DEFAULT_HISTORY_SIZE,
 	commitOnDelimiter = true
 }: UseHistoryBufferOptions<T>): UseHistoryBufferResult<T> {
 	const isControlled = controlledValue !== undefined
-	const historyLimit = Math.max(MAX_HISTORY_SIZE, maxSize)
+	const historyLimit = Math.max(1, Math.floor(maxSize))
 
 	const [internalValue, setInternalValue] = useState(defaultValue)
-
-	const currentValue = isControlled ? controlledValue : internalValue
+	const currentValue = controlledValue !== undefined ? controlledValue : internalValue
 
 	const pastRef = useRef<T[]>([])
 	const futureRef = useRef<T[]>([])
-
-	/**
-	 * Последнее состояние, которое является history boundary.
-	 */
 	const committedValueRef = useRef<T>(currentValue)
-
-	/**
-	 * Последнее фактически отображаемое значение.
-	 */
 	const localValueRef = useRef<T>(currentValue)
-
-	/**
-	 * Есть ли незавершённый пользовательский ввод.
-	 *
-	 * Например:
-	 *
-	 * committed = "Hello "
-	 * current   = "Hello world"
-	 *
-	 * pending = true
-	 */
 	const hasPendingChangesRef = useRef(false)
 
-	const [, forceHistoryUpdate] = useState(0)
+	const [historyState, setHistoryState] = useState({
+		canUndo: false,
+		canRedo: false
+	})
 
-	const notifyHistoryChange = useCallback(() => {
-		forceHistoryUpdate(value => value + 1)
+	const syncHistoryState = useCallback(() => {
+		setHistoryState({
+			canUndo: pastRef.current.length > 0,
+			canRedo: futureRef.current.length > 0
+		})
 	}, [])
 
 	const emit = useCallback(
@@ -178,87 +82,55 @@ export function useHistoryBuffer<T>({
 		[isControlled, onChange]
 	)
 
-	/**
-	 * Синхронизация controlled value.
-	 *
-	 * Если изменение пришло извне, а не через setValue(),
-	 * оно считается новой исходной точкой history.
-	 */
 	useEffect(() => {
-		if (!isControlled || controlledValue === undefined) {
-			return
-		}
-
-		if (Object.is(controlledValue, localValueRef.current)) {
-			return
-		}
+		if (!isControlled || controlledValue === undefined) return
+		if (Object.is(controlledValue, localValueRef.current)) return
 
 		pastRef.current = []
 		futureRef.current = []
-
 		committedValueRef.current = controlledValue
 		localValueRef.current = controlledValue
 		hasPendingChangesRef.current = false
-
-		notifyHistoryChange()
-	}, [controlledValue, isControlled, notifyHistoryChange])
+		syncHistoryState()
+	}, [controlledValue, isControlled, syncHistoryState])
 
 	const pushHistory = useCallback(
 		(state: T) => {
 			const history = pastRef.current
-
 			const last = history[history.length - 1]
 
-			if (last !== undefined && Object.is(last, state)) {
-				return
-			}
+			if (last !== undefined && Object.is(last, state)) return
 
 			pastRef.current = [...history, state].slice(-historyLimit)
 		},
 		[historyLimit]
 	)
 
-	/**
-	 * Завершает текущий логический блок.
-	 *
-	 * В history помещается состояние ДО блока.
-	 */
 	const commit = useCallback(() => {
 		const current = localValueRef.current
 		const committed = committedValueRef.current
 
 		if (Object.is(current, committed)) {
 			hasPendingChangesRef.current = false
+			syncHistoryState()
 			return
 		}
 
 		pushHistory(committed)
-
 		committedValueRef.current = current
 		hasPendingChangesRef.current = false
-
-		/**
-		 * Любое новое логическое изменение инвалидирует Redo.
-		 */
 		futureRef.current = []
-
-		notifyHistoryChange()
-	}, [notifyHistoryChange, pushHistory])
+		syncHistoryState()
+	}, [pushHistory, syncHistoryState])
 
 	const setValue = useCallback(
 		(nextValue: T) => {
 			const previousValue = localValueRef.current
 
-			if (Object.is(previousValue, nextValue)) {
-				return
-			}
+			if (Object.is(previousValue, nextValue)) return
 
-			emit(nextValue)
+		emit(nextValue)
 
-			/**
-			 * Для нестроковых значений history boundary
-			 * создаётся только явно через commit().
-			 */
 			if (
 				!commitOnDelimiter ||
 				typeof previousValue !== 'string' ||
@@ -266,50 +138,27 @@ export function useHistoryBuffer<T>({
 			) {
 				hasPendingChangesRef.current = true
 				futureRef.current = []
-				notifyHistoryChange()
+				syncHistoryState()
 				return
 			}
 
-			const isBoundary = reachedDelimiter(previousValue, nextValue)
-
-			if (isBoundary) {
-				/**
-				 * Записываем состояние ДО завершённого блока.
-				 */
+			if (reachedDelimiter(previousValue, nextValue)) {
 				pushHistory(committedValueRef.current)
-
 				committedValueRef.current = nextValue
 				hasPendingChangesRef.current = false
-
 				futureRef.current = []
 			} else {
-				/**
-				 * Пока пользователь находится внутри слова
-				 * history не изменяется.
-				 */
 				hasPendingChangesRef.current = true
 			}
 
-			notifyHistoryChange()
+			syncHistoryState()
 		},
-		[commitOnDelimiter, emit, notifyHistoryChange, pushHistory]
+		[commitOnDelimiter, emit, pushHistory, syncHistoryState]
 	)
 
 	const undo = useCallback(() => {
 		const current = localValueRef.current
 
-		/**
-		 * Сначала отменяем незавершённый блок.
-		 *
-		 * Например:
-		 *
-		 * committed = "Hello "
-		 * current = "Hello world"
-		 *
-		 * Ctrl+Z:
-		 *
-		 * "Hello world" → "Hello "
-		 */
 		if (hasPendingChangesRef.current) {
 			const committed = committedValueRef.current
 
@@ -318,13 +167,10 @@ export function useHistoryBuffer<T>({
 					0,
 					historyLimit
 				)
-
 				emit(committed)
-
 				localValueRef.current = committed
 				hasPendingChangesRef.current = false
-
-				notifyHistoryChange()
+				syncHistoryState()
 				return
 			}
 
@@ -332,60 +178,54 @@ export function useHistoryBuffer<T>({
 		}
 
 		const previous = pastRef.current[pastRef.current.length - 1]
-
 		if (previous === undefined) {
+			syncHistoryState()
 			return
 		}
 
 		pastRef.current = pastRef.current.slice(0, -1)
-
 		futureRef.current = [current, ...futureRef.current].slice(
 			0,
 			historyLimit
 		)
-
 		committedValueRef.current = previous
 		localValueRef.current = previous
 		hasPendingChangesRef.current = false
 
 		emit(previous)
-		notifyHistoryChange()
-	}, [emit, historyLimit, notifyHistoryChange])
+		syncHistoryState()
+	}, [emit, historyLimit, syncHistoryState])
 
 	const redo = useCallback(() => {
 		const next = futureRef.current[0]
-
 		if (next === undefined) {
+			syncHistoryState()
 			return
 		}
 
 		const current = localValueRef.current
-
 		futureRef.current = futureRef.current.slice(1)
-
 		pastRef.current = [...pastRef.current, current].slice(-historyLimit)
-
 		committedValueRef.current = next
 		localValueRef.current = next
 		hasPendingChangesRef.current = false
 
 		emit(next)
-		notifyHistoryChange()
-	}, [emit, historyLimit, notifyHistoryChange])
+		syncHistoryState()
+	}, [emit, historyLimit, syncHistoryState])
 
 	const reset = useCallback(
 		(nextValue: T) => {
 			pastRef.current = []
 			futureRef.current = []
-
 			committedValueRef.current = nextValue
 			localValueRef.current = nextValue
 			hasPendingChangesRef.current = false
 
 			emit(nextValue)
-			notifyHistoryChange()
+			syncHistoryState()
 		},
-		[emit, notifyHistoryChange]
+		[emit, syncHistoryState]
 	)
 
 	return {
@@ -394,8 +234,8 @@ export function useHistoryBuffer<T>({
 		commit,
 		undo,
 		redo,
-		canUndo: pastRef.current.length > 0,
-		canRedo: futureRef.current.length > 0,
+		canUndo: historyState.canUndo,
+		canRedo: historyState.canRedo,
 		reset
 	}
 }

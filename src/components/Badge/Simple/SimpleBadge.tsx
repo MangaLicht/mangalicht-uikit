@@ -1,3 +1,4 @@
+import type { IUIKitProps } from '@shared/types/IUIKitProps'
 import styles from './SimpleBadge.module.scss'
 
 export type SimpleBadgeVariant =

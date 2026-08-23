@@ -18,6 +18,11 @@ const config: StorybookConfig = {
 
 	viteFinal: async config => {
 		config.resolve ??= {}
+		config.esbuild = {
+			...(config.esbuild ?? {}),
+			jsx: 'automatic'
+		}
+
 		config.resolve.alias = {
 			...(config.resolve.alias || {}),
 			'@': path.resolve(__dirname, '../src'),

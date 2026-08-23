@@ -19,9 +19,9 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
 		return (
 			<picture>
 				{/* Рендерим список источников, если они переданы */}
-				{sources?.map((source, index) => (
+				{sources?.map(source => (
 					<source
-						key={index}
+						key={`${source.srcSet}:${source.media ?? ''}:${source.type ?? ''}`}
 						srcSet={source.srcSet}
 						media={source.media}
 						type={source.type}
