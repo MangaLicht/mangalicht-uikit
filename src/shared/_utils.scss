@@ -20,15 +20,6 @@
 	border-radius: var(--current-radius);
 }
 
-.glass {
-	background-color: var(--glass-fill);
-	backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
-	-webkit-backdrop-filter: blur(var(--glass-blur))
-		saturate(var(--glass-saturation)) !important;
-	box-shadow: inset 0px -2px 24px -20px var(--glass-rim) !important; // rim-light effect
-	transform: translateZ(0);
-}
-
 .hidden-mobile {
 	@include mobile {
 		display: none !important;
