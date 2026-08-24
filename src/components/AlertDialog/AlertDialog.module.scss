@@ -1,6 +1,7 @@
 @use '../../shared/mixins' as *;
 
 $dialog-bg: var(--uikit-bg-block);
+$overlay-bg: rgb(0 0 0 / 58%);
 $content-bg: color-mix(in srgb, var(--uikit-text-main), transparent 96%);
 $border: var(--uikit-block-border);
 $dialog-padding: 8px;
@@ -16,7 +17,7 @@ $dialog-padding: 8px;
 
 	padding: 24px;
 
-	background: rgb(0 0 0 / 58%);
+	background: $overlay-bg;
 
 	backdrop-filter: blur(var(--alert-dialog-blur, 6px));
 	-webkit-backdrop-filter: blur(var(--alert-dialog-blur, 6px));
