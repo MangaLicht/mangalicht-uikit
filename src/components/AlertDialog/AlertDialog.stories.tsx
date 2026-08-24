@@ -1,47 +1,38 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
-
 import { AlertDialog } from './'
 import { Button } from '../Button'
 
 const meta = {
 	title: 'Components/AlertDialog',
 	component: AlertDialog,
-
 	parameters: {
 		layout: 'fullscreen',
-
 		controls: {
 			exclude: ['children', 'onClose']
 		}
 	},
-
 	argTypes: {
 		open: {
 			control: 'boolean',
 			description: 'Определяет, открыт ли AlertDialog.'
 		},
-
 		title: {
 			control: 'text',
 			description: 'Заголовок диалога.'
 		},
-
 		description: {
 			control: 'text',
 			description: 'Описание действия.'
 		},
-
 		closeOnOverlayClick: {
 			control: 'boolean',
 			description: 'Закрывать диалог при клике по затемнённому фону.'
 		},
-
 		closeOnEscape: {
 			control: 'boolean',
 			description: 'Закрывать диалог клавишей Escape.'
 		},
-
 		blur: {
 			control: {
 				type: 'range',
@@ -49,34 +40,26 @@ const meta = {
 				max: 20,
 				step: 1
 			},
-
 			description: 'Степень размытия фона.'
 		}
 	},
-
 	args: {
-		open: true,
-
+		open: false, // ✅ Изменено с true на false
 		title: 'Are you absolutely sure?',
-
 		description:
 			'This action cannot be undone. This will permanently delete your account from our servers.',
-
 		closeOnOverlayClick: true,
-
 		closeOnEscape: true,
-
 		blur: 6
 	}
 } satisfies Meta<typeof AlertDialog>
 
 export default meta
-
 type Story = StoryObj<typeof meta>
 
 /**
- * Базовый AlertDialog.
- */
+Базовый AlertDialog.
+*/
 export const Default: Story = {
 	render: args => {
 		const [open, setOpen] = useState(args.open)
@@ -94,7 +77,6 @@ export const Default: Story = {
 					labelText='Open AlertDialog'
 					onClick={() => setOpen(true)}
 				/>
-
 				<AlertDialog
 					{...args}
 					open={open}
@@ -105,7 +87,6 @@ export const Default: Story = {
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
-
 					<Button
 						variant='primary'
 						labelText='Continue'
@@ -118,8 +99,8 @@ export const Default: Story = {
 }
 
 /**
- * Диалог подтверждения удаления.
- */
+Диалог подтверждения удаления.
+*/
 export const DeleteConfirmation: Story = {
 	render: () => {
 		const [open, setOpen] = useState(false)
@@ -138,7 +119,6 @@ export const DeleteConfirmation: Story = {
 					labelText='Delete account'
 					onClick={() => setOpen(true)}
 				/>
-
 				<AlertDialog
 					open={open}
 					title='Are you absolutely sure?'
@@ -150,14 +130,12 @@ export const DeleteConfirmation: Story = {
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
-
 					<Button
 						variant='primary'
 						isAlert={true}
 						labelText='Continue'
 						onClick={() => {
 							console.log('Account deleted')
-
 							setOpen(false)
 						}}
 					/>
@@ -168,11 +146,11 @@ export const DeleteConfirmation: Story = {
 }
 
 /**
- * Диалог, который нельзя закрыть кликом по overlay.
- */
+Диалог, который нельзя закрыть кликом по overlay.
+*/
 export const WithoutOverlayClose: Story = {
 	render: () => {
-		const [open, setOpen] = useState(true)
+		const [open, setOpen] = useState(false) // ✅ Изменено с true на false
 
 		return (
 			<div
@@ -180,6 +158,11 @@ export const WithoutOverlayClose: Story = {
 					minHeight: '100vh'
 				}}
 			>
+				<Button
+					variant='primary'
+					labelText='Open Dialog'
+					onClick={() => setOpen(true)}
+				/>
 				<AlertDialog
 					open={open}
 					title='Unsaved changes'
@@ -192,7 +175,6 @@ export const WithoutOverlayClose: Story = {
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
-
 					<Button
 						variant='primary'
 						labelText='Continue'
@@ -205,11 +187,11 @@ export const WithoutOverlayClose: Story = {
 }
 
 /**
- * Диалог, который нельзя закрыть через Escape.
- */
+Диалог, который нельзя закрыть через Escape.
+*/
 export const WithoutEscapeClose: Story = {
 	render: () => {
-		const [open, setOpen] = useState(true)
+		const [open, setOpen] = useState(false) // ✅ Изменено с true на false
 
 		return (
 			<div
@@ -217,6 +199,11 @@ export const WithoutEscapeClose: Story = {
 					minHeight: '100vh'
 				}}
 			>
+				<Button
+					variant='primary'
+					labelText='Open Dialog'
+					onClick={() => setOpen(true)}
+				/>
 				<AlertDialog
 					open={open}
 					title='Important action'
@@ -229,7 +216,6 @@ export const WithoutEscapeClose: Story = {
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
-
 					<Button
 						variant='primary'
 						labelText='Continue'
@@ -242,15 +228,14 @@ export const WithoutEscapeClose: Story = {
 }
 
 /**
- * Проверка размытия фона.
- */
+Проверка размытия фона.
+*/
 export const Blur: Story = {
 	args: {
 		blur: 12
 	},
-
 	render: args => {
-		const [open, setOpen] = useState(true)
+		const [open, setOpen] = useState(false) // ✅ Изменено с true на false
 
 		return (
 			<div
@@ -268,18 +253,15 @@ export const Blur: Story = {
 					}}
 				>
 					<h1>Background content</h1>
-
 					<p>
 						This content should become darkened and blurred when the
 						dialog is opened.
 					</p>
-
 					<Button
 						labelText='Open dialog'
 						onClick={() => setOpen(true)}
 					/>
 				</div>
-
 				<AlertDialog
 					{...args}
 					open={open}
@@ -290,7 +272,6 @@ export const Blur: Story = {
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
-
 					<Button
 						variant='primary'
 						labelText='Continue'

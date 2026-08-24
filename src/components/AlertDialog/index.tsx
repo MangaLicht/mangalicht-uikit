@@ -27,7 +27,7 @@ export interface AlertDialogProps extends Omit<
 export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogProps>(
 	(
 		{
-			open,
+			open = false,
 			title,
 			description,
 			children,
