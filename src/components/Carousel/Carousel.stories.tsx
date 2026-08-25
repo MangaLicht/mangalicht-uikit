@@ -8,6 +8,9 @@ const meta = {
 	argTypes: {
 		showDots: { control: 'boolean' },
 		showArrows: { control: 'boolean' },
+		dotsPosition: { control: 'select', options: ['outside', 'inside'] },
+		swipe: { control: 'boolean' },
+		variant: { control: 'select', options: ['default', 'card'] },
 		autoPlayInterval: { control: 'number' },
 		slides: { control: false }
 	}
@@ -73,6 +76,25 @@ const demoSlides = [
 	}
 ]
 
+const cardSlides = Array.from({ length: 8 }, (_, index) => ({
+	id: `card-${index + 1}`,
+	content: (
+		<div
+			style={{
+				width: '100%',
+				height: '100%',
+				display: 'grid',
+				placeItems: 'center',
+				fontSize: 36,
+				fontWeight: 700,
+				color: 'var(--uikit-text-main)'
+			}}
+		>
+			{index + 1}
+		</div>
+	)
+}))
+
 export const Default = {
 	render: () => (
 		<div style={{ width: 900 }}>
@@ -106,6 +128,86 @@ export const NoPeek = {
 	render: () => (
 		<div style={{ width: 900 }}>
 			<Carousel slides={demoSlides} height={360} />
+		</div>
+	)
+}
+
+export const Card = {
+	name: 'Card',
+	render: () => (
+		<div
+			style={{
+				width: 475
+			}}
+		>
+			<Carousel
+				slides={cardSlides}
+				variant='card'
+				height={346}
+				cardWidth={314}
+				cardHeight={346}
+				gap={6}
+				showDots
+				showArrows
+				swipe
+			/>
+		</div>
+	)
+}
+
+export const CardDotsInside = {
+	name: 'Card — dots inside + swipe',
+	render: () => (
+		<div
+			style={{
+				width: 475,
+				height: 397,
+				background: 'var(--uikit-bg-main)',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center'
+			}}
+		>
+			<Carousel
+				slides={cardSlides}
+				variant='card'
+				height={397}
+				cardWidth={314}
+				cardHeight={346}
+				gap={6}
+				showDots
+				dotsPosition='inside'
+				showArrows
+				swipe
+			/>
+		</div>
+	)
+}
+
+export const CardWithoutDots = {
+	name: 'Card — without dots',
+	render: () => (
+		<div
+			style={{
+				width: 475,
+				height: 397,
+				background: 'var(--uikit-bg-main)',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center'
+			}}
+		>
+			<Carousel
+				slides={cardSlides}
+				variant='card'
+				height={397}
+				cardWidth={314}
+				cardHeight={346}
+				gap={6}
+				showDots={false}
+				showArrows
+				swipe
+			/>
 		</div>
 	)
 }
