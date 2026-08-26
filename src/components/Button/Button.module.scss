@@ -24,14 +24,71 @@
 	justify-content: center;
 	column-gap: 0.375rem;
 
-	width: 100%;
-	padding: 8px 12px;
+	&[data-size='default'] {
+		width: 100%;
+		padding: 8px 12px;
 
-	@include adaptive-rounding(0px, 1px);
+		&[data-type='circle'] {
+			padding: 12px;
+		}
+		&[data-type='square'] {
+			padding: 12px;
+		}
+	}
+	&[data-size='sm'] {
+		width: 100%;
+		height: auto;
+		align-self: center;
+		padding: 4px 6px;
+
+		&[data-type='circle'] {
+			padding: 6px;
+		}
+		&[data-type='square'] {
+			padding: 6px;
+		}
+	}
+	&[data-size='xsm'] {
+		height: auto;
+		align-self: center;
+		padding: 2px 6px;
+		font-weight: 300;
+
+		&[data-type='circle'] {
+			padding: 2px;
+		}
+		&[data-type='square'] {
+			padding: 2px;
+		}
+	}
+
+	&[data-type='default'] {
+		@include adaptive-rounding(0px, 1px);
+	}
+	&[data-type='rounded'] {
+		@include keep-radius(999px);
+	}
+	&[data-type='square'] {
+		flex: 1;
+		width: auto;
+		height: auto;
+		align-self: center;
+		aspect-ratio: 1 / 1;
+		@include adaptive-rounding(0px, 1px);
+	}
+	&[data-type='circle'] {
+		flex: 1;
+		width: auto;
+		height: auto;
+		aspect-ratio: 1 / 1;
+		align-self: center;
+		@include keep-radius(999px);
+	}
 
 	text-align: center;
 	font-weight: 500;
 	line-height: 1;
+	white-space: nowrap;
 	cursor: pointer;
 	& span {
 		color: inherit;

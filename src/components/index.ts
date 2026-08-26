@@ -4,7 +4,9 @@ export {
 	Button,
 	type ButtonProps,
 	type ButtonVariants,
-	type ButtonAnimation
+	type ButtonAnimation,
+	type ButtonSize,
+	type ButtonType
 } from '@/components/Button'
 export {
 	Checkbox,
