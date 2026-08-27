@@ -27,6 +27,8 @@ export * from '@/components/Badge'
 export type * from '@/components/Badge'
 export * from '@/components/Markdown'
 export type * from '@/components/Markdown'
+export * from '@/components/DnD/index'
+export type * from '@/components/DnD/index'
 export {
 	Block,
 	type IBlockProps,

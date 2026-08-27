@@ -16,12 +16,9 @@
 	width: max-content;
 	height: max-content;
 	will-change: transform;
-	transform: translate3d(
-		var(--drag-area-x, 0px),
-		var(--drag-area-y, 0px),
-		0
-	);
-	transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+	transform: translate3d(var(--drag-area-x, 0px), var(--drag-area-y, 0px), 0);
+	transition: transform var(--drag-transition-speed)
+		cubic-bezier(0.22, 1, 0.36, 1);
 	contain: layout style;
 	user-select: none;
 	cursor: grab;
@@ -40,14 +37,14 @@
 	transition: none;
 }
 
-.active::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-	pointer-events: none;
-	border-radius: inherit;
-	box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
-}
+// .active::after {
+// 	content: '';
+// 	position: absolute;
+// 	inset: 0;
+// 	pointer-events: none;
+// 	border-radius: inherit;
+// 	box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+// }
 
 .item[data-drag-locked='true'] {
 	cursor: default;
