@@ -1,5 +1,7 @@
 import {
+	Children,
 	createContext,
+	isValidElement,
 	useCallback,
 	useContext,
 	useEffect,
@@ -8,8 +10,10 @@ import {
 	useState,
 	type CSSProperties,
 	type PointerEvent as ReactPointerEvent,
+	type ReactElement,
 	type ReactNode
 } from 'react'
+import { flushSync } from 'react-dom'
 
 import styles from './DragArea.module.scss'
 
@@ -18,22 +22,11 @@ export interface DragOrderChange {
 	order: string[]
 }
 
-export interface DragAreaProps {
-	children: ReactNode
-	columns?: number | 'auto'
-	gap?: number
-	rowGap?: number
-	columnGap?: number
-	onOrderChange?: (order: string[], activeId: string) => void
-	className?: string
-	style?: CSSProperties
-}
-
 export interface DragElementProps {
 	id: string
 	children: ReactNode
 	disabled?: boolean
-	/** Keeps the item in its grid slot; it can neither be dragged nor sorted around. */
+	/** Element stays in its slot and is excluded from sorting. */
 	locked?: boolean
 	className?: string
 	style?: CSSProperties
@@ -42,6 +35,18 @@ export interface DragElementProps {
 		id: string,
 		event: { cancelled: boolean; order: string[] }
 	) => void
+}
+
+export interface DragAreaProps {
+	/** Pass only DragElement children. Sorting state is fully owned by DragArea. */
+	children: ReactElement<DragElementProps> | ReactElement<DragElementProps>[]
+	columns?: number | 'auto'
+	gap?: number
+	rowGap?: number
+	columnGap?: number
+	className?: string
+	style?: CSSProperties
+	onOrderChange?: (order: string[], activeId: string) => void
 }
 
 interface RegisteredItem {
@@ -61,33 +66,35 @@ interface Slot {
 	centerY: number
 }
 
-interface DragAreaContextValue {
+interface DragContextValue {
 	register: (
 		id: string,
 		element: HTMLElement | null,
 		locked: boolean,
-		callbacks?: {
-			onDragStart?: (id: string) => void
-			onDragEnd?: (id: string, event: { cancelled: boolean; order: string[] }) => void
-		}
+		callbacks?: Pick<RegisteredItem, 'onDragStart' | 'onDragEnd'>
 	) => void
 	start: (id: string, event: PointerEvent) => void
 	activeId: string | null
-	isDragging: boolean
 }
 
-const DragAreaContext = createContext<DragAreaContextValue | null>(null)
+const DragContext = createContext<DragContextValue | null>(null)
 
 const clamp = (value: number, min: number, max: number) =>
 	Math.min(max, Math.max(min, value))
 
-const useDragAreaContext = () => {
-	const context = useContext(DragAreaContext)
-	if (!context) {
-		throw new Error('DragElement must be used inside <DragArea>')
-	}
+const DROP_TRANSITION_MS = 180
+
+const useDragContext = () => {
+	const context = useContext(DragContext)
+	if (!context) throw new Error('DragElement must be used inside <DragArea>')
 	return context
 }
+
+const getDragElements = (children: ReactNode) =>
+	Children.toArray(children).filter(
+		(child): child is ReactElement<DragElementProps> =>
+			isValidElement<DragElementProps>(child) && typeof child.props.id === 'string'
+	)
 
 export const DragArea = ({
 	children,
@@ -95,43 +102,72 @@ export const DragArea = ({
 	gap = 12,
 	rowGap,
 	columnGap,
-	onOrderChange,
 	className,
-	style
+	style,
+	onOrderChange
 }: DragAreaProps) => {
 	const areaRef = useRef<HTMLDivElement | null>(null)
 	const itemsRef = useRef(new Map<string, RegisteredItem>())
+	const layoutRef = useRef(new Map<string, Slot>())
+	const slotsRef = useRef<Slot[]>([])
 	const orderRef = useRef<string[]>([])
 	const activeIdRef = useRef<string | null>(null)
 	const activePointerIdRef = useRef<number | null>(null)
 	const activeSlotRef = useRef(-1)
 	const startOrderRef = useRef<string[]>([])
-	const layoutRef = useRef(new Map<string, Slot>())
-	const sortableSlotsRef = useRef<Slot[]>([])
 	const pointerOffsetRef = useRef({ x: 0, y: 0 })
 	const rafRef = useRef<number | null>(null)
+	const dropTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 	const pendingPointerRef = useRef<PointerEvent | null>(null)
-	const listenersRef = useRef(false)
+	const listenersAttachedRef = useRef(false)
+	const handlersRef = useRef<{
+		move: (event: PointerEvent) => void
+		up: (event: PointerEvent) => void
+		cancel: (event: PointerEvent) => void
+	}>({
+		move: () => undefined,
+		up: () => undefined,
+		cancel: () => undefined
+	})
+
+	const elements = getDragElements(children)
+	const [order, setOrder] = useState(() => elements.map(element => element.props.id))
 	const [activeId, setActiveId] = useState<string | null>(null)
 
-	const register = useCallback(
-		(id: string, element: HTMLElement | null, locked: boolean, callbacks) => {
+	// React is the source of truth for the final order. External code does not
+	// need to maintain or reorder an array just to use DragArea.
+	useEffect(() => {
+		const incomingIds = elements.map(element => element.props.id)
+		setOrder(current => {
+			const incoming = new Set(incomingIds)
+			const preserved = current.filter(id => incoming.has(id))
+			const added = incomingIds.filter(id => !current.includes(id))
+			const next = [...preserved, ...added]
+			return next.length === current.length && next.every((id, i) => id === current[i])
+				? current
+				: next
+		})
+	}, [children])
+
+	useEffect(() => {
+		orderRef.current = order
+	}, [order])
+
+	const register = useCallback<DragContextValue['register']>(
+		(id, element, locked, callbacks) => {
 			if (!element) {
 				itemsRef.current.delete(id)
-				orderRef.current = orderRef.current.filter(itemId => itemId !== id)
 				return
 			}
-
 			itemsRef.current.set(id, { id, element, locked, ...callbacks })
-			if (!orderRef.current.includes(id)) orderRef.current.push(id)
 		},
 		[]
 	)
 
-	const clearSiblingTransforms = useCallback(() => {
-		for (const { element } of itemsRef.current.values()) {
-			element.style.removeProperty('--drag-area-x')
-			element.style.removeProperty('--drag-area-y')
+	const clearTransforms = useCallback(() => {
+		for (const item of itemsRef.current.values()) {
+			item.element.style.removeProperty('--drag-area-x')
+			item.element.style.removeProperty('--drag-area-y')
 		}
 	}, [])
 
@@ -150,9 +186,8 @@ export const DragArea = ({
 				centerY: rect.top + rect.height / 2
 			})
 		}
-
 		layoutRef.current = layout
-		sortableSlotsRef.current = orderRef.current
+		slotsRef.current = orderRef.current
 			.filter(id => !itemsRef.current.get(id)?.locked)
 			.map(id => layout.get(id))
 			.filter((slot): slot is Slot => Boolean(slot))
@@ -161,159 +196,155 @@ export const DragArea = ({
 
 	const getTargetSlot = useCallback((event: PointerEvent) => {
 		const active = activeIdRef.current
-		const slots = sortableSlotsRef.current
-		const activeSlot = layoutRef.current.get(active ?? '')
-		if (!active || !activeSlot || slots.length === 0) return -1
+		const origin = layoutRef.current.get(active ?? '')
+		const slots = slotsRef.current
+		if (!active || !origin || !slots.length) return -1
 
-		const itemLeft = event.clientX - pointerOffsetRef.current.x
-		const itemTop = event.clientY - pointerOffsetRef.current.y
-		const centerX = itemLeft + activeSlot.width / 2
-		const centerY = itemTop + activeSlot.height / 2
+		const centerX = event.clientX - pointerOffsetRef.current.x + origin.width / 2
+		const centerY = event.clientY - pointerOffsetRef.current.y + origin.height / 2
 
-		// The grid is laid out row-major. Pick the row first, then the closest
-		// column. This is more stable around the corners than a pure Euclidean
-		// nearest-neighbour test.
-		let best = 0
-		let bestScore = Number.POSITIVE_INFINITY
+		let target = 0
+		let best = Infinity
 		for (let i = 0; i < slots.length; i += 1) {
 			const slot = slots[i]
-			const dx = Math.abs(centerX - slot.centerX)
-			const dy = Math.abs(centerY - slot.centerY)
-			const score = dy * 1.75 + dx
-			if (score < bestScore) {
-				bestScore = score
-				best = i
+			const score = Math.abs(centerY - slot.centerY) * 1.75 + Math.abs(centerX - slot.centerX)
+			if (score < best) {
+				best = score
+				target = i
 			}
 		}
-		return best
+		return target
 	}, [])
 
-	const applyDragPosition = useCallback((event: PointerEvent) => {
+	const moveActive = useCallback((event: PointerEvent) => {
 		const activeId = activeIdRef.current
-		const active = activeId ? itemsRef.current.get(activeId) : null
-		const area = areaRef.current
+		const item = activeId ? itemsRef.current.get(activeId) : null
 		const origin = layoutRef.current.get(activeId ?? '')
-		if (!active || !area || !origin) return
+		const area = areaRef.current
+		if (!item || !origin || !area) return
 
 		const areaRect = area.getBoundingClientRect()
-		const desiredLeft = event.clientX - pointerOffsetRef.current.x
-		const desiredTop = event.clientY - pointerOffsetRef.current.y
-		const minLeft = areaRect.left
-		const maxLeft = areaRect.right - origin.width
-		const minTop = areaRect.top
-		const maxTop = areaRect.bottom - origin.height
+		const left = clamp(
+			event.clientX - pointerOffsetRef.current.x,
+			areaRect.left,
+			Math.max(areaRect.left, areaRect.right - origin.width)
+		)
+		const top = clamp(
+			event.clientY - pointerOffsetRef.current.y,
+			areaRect.top,
+			Math.max(areaRect.top, areaRect.bottom - origin.height)
+		)
 
-		const left = clamp(desiredLeft, minLeft, Math.max(minLeft, maxLeft))
-		const top = clamp(desiredTop, minTop, Math.max(minTop, maxTop))
-
-		active.element.style.setProperty('--drag-area-x', `${left - origin.left}px`)
-		active.element.style.setProperty('--drag-area-y', `${top - origin.top}px`)
+		item.element.style.setProperty('--drag-area-x', `${left - origin.left}px`)
+		item.element.style.setProperty('--drag-area-y', `${top - origin.top}px`)
 	}, [])
 
-	const applySiblingTransforms = useCallback((targetSlot: number) => {
+	const shiftSiblings = useCallback((target: number) => {
 		const activeId = activeIdRef.current
 		if (!activeId) return
 
-		const sortableIds = orderRef.current.filter(
-			id => !itemsRef.current.get(id)?.locked
-		)
+		const sortableIds = orderRef.current.filter(id => !itemsRef.current.get(id)?.locked)
 		const from = sortableIds.indexOf(activeId)
 		if (from < 0) return
 
-		const destination = clamp(targetSlot, 0, sortableIds.length - 1)
+		const destination = clamp(target, 0, sortableIds.length - 1)
 		if (destination === activeSlotRef.current) return
 
-		const virtualOrder = [...sortableIds]
-		virtualOrder.splice(from, 1)
-		virtualOrder.splice(destination, 0, activeId)
+		const virtual = [...sortableIds]
+		virtual.splice(from, 1)
+		virtual.splice(destination, 0, activeId)
 
-		const slots = sortableSlotsRef.current
-		const layout = layoutRef.current
-
-		for (let index = 0; index < virtualOrder.length; index += 1) {
-			const id = virtualOrder[index]
+		for (let i = 0; i < virtual.length; i += 1) {
+			const id = virtual[i]
 			if (id === activeId) continue
 			const item = itemsRef.current.get(id)
-			const fromRect = layout.get(id)
-			const toSlot = slots[index]
-			if (!item || !fromRect || !toSlot) continue
-
-			item.element.style.setProperty(
-				'--drag-area-x',
-				`${toSlot.left - fromRect.left}px`
-			)
-			item.element.style.setProperty(
-				'--drag-area-y',
-				`${toSlot.top - fromRect.top}px`
-			)
+			const fromSlot = layoutRef.current.get(id)
+			const toSlot = slotsRef.current[i]
+			if (!item || !fromSlot || !toSlot) continue
+			item.element.style.setProperty('--drag-area-x', `${toSlot.left - fromSlot.left}px`)
+			item.element.style.setProperty('--drag-area-y', `${toSlot.top - fromSlot.top}px`)
 		}
 
 		activeSlotRef.current = destination
 	}, [])
 
 	const detachListeners = useCallback(() => {
-		if (!listenersRef.current) return
-		window.removeEventListener('pointermove', handlePointerMoveRef.current)
-		window.removeEventListener('pointerup', handlePointerUpRef.current)
-		window.removeEventListener('pointercancel', handlePointerCancelRef.current)
-		listenersRef.current = false
+		if (!listenersAttachedRef.current) return
+		window.removeEventListener('pointermove', handlersRef.current.move)
+		window.removeEventListener('pointerup', handlersRef.current.up)
+		window.removeEventListener('pointercancel', handlersRef.current.cancel)
+		listenersAttachedRef.current = false
 	}, [])
 
-	const end = useCallback(
-		(cancelled = false) => {
-			const activeId = activeIdRef.current
-			if (!activeId) return
+	const finish = useCallback((cancelled: boolean) => {
+		const activeId = activeIdRef.current
+		if (!activeId) return
 
-			detachListeners()
-			if (activePointerIdRef.current !== null) {
-				itemsRef.current.get(activeId)?.element.releasePointerCapture?.(activePointerIdRef.current)
-			}
+		detachListeners()
+		if (rafRef.current !== null) {
+			cancelAnimationFrame(rafRef.current)
+			rafRef.current = null
+		}
 
-			if (rafRef.current !== null) {
-				cancelAnimationFrame(rafRef.current)
-				rafRef.current = null
-			}
+		const sortable = orderRef.current.filter(id => !itemsRef.current.get(id)?.locked)
+		const from = sortable.indexOf(activeId)
+		const to = activeSlotRef.current
+		let nextOrder = [...startOrderRef.current]
 
-			const sortable = orderRef.current.filter(
-				id => !itemsRef.current.get(id)?.locked
+		if (!cancelled && from >= 0 && to >= 0 && from !== to) {
+			const nextSortable = [...sortable]
+			const [moved] = nextSortable.splice(from, 1)
+			nextSortable.splice(to, 0, moved)
+			let index = 0
+			nextOrder = startOrderRef.current.map(id =>
+				itemsRef.current.get(id)?.locked ? id : nextSortable[index++]
 			)
-			const from = sortable.indexOf(activeId)
-			const to = activeSlotRef.current
-			let nextOrder = [...startOrderRef.current]
+		}
 
-			if (!cancelled && from >= 0 && to >= 0 && from !== to) {
-				const nextSortable = [...sortable]
-				const [moved] = nextSortable.splice(from, 1)
-				nextSortable.splice(to, 0, moved)
+		const item = itemsRef.current.get(activeId)
+		item?.element.releasePointerCapture?.(activePointerIdRef.current ?? -1)
 
-				let index = 0
-				nextOrder = nextOrder.map(id => {
-					if (itemsRef.current.get(id)?.locked) return id
-					return nextSortable[index++]
-				})
-			}
+		const changed = nextOrder.join('\0') !== startOrderRef.current.join('\0')
+		const destination = cancelled
+			? layoutRef.current.get(activeId)
+			: slotsRef.current[clamp(to, 0, Math.max(0, slotsRef.current.length - 1))]
+		const origin = layoutRef.current.get(activeId)
 
+		activeIdRef.current = null
+		activePointerIdRef.current = null
+		setActiveId(null)
+
+		if (item && origin && destination) {
+			// The active class disables transitions while following the pointer.
+			// Remove it before changing the transform so the release animates to the slot.
+			item.element.classList.remove(styles.active)
+			void item.element.offsetWidth
+			item.element.style.setProperty('--drag-area-x', `${destination.left - origin.left}px`)
+			item.element.style.setProperty('--drag-area-y', `${destination.top - origin.top}px`)
+		}
+
+		dropTimeoutRef.current = setTimeout(() => {
+			dropTimeoutRef.current = null
 			orderRef.current = nextOrder
-			clearSiblingTransforms()
-			activeIdRef.current = null
-			activePointerIdRef.current = null
-			setActiveId(null)
+			if (!cancelled && changed) {
+				// Commit the new grid positions before removing the FLIP offsets.
+				// Keeping both operations in the same frame prevents the reordered
+				// elements from being painted once with transforms from the old layout.
+				flushSync(() => setOrder(nextOrder))
+				const area = areaRef.current
+				area?.classList.add(styles.settling)
+				clearTransforms()
+				if (area) void area.offsetWidth
+				area?.classList.remove(styles.settling)
+				onOrderChange?.(nextOrder, activeId)
+			} else {
+				clearTransforms()
+			}
+			item?.onDragEnd?.(activeId, { cancelled, order: nextOrder })
+		}, DROP_TRANSITION_MS)
+	}, [clearTransforms, detachListeners, onOrderChange])
 
-			const changed = nextOrder.join('\0') !== startOrderRef.current.join('\0')
-			if (!cancelled && changed) onOrderChange?.(nextOrder, activeId)
-			itemsRef.current.get(activeId)?.onDragEnd?.(activeId, {
-				cancelled,
-				order: nextOrder
-			})
-		},
-		[clearSiblingTransforms, detachListeners, onOrderChange]
-	)
-
-	const handlePointerMoveRef = useRef<(event: PointerEvent) => void>(() => undefined)
-	const handlePointerUpRef = useRef<(event: PointerEvent) => void>(() => undefined)
-	const handlePointerCancelRef = useRef<(event: PointerEvent) => void>(() => undefined)
-
-	const handlePointerMove = useCallback((event: PointerEvent) => {
+	const pointerMove = useCallback((event: PointerEvent) => {
 		if (!activeIdRef.current || event.pointerId !== activePointerIdRef.current) return
 		pendingPointerRef.current = event
 		if (rafRef.current !== null) return
@@ -322,106 +353,93 @@ export const DragArea = ({
 			rafRef.current = null
 			const pointer = pendingPointerRef.current
 			if (!pointer || !activeIdRef.current) return
-
-			applyDragPosition(pointer)
-			const target = getTargetSlot(pointer)
-			if (target >= 0) applySiblingTransforms(target)
+			moveActive(pointer)
+			shiftSiblings(getTargetSlot(pointer))
 		})
-	}, [applyDragPosition, applySiblingTransforms, getTargetSlot])
+	}, [getTargetSlot, moveActive, shiftSiblings])
 
-	const handlePointerUp = useCallback(
-		(event: PointerEvent) => {
-			if (event.pointerId !== activePointerIdRef.current) return
-			end(false)
-		},
-		[end]
-	)
+	const pointerUp = useCallback((event: PointerEvent) => {
+		if (event.pointerId === activePointerIdRef.current) finish(false)
+	}, [finish])
 
-	const handlePointerCancel = useCallback(
-		(event: PointerEvent) => {
-			if (event.pointerId !== activePointerIdRef.current) return
-			end(true)
-		},
-		[end]
-	)
+	const pointerCancel = useCallback((event: PointerEvent) => {
+		if (event.pointerId === activePointerIdRef.current) finish(true)
+	}, [finish])
 
-	handlePointerMoveRef.current = handlePointerMove
-	handlePointerUpRef.current = handlePointerUp
-	handlePointerCancelRef.current = handlePointerCancel
+	handlersRef.current.move = pointerMove
+	handlersRef.current.up = pointerUp
+	handlersRef.current.cancel = pointerCancel
 
-	const start = useCallback(
-		(id: string, event: PointerEvent) => {
-			const item = itemsRef.current.get(id)
-			const area = areaRef.current
-			if (!item || item.locked || !area || activeIdRef.current) return
+	const start = useCallback<DragContextValue['start']>((id, event) => {
+		const item = itemsRef.current.get(id)
+		const area = areaRef.current
+		if (!item || item.locked || !area || activeIdRef.current || dropTimeoutRef.current) return
 
-			activeIdRef.current = id
-			activePointerIdRef.current = event.pointerId
-			item.onDragStart?.(id)
-			startOrderRef.current = [...orderRef.current]
-			setActiveId(id)
+		const rect = item.element.getBoundingClientRect()
+		activeIdRef.current = id
+		activePointerIdRef.current = event.pointerId
+		activeSlotRef.current = -1
+		startOrderRef.current = [...orderRef.current]
+		pointerOffsetRef.current = { x: event.clientX - rect.left, y: event.clientY - rect.top }
 
-			const rect = item.element.getBoundingClientRect()
-			pointerOffsetRef.current = {
-				x: event.clientX - rect.left,
-				y: event.clientY - rect.top
-			}
+		captureLayout()
+		activeSlotRef.current = orderRef.current
+			.filter(itemId => !itemsRef.current.get(itemId)?.locked)
+			.indexOf(id)
 
-			captureLayout()
-			const sortable = orderRef.current.filter(
-				itemId => !itemsRef.current.get(itemId)?.locked
-			)
-			activeSlotRef.current = sortable.indexOf(id)
+		item.onDragStart?.(id)
+		setActiveId(id)
+		item.element.setPointerCapture?.(event.pointerId)
 
-			item.element.setPointerCapture?.(event.pointerId)
-			window.addEventListener('pointermove', handlePointerMove)
-			window.addEventListener('pointerup', handlePointerUp)
-			window.addEventListener('pointercancel', handlePointerCancel)
-			listenersRef.current = true
-		},
-		[captureLayout, handlePointerCancel, handlePointerMove, handlePointerUp]
-	)
+		window.addEventListener('pointermove', handlersRef.current.move)
+		window.addEventListener('pointerup', handlersRef.current.up)
+		window.addEventListener('pointercancel', handlersRef.current.cancel)
+		listenersAttachedRef.current = true
+	}, [captureLayout])
 
 	useEffect(() => {
 		if (columns !== 'auto') return
 		const area = areaRef.current
 		if (!area) return
-
-		const updateColumns = () => {
-			const first = Array.from(itemsRef.current.values())[0]?.element
+		const update = () => {
+			const first = orderRef.current.map(id => itemsRef.current.get(id)?.element).find(Boolean)
 			if (!first) return
 			const width = first.getBoundingClientRect().width
 			if (!width) return
-			const columnGapValue = columnGap ?? gap
-			const count = Math.max(1, Math.floor((area.clientWidth + columnGapValue) / (width + columnGapValue)))
+			const gapValue = columnGap ?? gap
+			const count = Math.max(1, Math.floor((area.clientWidth + gapValue) / (width + gapValue)))
 			area.style.setProperty('--drag-area-columns', String(count))
 		}
-
-		updateColumns()
-		const observer = new ResizeObserver(updateColumns)
+		update()
+		const observer = new ResizeObserver(update)
 		observer.observe(area)
-		for (const { element } of itemsRef.current.values()) observer.observe(element)
 		return () => observer.disconnect()
-	}, [columnGap, columns, gap])
+	}, [children, columnGap, columns, gap])
 
 	useEffect(() => () => {
 		if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+		if (dropTimeoutRef.current !== null) clearTimeout(dropTimeoutRef.current)
 		detachListeners()
-		clearSiblingTransforms()
-	}, [clearSiblingTransforms, detachListeners])
+		clearTransforms()
+	}, [clearTransforms, detachListeners])
 
-	const contextValue = useMemo<DragAreaContextValue>(
-		() => ({
-			register,
-			start,
-			activeId,
-			isDragging: activeId !== null
-		}),
+	const childrenById = useMemo(() => {
+		const map = new Map<string, ReactElement<DragElementProps>>()
+		for (const element of elements) map.set(element.props.id, element)
+		return map
+	}, [children])
+
+	const renderedChildren = order
+		.map(id => childrenById.get(id))
+		.filter((element): element is ReactElement<DragElementProps> => Boolean(element))
+
+	const context = useMemo<DragContextValue>(
+		() => ({ register, start, activeId }),
 		[activeId, register, start]
 	)
 
 	return (
-		<DragAreaContext.Provider value={contextValue}>
+		<DragContext.Provider value={context}>
 			<div
 				ref={areaRef}
 				className={[styles.area, className].filter(Boolean).join(' ')}
@@ -432,9 +450,9 @@ export const DragArea = ({
 					'--drag-area-column-gap': `${columnGap ?? gap}px`
 				} as CSSProperties}
 			>
-				{children}
+				{renderedChildren}
 			</div>
-		</DragAreaContext.Provider>
+		</DragContext.Provider>
 	)
 }
 
@@ -449,35 +467,28 @@ export const DragElement = ({
 	onDragEnd
 }: DragElementProps) => {
 	const wrapperRef = useRef<HTMLDivElement | null>(null)
-	const { register, start, activeId } = useDragAreaContext()
+	const { register, start, activeId } = useDragContext()
 
 	useEffect(() => {
-		register(id, wrapperRef.current, disabled || locked, {
-			onDragStart,
-			onDragEnd
-		})
+		register(id, wrapperRef.current, disabled || locked, { onDragStart, onDragEnd })
 		return () => register(id, null, disabled || locked)
 	}, [disabled, id, locked, onDragEnd, onDragStart, register])
 
 	useEffect(() => {
 		const wrapper = wrapperRef.current
-		if (!wrapper) return
-
-		const child = wrapper.firstElementChild
-		if (!(child instanceof HTMLElement)) return
+		const child = wrapper?.firstElementChild
+		if (!(child instanceof HTMLElement) || !wrapper) return
 
 		const syncSize = () => {
 			const rect = child.getBoundingClientRect()
 			wrapper.style.width = `${rect.width}px`
 			wrapper.style.height = `${rect.height}px`
 		}
-
 		syncSize()
 		const observer = new ResizeObserver(syncSize)
 		observer.observe(child)
 		return () => observer.disconnect()
 	}, [children])
-
 
 	const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
 		if (disabled || locked || event.button !== 0) return
@@ -488,12 +499,9 @@ export const DragElement = ({
 	return (
 		<div
 			ref={wrapperRef}
-			className={[
-				styles.item,
-				activeId === id ? styles.active : '',
-				activeId && activeId !== id ? styles.sibling : '',
-				className ?? ''
-			].filter(Boolean).join(' ')}
+			className={[styles.item, activeId === id ? styles.active : '', className ?? '']
+				.filter(Boolean)
+				.join(' ')}
 			style={style}
 			onPointerDown={handlePointerDown}
 			data-drag-id={id}
@@ -503,6 +511,3 @@ export const DragElement = ({
 		</div>
 	)
 }
-
-export { useDragAreaContext }
-
