@@ -1,342 +1,124 @@
 # mangalicht-uikit
 
-React UI Kit на **React 19 + TypeScript**, предназначенный для создания интерфейсов с переиспользуемыми компонентами, общей системой темизации, SCSS/CSS Modules, Storybook и сборкой библиотеки через **Vite**.
+React + TypeScript UI Kit для построения интерфейсов на базе React 19.
 
-# Навигация по компонентам
+Библиотека построена вокруг нескольких принципов:
 
-Быстрый переход к документации и исходному коду компонентов.
-
-| Компонент                       | Описание                                 | Исходный код                                                     |
-| ------------------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
-| [Badge](#badge)                 | Значок уровня или достижения             | [`src/components/Badge`](./src/components/Badge)                 |
-| [Block](#block)                 | Контейнер с заголовком                   | [`src/components/Block`](./src/components/Block)                 |
-| [Button](#button)               | Универсальная кнопка                     | [`src/components/Button`](./src/components/Button)               |
-| [Carousel](#carousel)           | Карусель с активным раскрытым слайдом    | [`src/components/Carousel`](./src/components/Carousel)           |
-| [Checkbox](#checkbox)           | Чекбокс и radio-вариант                  | [`src/components/Checkbox`](./src/components/Checkbox)           |
-| [DropDown](#dropdown)           | Выпадающее меню с вложенными подменю     | [`src/components/DropDown`](./src/components/DropDown)           |
-| [Input](#input)                 | Поле ввода с валидацией                  | [`src/components/Input`](./src/components/Input)                 |
-| [MarkdownField](#markdownfield) | Markdown-редактор с preview              | [`src/components/MarkdownField`](./src/components/MarkdownField) |
-| [ProgressBar](#progressbar)     | Индикатор прогресса                      | [`src/components/ProgressBar`](./src/components/ProgressBar)     |
-| [Select](#select)               | Кастомный выпадающий список              | [`src/components/Select`](./src/components/Select)               |
-| [Slider](#slider)               | Ползунок на основе `input[type="range"]` | [`src/components/Slider`](./src/components/Slider)               |
-| [Switch](#switch)               | Переключатель                            | [`src/components/Switch`](./src/components/Switch)               |
-| [TabList](#tablist)             | Группа вкладок                           | [`src/components/TabList`](./src/components/TabList)             |
-| [Tooltip](#tooltip)             | Всплывающая подсказка                    | [`src/components/Tooltip`](./src/components/Tooltip)             |
-
-## Иконки
-
-| Раздел            | Описание                            | Исходный код               |
-| ----------------- | ----------------------------------- | -------------------------- |
-| [Иконки](#иконки) | SVG-иконки в виде React-компонентов | [`src/icons`](./src/icons) |
-
-## Хуки
-
-| Хук                                           | Назначение                                 | Исходный код                                                             |
-| --------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------ |
-| [`useAnchoredPosition`](#useanchoredposition) | Позиционирование floating-элементов        | [`src/hooks/useAnchoredPosition.ts`](./src/hooks/useAnchoredPosition.ts) |
-| [`useAnimationTrigger`](#useanimationtrigger) | Управление одноразовыми анимациями         | [`src/hooks/useAnimationTrigger.ts`](./src/hooks/useAnimationTrigger.ts) |
-| [`useAutosizeTextarea`](#useautosizetextarea) | Автоматическая высота textarea             | [`src/hooks/useAutosizeTextarea.ts`](./src/hooks/useAutosizeTextarea.ts) |
-| [`useClickOutside`](#useclickoutside)         | Обработка кликов вне элемента              | [`src/hooks/useClickOutside.ts`](./src/hooks/useClickOutside.ts)         |
-| [`useMouseTracking`](#usemousetracking)       | Отслеживание положения мыши                | [`src/hooks/useMouseTracking.ts`](./src/hooks/useMouseTracking.ts)       |
-| [`useSmoothFollow`](#usesmoothfollow)         | Плавное следование элемента за координатой | [`src/hooks/useSmoothFollow.ts`](./src/hooks/useSmoothFollow.ts)         |
-| [`useValidation`](#usevalidation)             | Общая система валидации                    | [`src/hooks/useValidation.ts`](./src/hooks/useValidation.ts)             |
+- компоненты имеют локальные SCSS Modules;
+- поведение, которое можно переиспользовать, вынесено в hooks;
+- floating UI использует Portal и `@floating-ui/dom`;
+- интерактивные контролы по возможности опираются на нативные HTML-элементы;
+- формы поддерживают controlled/uncontrolled сценарии;
+- тема задаётся через `data-theme="light|dark"`;
+- библиотека собирается Vite Library Mode;
+- TypeScript declarations генерируются автоматически.
 
 ---
-
-# Навигация по архитектуре
-
-| Раздел                                      | Назначение                            | Расположение                                                         |
-| ------------------------------------------- | ------------------------------------- | -------------------------------------------------------------------- |
-| [Компоненты](#компоненты)                   | Основные UI-компоненты                | [`src/components`](./src/components)                                 |
-| [Хуки](#хуки)                               | Переиспользуемая логика               | [`src/hooks`](./src/hooks)                                           |
-| [Иконки](#иконки)                           | SVG React-компоненты                  | [`src/icons`](./src/icons)                                           |
-| [Стили и CSS Modules](#стили-и-css-modules) | Локальные стили компонентов           | [`src/components/*/*.module.scss`](./src/components)                 |
-| [Общие SCSS-ресурсы](#общие-scss-ресурсы)   | Темы, mixins, normalize и utilities   | [`src/shared`](./src/shared)                                         |
-| [Portal](#portal)                           | Общий контейнер для floating UI       | [`src/shared/utils/portalRoot.ts`](./src/shared/utils/portalRoot.ts) |
-| [Storybook](#storybook)                     | Документация и разработка компонентов | [`.storybook`](./.storybook)                                         |
-| [Конфигурация Vite](#сборка-библиотеки)     | Сборка npm-пакета                     | [`vite.config.ts`](./vite.config.ts)                                 |
 
 ## Содержание
 
-- [Возможности](#возможности)
-- [Технологический стек](#технологический-стек)
-- [Архитектура проекта](#архитектура-проекта)
 - [Установка](#установка)
-- [Подключение](#подключение)
+- [Импорт](#импорт)
 - [Темизация](#темизация)
 - [Компоненты](#компоненты)
-    - [Button](#button)
-    - [Switch](#switch)
-    - [Checkbox](#checkbox)
-    - [Input](#input)
-    - [MarkdownField](#markdownfield)
-    - [Select](#select)
-    - [Slider](#slider)
-    - [ProgressBar](#progressbar)
-    - [TabList](#tablist)
-    - [Tooltip](#tooltip)
-    - [Block](#block)
-    - [Badge](#badge)
-    - [DropDown](#dropdown)
-    - [Carousel](#carousel)
-- [Хуки](#хуки)
+  - [AlertDialog](#alertdialog)
+  - [Badge](#badge)
+  - [Block](#block)
+  - [Button](#button)
+  - [Carousel](#carousel)
+  - [Checkbox](#checkbox)
+  - [DnD](#dnd)
+  - [DropDown](#dropdown)
+  - [ExpandableCard](#expandablecard)
+  - [Image](#image)
+  - [Input](#input)
+  - [Markdown](#markdown)
+  - [ProgressBar](#progressbar)
+  - [ScrollArea](#scrollarea)
+  - [Select](#select)
+  - [Slider](#slider)
+  - [Switch](#switch)
+  - [TabList](#tablist)
+  - [Toggle](#toggle)
+  - [Tooltip](#tooltip)
+  - [Sheet](#sheet)
+- [Общие hooks](#общие-hooks)
 - [Иконки](#иконки)
-- [Стили и CSS Modules](#стили-и-css-modules)
-- [Валидация](#валидация)
-- [Portal](#portal)
+- [Архитектура](#архитектура)
 - [Storybook](#storybook)
-- [Сборка библиотеки](#сборка-библиотеки)
-- [Публикация пакета](#публикация-пакета)
-- [Экспорты пакета](#экспорты-пакета)
-- [Архитектурные принципы](#архитектурные-принципы)
-
----
-
-## Возможности
-
-- React 19 + TypeScript
-- Vite для сборки библиотеки
-- Storybook для разработки и документации компонентов
-- SCSS
-- CSS Modules для изолированных стилей компонентов
-- светлая и тёмная темы
-- CSS custom properties для дизайн-токенов
-- controlled/uncontrolled компоненты форм
-- `forwardRef` для доступа к нативным DOM-элементам
-- переиспользуемые React-хуки
-- React Portal для всплывающих элементов
-- позиционирование через `@floating-ui/dom`
-- Markdown-редактор с безопасным HTML-preview
-- встроенная валидация полей
-- TypeScript declaration files
-- sourcemap при сборке
-- экспорт исходных SCSS-файлов
-- поддержка `prefers-reduced-motion` для анимаций
-
----
-
-# Технологический стек
-
-| Технология                   | Назначение                          |
-| ---------------------------- | ----------------------------------- |
-| React 19                     | UI-компоненты                       |
-| TypeScript                   | Типизация                           |
-| Vite                         | Сборка библиотеки                   |
-| Storybook 10                 | Разработка и документация           |
-| SCSS / Sass                  | Стили                               |
-| CSS Modules                  | Изоляция стилей компонентов         |
-| `@floating-ui/dom`           | Позиционирование floating-элементов |
-| `marked`                     | Парсинг Markdown                    |
-| `dompurify`                  | Безопасная очистка HTML             |
-| `vite-plugin-dts`            | Генерация `.d.ts`                   |
-| `vite-plugin-lib-inject-css` | Подключение CSS библиотеки          |
-
----
-
-# Архитектура проекта
-
-```text
-mangalicht-uikit/
-│
-├── .storybook/
-│   ├── main.ts
-│   └── preview.tsx
-│
-├── src/
-│   │
-│   ├── components/
-│   │   ├── Badge/
-│   │   ├── Block/
-│   │   ├── Button/
-│   │   ├── Carousel/
-│   │   ├── Checkbox/
-│   │   ├── DropDown/
-│   │   ├── Input/
-│   │   ├── MarkdownField/
-│   │   ├── ProgressBar/
-│   │   ├── Select/
-│   │   ├── Slider/
-│   │   ├── Switch/
-│   │   ├── TabList/
-│   │   └── Tooltip/
-│   │
-│   │   └── index.ts
-│   │
-│   ├── hooks/
-│   │   ├── useAnchoredPosition.ts
-│   │   ├── useAnimationTrigger.ts
-│   │   ├── useAutosizeTextarea.ts
-│   │   ├── useClickOutside.ts
-│   │   ├── useMouseTracking.ts
-│   │   ├── useSmoothFollow.ts
-│   │   └── useValidation.ts
-│   │
-│   ├── icons/
-│   │   ├── Chevron.tsx
-│   │   ├── Close.tsx
-│   │   ├── Loading.tsx
-│   │   ├── Markdown.tsx
-│   │   ├── Search.tsx
-│   │   └── index.ts
-│   │
-│   ├── shared/
-│   │   ├── scss/
-│   │   │   └── global-styles.scss
-│   │   ├── types/
-│   │   │   └── IUIKitProps.ts
-│   │   ├── utils/
-│   │   │   └── portalRoot.ts
-│   │   ├── _media.scss
-│   │   ├── _mixins.scss
-│   │   ├── _utils.scss
-│   │   ├── normalize.scss
-│   │   └── theme-vars.scss
-│   │
-│   ├── global.d.ts
-│   └── index.ts
-│
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-└── README.md
-```
-
-## Ответственность директорий
-
-### `src/components`
-
-Основные UI-компоненты библиотеки.
-
-Каждый компонент, как правило, содержит собственную директорию:
-
-```text
-Button/
-├── Button.module.scss
-├── Button.stories.tsx
-├── _Button-vars.scss
-└── index.tsx
-```
-
-Таким образом, логика компонента, его стили, SCSS-переменные и Storybook story находятся рядом.
-
-### `src/hooks`
-
-Переиспользуемая поведенческая логика, не привязанная к конкретному компоненту.
-
-Например:
-
-- позиционирование floating-элементов;
-- определение клика вне элемента;
-- отслеживание мыши;
-- плавное следование за курсором;
-- запуск анимаций;
-- автоматическое изменение высоты textarea;
-- валидация.
-
-### `src/icons`
-
-SVG-иконки в виде React-компонентов.
-
-Иконки экспортируются через:
-
-```tsx
-import { SearchIcon, CloseIcon } from 'mangalicht-uikit'
-```
-
-### `src/shared`
-
-Общие ресурсы библиотеки:
-
-- дизайн-токены;
-- темы;
-- normalize;
-- глобальные стили;
-- SCSS mixins;
-- типы;
-- DOM utilities;
-- portal root.
-
-### `.storybook`
-
-Конфигурация Storybook.
-
-Storybook автоматически ищет:
-
-```text
-src/**/*.mdx
-src/**/*.stories.ts
-src/**/*.stories.tsx
-```
+- [Сборка](#сборка)
+- [Экспорт пакета](#экспорт-пакета)
 
 ---
 
 # Установка
 
-Для установки опубликованного пакета:
-
 ```bash
 npm install mangalicht-uikit
 ```
 
-Пакет использует React 19 и React DOM 19 как `peerDependencies`.
-
-В проекте-потребителе должны быть установлены:
+В приложении должны быть установлены React и React DOM 19:
 
 ```bash
 npm install react react-dom
 ```
 
----
+## Базовый импорт
 
-# Подключение
-
-Основные компоненты и иконки доступны из корневого экспорта:
+Все публичные компоненты экспортируются из корня:
 
 ```tsx
-import { Button, Input, Select, Switch, SearchIcon } from 'mangalicht-uikit'
+import {
+  AlertDialog,
+  Badge,
+  Block,
+  Button,
+  Carousel,
+  Checkbox,
+  DragArea,
+  DragElement,
+  DropDown,
+  DropDownItem,
+  ExpandableCard,
+  ExpandableElement,
+  Image,
+  Input,
+  MarkdownComment,
+  MarkdownInput,
+  MarkdownPreview,
+  ProgressBar,
+  ScrollArea,
+  Select,
+  Slider,
+  Switch,
+  TabList,
+  Toggle,
+  Tooltip,
+} from 'mangalicht-uikit'
 ```
 
-Стили библиотеки подключаются автоматически через entry point:
+Типы экспортируются вместе с компонентами.
 
-```text
-src/index.ts
-```
+Иконки доступны отдельным публичным экспортом:
 
-Он экспортирует компоненты и иконки, а также подключает:
-
-```text
-normalize.scss
-theme-vars.scss
-global-styles.scss
+```tsx
+import { SearchIcon, CloseIcon } from 'mangalicht-uikit'
 ```
 
 ---
 
 # Темизация
 
-UI Kit использует атрибут:
+Тема определяется атрибутом:
 
 ```html
-data-theme
-```
-
-с двумя поддерживаемыми значениями:
-
-```text
-light
-dark
-```
-
-Например:
-
-```html
-<html data-theme="light"></html>
+<html data-theme="light">
 ```
 
 или:
 
 ```html
-<html data-theme="dark"></html>
+<html data-theme="dark">
 ```
 
 В React:
@@ -345,608 +127,151 @@ dark
 document.documentElement.dataset.theme = 'dark'
 ```
 
-Переключение темы в runtime:
+Пример переключателя:
 
 ```tsx
 const toggleTheme = () => {
-	document.documentElement.dataset.theme =
-		document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
+  const root = document.documentElement
+
+  root.dataset.theme =
+    root.dataset.theme === 'dark' ? 'light' : 'dark'
 }
 ```
 
-Дизайн-токены компонентов доступны через CSS custom properties:
+Общие design tokens находятся в `src/shared/theme-vars.scss`.
 
-```css
-var(--uikit-bg-block)
-var(--uikit-text-main)
-var(--uikit-accent)
-```
-
-## Storybook
-
-В Storybook переключение темы доступно через глобальный toolbar.
-
-Конфигурация находится в:
-
-```text
-.storybook/preview.tsx
-```
-
-Storybook автоматически устанавливает:
-
-```html
-data-theme="light"
-```
-
-или:
-
-```html
-data-theme="dark"
-```
-
-на `document.documentElement`.
+Компоненты используют CSS custom properties, поэтому тему можно менять без перемонтирования UI.
 
 ---
 
 # Компоненты
 
-## Button
+## AlertDialog
 
-Универсальная кнопка.
+Модальное alert-окно. Компонент рендерится через Portal, блокирует прокрутку `body`, поддерживает Escape и закрытие по overlay.
 
-```tsx
-import { Button } from 'mangalicht-uikit'
-;<Button
-	labelText='Сохранить'
-	variant='highlight'
-	onClick={() => console.log('saved')}
-/>
-```
-
-Поддерживаемые варианты:
-
-```text
-default
-highlight
-bordered
-borderedAccent
-ghost
-transparent
-```
-
-Основные props:
-
-```ts
-interface ButtonProps {
-	labelText?: string
-	variant?: ButtonVariants
-	isAlert?: boolean
-	disabled?: boolean
-	type?: 'button' | 'submit' | 'reset'
-	iconStart?: React.ReactNode
-	iconEnd?: React.ReactNode
-	animation?: 'default' | 'none'
-	classNames?: string
-}
-```
-
-Компонент также поддерживает нативные атрибуты `<button>`.
-
----
-
-## Switch
-
-Переключатель на основе нативного:
-
-```html
-input[type="checkbox"]
-```
-
-Компонент полностью controlled:
+### Пример
 
 ```tsx
 import { useState } from 'react'
-import { Switch } from 'mangalicht-uikit'
+import { AlertDialog, Button } from 'mangalicht-uikit'
 
-function Example() {
-	const [enabled, setEnabled] = useState(false)
+export function Example() {
+  const [open, setOpen] = useState(false)
 
-	return (
-		<Switch
-			checked={enabled}
-			onChange={setEnabled}
-			labelText='Тёмная тема'
-		/>
-	)
+  return (
+    <>
+      <Button
+        labelText="Удалить"
+        isAlert
+        onClick={() => setOpen(true)}
+      />
+
+      <AlertDialog
+        open={open}
+        title="Удалить запись?"
+        description="Это действие нельзя отменить."
+        onClose={() => setOpen(false)}
+      >
+        <Button
+          labelText="Отмена"
+          onClick={() => setOpen(false)}
+        />
+      </AlertDialog>
+    </>
+  )
 }
 ```
 
-Props:
+### Props
 
-```ts
-interface SwitchProps {
-	checked: boolean
-	onChange: (checked: boolean) => void
-	labelText?: string
-	disabled?: boolean
-	name?: string
-	size?: 'default' | 'small'
-}
-```
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `open` | `boolean` | `false` | Показывать диалог. |
+| `title` | `ReactNode` | — | Заголовок. |
+| `description` | `ReactNode` | — | Описание. |
+| `children` | `ReactNode` | — | Основное содержимое/действия. |
+| `onClose` | `() => void` | — | Callback закрытия. |
+| `closeOnOverlayClick` | `boolean` | `true` | Закрывать при клике по overlay. |
+| `closeOnEscape` | `boolean` | `true` | Закрывать по Escape. |
+| `blur` | `number` | `6` | Размытие фона в px. |
+| `className` | `string` | — | Класс диалога. |
+| `...HTMLAttributes` | — | — | Остальные атрибуты `div`. |
 
-Нативный input используется для доступности и клавиатурного управления.
+`ref` указывает на DOM-элемент диалога.
 
 ---
 
-## Checkbox
+# Badge
 
-Чекбокс с двумя визуальными вариантами:
+В `Badge` находятся три специализированных компонента:
 
-```text
-default
-radio
-```
+- `SimpleBadge`
+- `StrickBadge`
+- `ProfileLevelBadge`
+
+## SimpleBadge
+
+Небольшой текстовый badge.
 
 ```tsx
-import { Checkbox } from 'mangalicht-uikit'
-;<Checkbox
-	labelText='Согласен с условиями'
-	defaultChecked={false}
-	onClick={checked => console.log(checked)}
+import { SimpleBadge } from 'mangalicht-uikit'
+
+<SimpleBadge
+  label="Новое"
+  variant="positive"
 />
 ```
 
-Поддерживаются оба режима:
+### Props
 
-```tsx
-<Checkbox checked={checked} onClick={setChecked} />
-```
-
-и:
-
-```tsx
-<Checkbox defaultChecked />
-```
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `label` | `string` | обязательный | Текст badge. |
+| `variant` | `'primary' \| 'destructive' \| 'outline' \| 'positive'` | `'primary'` | Визуальный вариант. |
+| `classNames` | `string` | — | Дополнительный класс. |
 
 ---
 
-## Input
+## StrickBadge
 
-Однострочное поле ввода с поддержкой валидации.
-
-```tsx
-import { useState } from 'react'
-import { Input } from 'mangalicht-uikit'
-
-function Example() {
-	const [value, setValue] = useState('')
-
-	return (
-		<Input
-			label='Email'
-			value={value}
-			onChange={setValue}
-			placeholder='Введите email'
-		/>
-	)
-}
-```
-
-Поддерживает:
-
-- controlled/uncontrolled режим;
-- label;
-- hint;
-- внешнюю ошибку;
-- встроенную валидацию;
-- иконку;
-- очистку;
-- нативные `<input>` props.
-
-Пример поиска:
+Badge для отображения серии/streak с иконкой Flame.
 
 ```tsx
-<Input
-	type='search'
-	icon={<SearchIcon />}
-	clearable
-	value={query}
-	onChange={setQuery}
-	placeholder='Поиск...'
+import { StrickBadge } from 'mangalicht-uikit'
+
+<StrickBadge
+  value={14}
+  animated
 />
 ```
 
-Основные дополнительные props:
+### Props
 
-```ts
-interface InputProps {
-	value?: string
-	defaultValue?: string
-	onChange?: (
-		value: string,
-		event?: React.ChangeEvent<HTMLInputElement>
-	) => void
-
-	label?: string
-	hint?: string
-	errorMessage?: string
-
-	rules?: ValidationRules
-	validateOn?: 'change' | 'blur' | 'submit'
-
-	onValidChange?: (isValid: boolean, error: string | null) => void
-
-	icon?: React.ReactNode
-	clearable?: boolean
-
-	classNames?: string
-	wrapperClassName?: string
-}
-```
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `value` | `number \| string` | обязательный | Значение серии. |
+| `animated` | `boolean` | `true` | Включает периодическую анимацию Flame. |
+| `classNames` | `string` | — | Дополнительный класс. |
+| `ariaLabel` | `string` | `Серия: ${value}` | Accessible label. |
+| `children` | `ReactNode` | — | Дополнительное содержимое. |
 
 ---
 
-## MarkdownField
+## ProfileLevelBadge
 
-Многострочный Markdown-редактор.
-
-```tsx
-import { MarkdownField } from 'mangalicht-uikit'
-;<MarkdownField label='Описание' value={text} onChange={setText} />
-```
-
-Возможности:
-
-- Markdown toolbar;
-- bold;
-- italic;
-- links;
-- lists;
-- code;
-- spoilers;
-- preview;
-- переключение `Написать / Превью`;
-- автоматическое изменение высоты;
-- ограничение максимальной высоты;
-- счётчик символов;
-- валидация.
-
-Пример:
+Badge уровня профиля.
 
 ```tsx
-<MarkdownField
-	value={text}
-	onChange={setText}
-	minRows={5}
-	maxRows={15}
-	showToolbar
-	showPreviewToggle
-	showCounter
-	showSpoilerButton
+import { ProfileLevelBadge } from 'mangalicht-uikit'
+
+<ProfileLevelBadge
+  variant="gold"
+  level={25}
 />
 ```
 
-Markdown обрабатывается через `marked`.
-
-HTML preview дополнительно очищается через `DOMPurify` перед вставкой в DOM.
-
-Это предотвращает вставку непроверенного HTML из пользовательского Markdown.
-
----
-
-## Select
-
-Кастомный выпадающий список.
-
-```tsx
-import { useState } from 'react'
-import { Select } from 'mangalicht-uikit'
-
-function Example() {
-	const [value, setValue] = useState<string>()
-
-	return (
-		<Select
-			options={[
-				{ value: 'apple', label: 'Яблоко' },
-				{ value: 'banana', label: 'Банан' },
-				{
-					value: 'cherry',
-					label: 'Вишня',
-					disabled: true
-				}
-			]}
-			value={value}
-			onChange={setValue}
-			placeholder='Выберите фрукт'
-		/>
-	)
-}
-```
-
-Формат option:
-
-```ts
-interface SelectOption {
-	value: string
-	label: string
-	disabled?: boolean
-}
-```
-
-Основные props:
-
-```ts
-interface SelectProps {
-	options: SelectOption[]
-
-	value?: string
-	defaultValue?: string
-
-	onChange?: (value: string) => void
-
-	disabled?: boolean
-	placeholder?: string
-	name?: string
-	minWidth?: number
-
-	classNames?: string
-}
-```
-
-### Клавиатура
-
-Поддерживаются:
-
-- `Enter`;
-- `Space`;
-- `ArrowUp`;
-- `ArrowDown`;
-- `Home`;
-- `End`;
-- `Escape`.
-
-Select использует listbox-паттерн с `aria-activedescendant`.
-
-Выпадающая панель рендерится через Portal.
-
-Позиционирование выполняется через `@floating-ui/dom`.
-
----
-
-## Slider
-
-Ползунок на основе нативного:
-
-```html
-input[type="range"]
-```
-
-```tsx
-import { Slider } from 'mangalicht-uikit'
-;<Slider min={0} max={100} value={40} onChange={setValue} />
-```
-
-Основные props:
-
-```ts
-interface SliderProps {
-	value?: number
-	defaultValue?: number
-
-	onChange?: (
-		value: number,
-		event?: React.ChangeEvent<HTMLInputElement>
-	) => void
-
-	min?: number
-	max?: number
-	step?: number
-
-	showLabel?: boolean
-	label?: React.ReactNode
-
-	classNames?: string
-	wrapperClassName?: string
-}
-```
-
-Нативный range input обеспечивает:
-
-- клавиатурное управление;
-- touch drag;
-- стрелки;
-- `Home`;
-- `End`;
-- `PageUp`;
-- `PageDown`;
-- стандартную ARIA-семантику.
-
----
-
-## ProgressBar
-
-Индикатор прогресса.
-
-```tsx
-import { ProgressBar } from 'mangalicht-uikit'
-;<ProgressBar min={0} max={100} value={72} />
-```
-
-Props:
-
-```ts
-interface ProgressBarProps {
-	min?: number
-	max?: number
-	value: number
-
-	showLabel?: boolean
-	label?: React.ReactNode
-	ariaLabel?: string
-
-	fillColor?: 'yellow' | 'accent'
-
-	classNames?: string
-	wrapperClassName?: string
-}
-```
-
-`value` может выходить за пределы диапазона — визуальное заполнение при этом ограничивается диапазоном `[min, max]`.
-
----
-
-## TabList
-
-Группа вкладок с анимированным индикатором.
-
-```tsx
-import { useState } from 'react'
-import { TabList } from 'mangalicht-uikit'
-
-function Example() {
-	const [activeTab, setActiveTab] = useState('home')
-
-	return (
-		<TabList
-			tabs={[
-				{ id: 'home', label: 'Главная' },
-				{ id: 'about', label: 'О нас' },
-				{ id: 'settings', label: 'Настройки' }
-			]}
-			activeTab={activeTab}
-			onTabChange={setActiveTab}
-		/>
-	)
-}
-```
-
-Структура вкладки:
-
-```ts
-interface TabItem {
-	id: string
-	label: string
-	icon?: React.ReactNode
-}
-```
-
-Варианты:
-
-```text
-block
-inner
-```
-
-Индикатор автоматически измеряет активную вкладку и перемещается при изменении `activeTab`.
-
----
-
-## Tooltip
-
-Всплывающая подсказка, привязанная к позиции курсора.
-
-```tsx
-import { Tooltip } from 'mangalicht-uikit'
-;<Tooltip content='Подсказка' position='top'>
-	<button>Наведи на меня</button>
-</Tooltip>
-```
-
-Props:
-
-```ts
-interface TooltipProps {
-	content: React.ReactNode
-	children: React.ReactElement
-
-	position?: 'top' | 'bottom'
-	disabled?: boolean
-
-	classNames?: string
-
-	offset?: number
-	showDelay?: number
-	cursorLag?: number
-}
-```
-
-По умолчанию:
-
-```text
-position = "top"
-offset = 12
-showDelay = 500
-cursorLag = 100
-```
-
-Позиция подсказки обновляется через `requestAnimationFrame`.
-
-`cursorLag` задаёт инерционное отставание tooltip от курсора.
-
-При:
-
-```tsx
-cursorLag={0}
-```
-
-сглаживание отключается.
-
-Tooltip использует Portal и автоматически создаёт:
-
-```html
-<div id="uikit-portal-root"></div>
-```
-
----
-
-## Block
-
-Контейнер с заголовком.
-
-```tsx
-import { Block } from 'mangalicht-uikit'
-;<Block variant='outlined' title='Настройки' titleStyle={2} width={400}>
-	<p>Содержимое блока</p>
-</Block>
-```
-
-Варианты:
-
-```text
-default
-outlined
-```
-
-`titleStyle` определяет используемый HTML-заголовок:
-
-```text
-1 → h1
-2 → h2
-3 → h3
-4 → h4
-5 → h5
-6 → h6
-```
-
-Дополнительные возможности:
-
-```ts
-titleChildren?: React.ReactNode
-width?: number
-height?: number
-classNames?: string
-```
-
-`titleChildren` используется для дополнительного содержимого рядом с заголовком.
-
----
-
-## Badge
-
-Значок уровня/достижения.
-
-Поддерживаемые варианты:
+Доступные тиры:
 
 ```text
 bronze
@@ -957,821 +282,1403 @@ ruby
 diamond
 ```
 
-Пример:
+### Props
 
-```tsx
-import { Badge } from 'mangalicht-uikit'
-;<Badge variant='gold' level={10} />
-```
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `variant` | `PLBadgeVariant` | обязательный | Тир badge. |
+| `level` | `number \| string` | — | Уровень. |
+| `label` | `ReactNode` | — | Полностью заменяет текст `Уровень N`. |
+| `shine` | `boolean` | `true` | Анимация блика. |
+| `classNames` | `string` | — | Дополнительный класс. |
 
-Автоматически будет сформировано:
+---
+
+# Block
+
+Контейнер для группировки интерфейса.
+
+Варианты:
 
 ```text
-Уровень 10
+default
+outlined
 ```
 
-Можно передать собственное содержимое:
+### Пример
 
 ```tsx
-<Badge variant='diamond' label='VIP' />
+import { Block, Button } from 'mangalicht-uikit'
+
+<Block
+  variant="outlined"
+  title="Настройки"
+  titleStyle={3}
+  width={500}
+>
+  <Button labelText="Сохранить" />
+</Block>
 ```
 
-Анимацию блика можно отключить:
+`titleChildren` позволяет добавить разрешённый элемент рядом с заголовком. Архитектура компонента допускает SVG и `Button`.
 
-```tsx
-<Badge variant='gold' level={10} shine={false} />
-```
+### Props
 
-Анимация учитывает:
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `variant` | `'default' \| 'outlined'` | обязательный | Вариант контейнера. |
+| `title` | `string` | — | Заголовок. |
+| `titleStyle` | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `2` | HTML-уровень заголовка. |
+| `titleChildren` | `ReactNode \| ReactElement` | — | Дополнительный элемент рядом с title. |
+| `width` | `number` | — | Ширина в px. При отсутствии — `100%`. |
+| `height` | `number` | — | Высота в px. При отсутствии — `100%`. |
+| `classNames` | `string` | — | Класс внутреннего блока. |
+| `children` | `ReactNode \| ReactElement` | — | Содержимое. |
+| `...HTMLAttributes` | — | — | Атрибуты корневого `div`. |
 
-```css
-prefers-reduced-motion
-```
+`ref` указывает на wrapper.
 
 ---
 
-## DropDown
+# Button
 
-Выпадающее меню с поддержкой вложенных подменю.
-
-```tsx
-import { DropDown, DropDownItem } from 'mangalicht-uikit'
-;<DropDown triggerLabel='Меню'>
-	<DropDownItem label='Профиль' onClick={() => {}} />
-
-	<DropDownItem label='Настройки' onClick={() => {}} />
-</DropDown>
-```
-
-Для вложенного меню используется сам `DropDown`:
+Базовая кнопка UI Kit.
 
 ```tsx
-<DropDown triggerLabel='Настройки'>
-	<DropDownItem label='Профиль' />
+import { Button } from 'mangalicht-uikit'
 
-	<DropDown triggerLabel='Внешний вид'>
-		<DropDownItem label='Светлая тема' />
-		<DropDownItem label='Тёмная тема' />
-
-		<DropDown triggerLabel='Дополнительно'>
-			<DropDownItem label='Пункт 1' />
-			<DropDownItem label='Пункт 2' />
-		</DropDown>
-	</DropDown>
-</DropDown>
+<Button
+  labelText="Сохранить"
+  variant="highlight"
+  buttonType="rounded"
+  size="default"
+  onClick={handleSave}
+/>
 ```
 
-Архитектура DropDown построена на контексте.
+## Variants
 
-Корневой `DropDown` создаёт состояние меню, а вложенные экземпляры получают его через `DropDownContext`.
-
-Поддерживаются:
-
-- произвольная глубина вложенности;
-- flyout-подменю;
-- закрытие после выбора;
-- блокировка;
-- кастомный trigger;
-- иконки;
-- фиксированная ширина корневого меню.
-
-Основные props:
-
-```ts
-interface DropDownProps {
-	children: React.ReactNode
-
-	trigger?: React.ReactElement
-	triggerLabel?: string
-
-	width?: number
-	disabled?: boolean
-
-	closeOnItemClick?: boolean
-
-	onClick?: (event: React.MouseEvent<HTMLLIElement>) => void
-
-	icon?: React.ReactNode
-}
+```text
+default
+highlight
+bordered
+borderedAccent
+ghost
+transparent
 ```
 
-Элемент меню:
+## Button types
 
-```ts
-interface DropDownItemProps {
-	label: string
-	onClick?: (event: React.MouseEvent<HTMLLIElement>) => void
-	disabled?: boolean
-	icon?: React.ReactNode
-	classNames?: string
-}
+```text
+default
+rounded
+square
+circle
 ```
+
+## Sizes
+
+```text
+default
+sm
+xsm
+```
+
+### Иконки
+
+```tsx
+import { SearchIcon } from 'mangalicht-uikit'
+
+<Button
+  labelText="Поиск"
+  iconStart={<SearchIcon />}
+/>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `labelText` | `string` | — | Текст кнопки. |
+| `variant` | `ButtonVariants` | `'default'` | Визуальный вариант. |
+| `buttonType` | `'default' \| 'rounded' \| 'square' \| 'circle'` | `'default'` | Форма кнопки. |
+| `size` | `'default' \| 'sm' \| 'xsm'` | `'default'` | Размер. |
+| `isAlert` | `boolean` | `false` | Alert/красное состояние. |
+| `iconStart` | `ReactNode` | — | Иконка перед текстом. |
+| `iconEnd` | `ReactNode` | — | Иконка после текста. |
+| `animation` | `'default' \| 'none'` | `'default'` | Режим анимации. |
+| `disabled` | `boolean` | `false` | Блокировка. |
+| `classNames` | `string` | — | Дополнительный класс. |
+| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Нативный type. |
+| `onClick` | `MouseEventHandler` | — | Обработчик клика. |
+| `...ButtonHTMLAttributes` | — | — | Остальные атрибуты `button`. |
+
+`ref` указывает на нативный `<button>`.
 
 ---
 
-## Carousel
+# Carousel
 
-Карусель со слайдами, активным раскрытым слайдом и компактными соседними слайдами.
+Карусель с бесконечной навигацией. Поддерживает обычный режим и карточный режим.
 
 ```tsx
 import { Carousel } from 'mangalicht-uikit'
-;<Carousel
-	slides={[
-		{
-			id: 'one',
-			content: <div>Первый слайд</div>
-		},
-		{
-			id: 'two',
-			content: <div>Второй слайд</div>
-		},
-		{
-			id: 'three',
-			content: <div>Третий слайд</div>
-		}
-	]}
+
+<Carousel
+  slides={[
+    { id: '1', content: <Card title="One" /> },
+    { id: '2', content: <Card title="Two" /> },
+    { id: '3', content: <Card title="Three" /> },
+  ]}
+  showArrows
+  showDots
 />
 ```
 
-Структура слайда:
+## Card variant
 
-```ts
-interface CarouselSlide {
-	id: string
-	content: React.ReactNode
-}
-```
-
-Основные props:
-
-```ts
-interface CarouselProps {
-	slides: CarouselSlide[]
-
-	activeIndex?: number
-	defaultActiveIndex?: number
-
-	onSlideChange?: (index: number) => void
-
-	autoPlayInterval?: number
-
-	showArrows?: boolean
-	showDots?: boolean
-
-	height?: number
-	collapsedWidth?: number
-	gap?: number
-
-	classNames?: string
-}
-```
-
-Поддерживаются controlled и uncontrolled режимы:
+Для карточной карусели:
 
 ```tsx
 <Carousel
-	slides={slides}
-	activeIndex={activeIndex}
-	onSlideChange={setActiveIndex}
+  variant="card"
+  slides={slides}
+  cardWidth={314}
+  cardHeight={346}
+  swipe
+  showDots
+  dotsPosition="inside"
 />
 ```
 
-или:
+В `card`-варианте соседние карточки не должны визуально выступать за viewport; свайп включён по умолчанию.
 
-```tsx
-<Carousel slides={slides} defaultActiveIndex={0} />
-```
-
-### Архитектура бесконечной прокрутки
-
-Carousel использует несколько копий массива слайдов:
-
-```text
-COPY 0
-COPY 1
-COPY 2  ← центральная копия
-COPY 3
-COPY 4
-```
-
-После достижения края карусель выполняет невидимый reset в центральную копию.
-
-Reset выполняется с временным отключением CSS transition и с принудительным reflow через `offsetWidth`, что предотвращает визуальное проигрывание reset-анимации.
-
-Размер активного слайда рассчитывается относительно ширины контейнера.
-
-Ширина контейнера отслеживается через `ResizeObserver`.
-
----
-
-# Хуки
-
-Все переиспользуемые хуки находятся в:
-
-```text
-src/hooks/
-```
-
-## `useValidation`
-
-Общая система валидации для:
-
-- `Input`;
-- `MarkdownField`.
-
-Поддерживает правила:
-
-```text
-required
-minLength
-maxLength
-pattern
-validate
-```
-
-Режим запуска:
-
-```text
-blur
-change
-submit
-```
-
-Типы `ValidationRules` и `ValidateOn` экспортируются из пакета.
-
-```tsx
-import type { ValidationRules, ValidateOn } from 'mangalicht-uikit'
-```
-
----
-
-## `useAnchoredPosition`
-
-Общий механизм позиционирования floating-элементов относительно якоря.
-
-Используется для компонентов, которым необходимо отображать панели вне обычного DOM-потока.
-
----
-
-## `useClickOutside`
-
-Отслеживает клики за пределами заданного элемента.
-
-Используется для закрытия интерактивных floating-компонентов.
-
----
-
-## `useAutosizeTextarea`
-
-Автоматически изменяет высоту textarea в зависимости от содержимого.
-
-Поддерживает:
+### CarouselSlide
 
 ```ts
-minRows
-maxRows
-enabled
-```
-
-Используется `MarkdownField`.
-
-При достижении `maxRows` появляется внутренний scroll.
-
----
-
-## `useAnimationTrigger`
-
-Запускает одноразовую анимацию после изменения указанного значения.
-
-```tsx
-const animate = useAnimationTrigger(value, 500)
-```
-
-Первоначальный render игнорируется.
-
----
-
-## `useMouseTracking`
-
-Универсальное отслеживание положения мыши.
-
-Возвращает:
-
-```ts
-{
-	;(isHovering, handlers)
+interface CarouselSlide {
+  id: string
+  content: React.ReactNode
 }
 ```
 
-Используется `Tooltip`, но сам хук не связан с tooltip и может применяться в других сценариях.
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `slides` | `CarouselSlide[]` | обязательный | Массив слайдов. |
+| `activeIndex` | `number` | — | Controlled active index. |
+| `defaultActiveIndex` | `number` | `0` | Начальный index uncontrolled. |
+| `onSlideChange` | `(index: number) => void` | — | Вызывается после смены слайда. |
+| `autoPlayInterval` | `number` | — | Интервал autoplay в ms. |
+| `showArrows` | `boolean` | `true` | Показывать стрелки. |
+| `showDots` | `boolean` | `true` | Показывать dots. |
+| `height` | `number` | — | Высота карусели. |
+| `collapsedWidth` | `number` | `86` | Ширина неактивного слайда в default-режиме. |
+| `gap` | `number` | `6` | Отступ между слайдами. |
+| `variant` | `'default' \| 'card'` | `'default'` | Режим карусели. |
+| `cardWidth` | `number` | `314` | Ширина карточки в card-режиме. |
+| `cardHeight` | `number` | `346` | Высота карточки в card-режиме. |
+| `swipe` | `boolean` | `variant === 'card'` | Разрешить свайп. |
+| `dotsPosition` | `'outside' \| 'inside'` | `'outside'` | Расположение dots. |
+| `classNames` | `string` | — | Дополнительный класс. |
+
+`activeIndex` делает карусель controlled.
 
 ---
 
-## `useSmoothFollow`
+# Checkbox
 
-Плавное следование DOM-элемента за целевой координатой.
-
-Использует:
-
-```text
-requestAnimationFrame
-```
-
-и экспоненциальное сглаживание.
-
-Основной параметр:
-
-```ts
-lag
-```
-
-Чем больше `lag`, тем сильнее инерционное отставание.
-
----
-
-# Иконки
-
-Иконки экспортируются из корня пакета.
-
-Доступны:
+Чекбокс на базе нативного `input[type="checkbox"]`.
 
 ```tsx
-import {
-	ChevronIcon,
-	SearchIcon,
-	CloseIcon,
-	LoadingIcon,
-	BoldIcon,
-	ItalicIcon,
-	LinkIcon,
-	ListIcon,
-	CodeIcon,
-	EyeIcon,
-	PencilIcon
-} from 'mangalicht-uikit'
-```
-
-Исходники находятся в:
-
-```text
-src/icons/
-```
-
-Иконки реализованы как React-компоненты.
-
----
-
-# Стили и CSS Modules
-
-Каждый компонент хранит свои стили рядом с исходным кодом:
-
-```text
-Button/
-├── index.tsx
-├── Button.module.scss
-├── Button.stories.tsx
-└── _Button-vars.scss
-```
-
-Компонент импортирует собственный CSS Module:
-
-```tsx
-import styles from './Button.module.scss'
-```
-
-Классы генерируются Vite с уникальными именами.
-
-В конфигурации используется:
-
-```ts
-generateScopedName: '[name]__[local]___[hash:base64:5]'
-```
-
-Это снижает вероятность конфликтов CSS библиотеки со стилями приложения-потребителя.
-
----
-
-# Общие SCSS-ресурсы
-
-В:
-
-```text
-src/shared/
-```
-
-находятся:
-
-```text
-normalize.scss
-theme-vars.scss
-_media.scss
-_mixins.scss
-_utils.scss
-```
-
-и:
-
-```text
-shared/scss/global-styles.scss
-```
-
-Они используются для:
-
-- нормализации;
-- темизации;
-- глобальных стилей;
-- media queries;
-- mixins;
-- общих SCSS utilities.
-
-При сборке исходные SCSS-файлы также копируются в:
-
-```text
-dist/scss/
-```
-
-Это позволяет потребителю при необходимости использовать исходные SCSS-ресурсы темы и общих стилей.
-
----
-
-# Portal
-
-Для floating-компонентов используется общий portal root:
-
-```html
-<div id="uikit-portal-root"></div>
-```
-
-Он создаётся автоматически функцией:
-
-```text
-src/shared/utils/portalRoot.ts
-```
-
-Если элемента ещё нет, библиотека создаёт его внутри:
-
-```html
-<body></body>
-```
-
-Portal root:
-
-```css
-position: fixed;
-inset: 0;
-pointer-events: none;
-z-index: 10000;
-```
-
-Отдельные floating-панели могут включать `pointer-events` самостоятельно.
-
-Это позволяет:
-
-- не зависеть от `overflow: hidden` родителя;
-- избежать проблем с `z-index`;
-- вынести floating UI из локального stacking context.
-
-Portal используется, в частности, для:
-
-- `Tooltip`;
-- `Select`;
-- floating-панелей `DropDown`.
-
----
-
-# Storybook
-
-Storybook используется как основная среда разработки и визуального тестирования компонентов.
-
-Запуск:
-
-```bash
-npm run dev
-```
-
-После запуска Storybook доступен по адресу:
-
-```text
-http://localhost:6006
-```
-
-Story-файлы находятся непосредственно рядом с компонентами:
-
-```text
-src/components/Button/Button.stories.tsx
-src/components/Input/Input.stories.tsx
-src/components/Carousel/Carousel.stories.tsx
-```
-
-Это позволяет изменять компонент и его документацию в одном месте.
-
-## Темы Storybook
-
-Storybook предоставляет глобальный toolbar:
-
-```text
-Light
-Dark
-```
-
-Переключение изменяет:
-
-```html
-data-theme
-```
-
-на `document.documentElement`.
-
----
-
-# Сборка Storybook
-
-Для создания статической версии:
-
-```bash
-npm run build-storybook
-```
-
-Результатом является статическая сборка Storybook.
-
----
-
-# Сборка библиотеки
-
-Для production-сборки:
-
-```bash
-npm run build
-```
-
-Используется:
-
-```text
-Vite
-```
-
-Конфигурация находится в:
-
-```text
-vite.config.ts
-```
-
-## Что делает сборка
-
-Vite:
-
-1. собирает TypeScript/React;
-2. обрабатывает SCSS;
-3. создаёт CSS Modules;
-4. генерирует declaration files;
-5. создаёт sourcemaps;
-6. исключает React из bundle;
-7. копирует общие SCSS-файлы;
-8. формирует ESM и CommonJS entry points.
-
----
-
-# Структура `dist`
-
-Публичная структура пакета определяется `package.json`.
-
-Основные entry points:
-
-```text
-dist/
-├── index.js
-├── index.cjs
-├── index.d.ts
-├── index.css
-├── components/
-├── hooks/
-├── icons/
-├── shared/
-└── scss/
-```
-
-Конкретный набор внутренних JS-файлов формируется Vite/Rollup на основании исходников `src`.
-
----
-
-# Публикация пакета
-
-В текущей версии проекта **нет `npm run publish`**.
-
-Для подготовки npm-пакета используется:
-
-```bash
-npm run pack
-```
-
-Команда выполняет:
-
-```bash
-npm run build
-npm pack
-```
-
-После этого создаётся `.tgz` архив пакета.
-
-Для публикации в npm стандартным способом:
-
-```bash
-npm publish
-```
-
-Перед публикацией рекомендуется проверить:
-
-```bash
-npm pack --dry-run
-```
-
-и убедиться, что в пакет попадает только необходимое содержимое.
-
-Публичное содержимое ограничивается настройкой:
-
-```json
-{
-	"files": ["dist"]
-}
-```
-
----
-
-# Экспорты пакета
-
-Главная точка входа:
-
-```text
-src/index.ts
-```
-
-Она экспортирует:
-
-```text
-components
-icons
-```
-
-и подключает глобальные SCSS:
-
-```text
-normalize.scss
-theme-vars.scss
-global-styles.scss
-```
-
-## Компоненты
-
-Через:
-
-```tsx
-import {
-	Badge,
-	Block,
-	Button,
-	Carousel,
-	Checkbox,
-	DropDown,
-	DropDownItem,
-	Input,
-	MarkdownField,
-	ProgressBar,
-	Select,
-	Slider,
-	Switch,
-	TabList,
-	Tooltip
-} from 'mangalicht-uikit'
-```
-
-## Типы
-
-Типы компонентов также экспортируются:
-
-```tsx
-import type {
-	ButtonProps,
-	SelectProps,
-	InputProps,
-	SliderProps,
-	CarouselProps,
-	CarouselSlide,
-	DropDownProps,
-	DropDownItemProps,
-	MarkdownFieldProps,
-	ProgressBarProps,
-	SwitchProps,
-	CheckboxProps,
-	TabListProps,
-	BadgeProps
-} from 'mangalicht-uikit'
-```
-
-Также доступны:
-
-```tsx
-import type { ValidationRules, ValidateOn } from 'mangalicht-uikit'
-```
-
-## Иконки
-
-```tsx
-import {
-	ChevronIcon,
-	CloseIcon,
-	SearchIcon,
-	LoadingIcon,
-	BoldIcon,
-	ItalicIcon,
-	LinkIcon,
-	ListIcon,
-	CodeIcon,
-	EyeIcon,
-	PencilIcon
-} from 'mangalicht-uikit'
-```
-
----
-
-# Архитектурные принципы
-
-## 1. Компоненты изолированы
-
-Каждый компонент содержит собственную реализацию:
-
-```text
-Component/
-├── index.tsx
-├── Component.module.scss
-├── _Component-vars.scss
-└── Component.stories.tsx
-```
-
-Это упрощает:
-
-- поддержку;
-- тестирование;
-- изменение стилей;
-- развитие компонентов независимо друг от друга.
-
----
-
-## 2. Поведение выносится в хуки
-
-Компоненты не должны содержать универсальную логику, если её можно переиспользовать.
-
-Например:
-
-```text
-Tooltip
- ├── useMouseTracking
- └── useSmoothFollow
-
-Select
- ├── useAnchoredPosition
- └── useClickOutside
-
-Input
- └── useValidation
-
-MarkdownField
- ├── useValidation
- └── useAutosizeTextarea
-```
-
----
-
-## 3. Нативные HTML-элементы используются там, где это возможно
-
-Например:
-
-```text
-Switch     → input[type=checkbox]
-Checkbox   → input[type=checkbox]
-Slider     → input[type=range]
-Button     → button
-Input      → input
-Markdown   → textarea
-```
-
-Это позволяет сохранять нативное поведение браузера и доступность.
-
----
-
-## 4. Controlled / uncontrolled API
-
-Компоненты формы, где это уместно, поддерживают оба режима.
-
-Controlled:
-
-```tsx
-<Input value={value} onChange={setValue} />
+import { Checkbox } from 'mangalicht-uikit'
+
+<Checkbox
+  labelText="Согласен"
+  checked={accepted}
+  onClick={setAccepted}
+/>
 ```
 
 Uncontrolled:
 
 ```tsx
-<Input defaultValue='Hello' />
+<Checkbox
+  labelText="Запомнить меня"
+  defaultChecked
+/>
+```
+
+## Variants
+
+```text
+default
+radio
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `checked` | `boolean` | — | Controlled состояние. |
+| `defaultChecked` | `boolean` | `false` | Начальное uncontrolled состояние. |
+| `onClick` | `(checked: boolean) => void` | — | Callback с новым состоянием. |
+| `variant` | `'default' \| 'radio'` | `'default'` | Внешний вид. |
+| `labelText` | `string` | — | Подпись. |
+| `disabled` | `boolean` | `false` | Блокировка. |
+| `name` | `string` | — | Native input name. |
+| `classNames` | `string` | — | Класс wrapper. |
+| `className` | `string` | — | Также поддерживается из `InputHTMLAttributes`. |
+| `...InputHTMLAttributes` | — | — | Остальные атрибуты input. |
+
+`ref` указывает на native checkbox.
+
+---
+
+# DnD
+
+DnD состоит из двух компонентов:
+
+```tsx
+<DragArea>
+  <DragElement id="one">...</DragElement>
+  <DragElement id="two">...</DragElement>
+</DragArea>
+```
+
+**Состояние сортировки находится внутри `DragArea`.** Внешнему коду не нужно вручную менять массив после каждого drag.
+
+Компонент использует Pointer Events, FLIP-подобное позиционирование и плавное освобождение ячейки.
+
+## DragArea
+
+```tsx
+import {
+  DragArea,
+  DragElement,
+} from 'mangalicht-uikit'
+
+<DragArea
+  columns={3}
+  gap={16}
+  transitionSpeed={300}
+  onOrderChange={(order, activeId) => {
+    console.log(order, activeId)
+  }}
+>
+  <DragElement id="a">A</DragElement>
+  <DragElement id="b">B</DragElement>
+  <DragElement id="c">C</DragElement>
+</DragArea>
+```
+
+### Props DragArea
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `children` | `DragElement \| DragElement[]` | обязательный | Только `DragElement`. |
+| `columns` | `number \| 'auto'` | `'auto'` | Количество колонок. `auto` рассчитывается по ширине. |
+| `gap` | `number` | `12` | Общий gap в px. |
+| `rowGap` | `number` | `gap` | Вертикальный gap. |
+| `columnGap` | `number` | `gap` | Горизонтальный gap. |
+| `transitionSpeed` | `number` | `300` | Скорость CSS transition. |
+| `className` | `string` | — | Класс области. |
+| `style` | `CSSProperties` | — | Inline style. |
+| `onOrderChange` | `(order, activeId) => void` | — | Новый порядок после drop. |
+
+### DragElement
+
+```tsx
+<DragElement
+  id="card-1"
+  locked={false}
+  onDragStart={id => console.log('start', id)}
+  onDragEnd={(id, event) => {
+    console.log(event.cancelled, event.order)
+  }}
+>
+  <MyCard />
+</DragElement>
+```
+
+### Props DragElement
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `id` | `string` | обязательный | Уникальный идентификатор. |
+| `children` | `ReactNode` | обязательный | Перетаскиваемое содержимое. |
+| `disabled` | `boolean` | `false` | Полностью отключает drag. |
+| `locked` | `boolean` | `false` | Элемент не перемещается и занимает фиксированную позицию. |
+| `className` | `string` | — | Класс wrapper. |
+| `style` | `CSSProperties` | — | Inline style wrapper. |
+| `onDragStart` | `(id: string) => void` | — | Начало drag. |
+| `onDragEnd` | `(id, {cancelled, order}) => void` | — | Завершение или отмена drag. |
+
+`disabled` и `locked` влияют на сортировку одинаково: элемент не может быть активным. `locked` дополнительно означает, что его позиция сохраняется при перестановке остальных элементов.
+
+---
+
+# DropDown
+
+Выпадающее меню с вложенными flyout-подменю.
+
+## Простое меню
+
+```tsx
+import {
+  DropDown,
+  DropDownItem,
+} from 'mangalicht-uikit'
+
+<DropDown triggerLabel="Меню">
+  <DropDownItem
+    label="Профиль"
+    onClick={() => openProfile()}
+  />
+  <DropDownItem
+    label="Настройки"
+    onClick={() => openSettings()}
+  />
+</DropDown>
+```
+
+## Кастомный trigger
+
+```tsx
+<DropDown
+  trigger={
+    <Button
+      labelText="Действия"
+      variant="ghost"
+    />
+  }
+>
+  <DropDownItem label="Редактировать" />
+  <DropDownItem label="Удалить" disabled />
+</DropDown>
+```
+
+## Вложенное меню
+
+```tsx
+<DropDown triggerLabel="Меню">
+  <DropDownItem label="Главная" />
+
+  <DropDown
+    triggerLabel="Настройки"
+    icon={<SettingsIcon />}
+  >
+    <DropDownItem label="Профиль" />
+    <DropDownItem label="Безопасность" />
+
+    <DropDown
+      triggerLabel="Дополнительно"
+    >
+      <DropDownItem label="Экспериментальные настройки" />
+    </DropDown>
+  </DropDown>
+</DropDown>
+```
+
+### DropDown Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `children` | `ReactNode` | обязательный | `DropDownItem` и/или вложенные `DropDown`. |
+| `trigger` | `ReactElement` | — | Кастомный trigger корневого меню. |
+| `triggerLabel` | `string` | `'Меню'` | Текст default trigger или строки подменю. |
+| `width` | `number` | — | Фиксированная ширина root panel в px. |
+| `disabled` | `boolean` | `false` | Отключает открытие. |
+| `closeOnItemClick` | `boolean` | `true` | Закрывать root после leaf item. |
+| `onClick` | `(event: MouseEvent<HTMLLIElement>) => void` | — | Для вложенного DropDown. |
+| `icon` | `ReactNode` | — | Иконка строки вложенного DropDown. |
+| `classNames` | `string` | — | Дополнительный класс. |
+| `...IUIKitProps` | — | — | Общие UI Kit props. |
+
+Root меню закрывается при клике вне всего дерева панелей и при scroll страницы. Scroll внутри floating-панели не закрывает меню.
+
+### DropDownItem Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `label` | `string` | обязательный | Текст. |
+| `onClick` | `(event: MouseEvent<HTMLLIElement>) => void` | — | Обработчик. |
+| `disabled` | `boolean` | `false` | Блокировка. |
+| `icon` | `ReactNode` | — | Иконка перед текстом. |
+| `classNames` | `string` | — | Дополнительный класс. |
+
+---
+
+# ExpandableCard
+
+Карточка, которая увеличивается после задержки при hover/focus. На touch-устройствах раскрытие происходит двойным тапом, а клик вне раскрытой карточки закрывает её.
+
+```tsx
+import {
+  ExpandableCard,
+  ExpandableElement,
+} from 'mangalicht-uikit'
+
+<ExpandableCard
+  width={166}
+  height={220}
+  expandedWidth={318}
+  expandedHeight={398}
+  showDelay={700}
+>
+  <ExpandableElement
+    initialClassName="collapsed-content"
+    expandedClassName="expanded-content"
+  >
+    Контент
+  </ExpandableElement>
+</ExpandableCard>
+```
+
+`ExpandableElement` использует context родительской карточки и получает текущее состояние expanded.
+
+### ExpandableCard Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `children` | `ReactNode` | — | Содержимое. |
+| `width` | `number \| string` | `166` | Начальная ширина. |
+| `height` | `number \| string` | `220` | Начальная высота. |
+| `expandedWidth` | `number \| string` | `318` | Ширина в expanded состоянии. |
+| `expandedHeight` | `number \| string` | `398` | Высота в expanded состоянии. |
+| `showDelay` | `number` | `700` | Задержка hover в ms. |
+| `animationDuration` | `number` | `360` | Длительность перехода в ms. |
+| `disabled` | `boolean` | `false` | Отключает раскрытие. |
+| `className` | `string` | — | Класс карточки. |
+| `style` | `CSSProperties` | — | Inline style карточки. |
+| `...HTMLAttributes` | — | — | Атрибуты `article`. |
+
+### ExpandableElement Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `children` | `ReactNode` | — | Содержимое. |
+| `initialClassName` | `string` | — | Класс в collapsed состоянии. |
+| `expandedClassName` | `string` | — | Класс в expanded состоянии. |
+| `className` | `string` | — | Общий класс. |
+| `style` | `CSSProperties` | — | Inline style. |
+| `...HTMLAttributes` | — | — | Атрибуты `div`. |
+
+> `ExpandableElement` должен находиться внутри `ExpandableCard`. Иначе компонент выбрасывает ошибку context.
+
+---
+
+# Image
+
+Обёртка над native `<img>` с поддержкой `<picture>/<source>`.
+
+```tsx
+import { Image } from 'mangalicht-uikit'
+
+<Image
+  src="/images/cover.jpg"
+  alt="Обложка"
+  width={640}
+  height={360}
+  sources={[
+    {
+      srcSet: '/images/cover.avif',
+      type: 'image/avif'
+    },
+    {
+      srcSet: '/images/cover-mobile.jpg',
+      media: '(max-width: 640px)'
+    }
+  ]}
+/>
+```
+
+### ImageSource
+
+```ts
+interface ImageSource {
+  srcSet: string
+  media?: string
+  type?: string
+}
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `sources` | `ImageSource[]` | — | Дополнительные `<source>`. |
+| `classNames` | `string` | — | Класс изображения. |
+| `...ImgHTMLAttributes` | — | — | Остальные native image props. |
+
+---
+
+# Input
+
+Однострочный input с controlled/uncontrolled режимами и встроенной валидацией.
+
+```tsx
+import { Input } from 'mangalicht-uikit'
+
+<Input
+  label="Email"
+  placeholder="mail@example.com"
+  value={email}
+  onChange={setEmail}
+  rules={{
+    required: true,
+    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  }}
+  validateOn="blur"
+/>
+```
+
+### Search input
+
+```tsx
+<Input
+  type="search"
+  icon={<SearchIcon />}
+  clearable
+  value={query}
+  onChange={setQuery}
+  placeholder="Поиск..."
+/>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `value` | `string` | — | Controlled значение. |
+| `defaultValue` | `string` | — | Начальное uncontrolled значение. |
+| `onChange` | `(value, event?) => void` | — | Изменение значения. |
+| `onValidChange` | `(isValid, error) => void` | — | Изменение результата валидации. |
+| `rules` | `ValidationRules` | — | Правила валидации. |
+| `validateOn` | `'blur' \| 'change' \| 'submit'` | `'blur'` | Когда валидировать. |
+| `label` | `string` | — | Label. |
+| `hint` | `string` | — | Hint, если нет ошибки. |
+| `errorMessage` | `string` | — | Внешняя ошибка; имеет приоритет. |
+| `clearable` | `boolean` | `false` | Показывать очистку при наличии значения. |
+| `icon` | `ReactNode` | — | Иконка слева. |
+| `classNames` | `string` | — | Класс input. |
+| `wrapperClassName` | `string` | — | Класс wrapper. |
+| `disabled` | `boolean` | `false` | Native disabled. |
+| `...InputHTMLAttributes` | — | — | Остальные native props. |
+
+`ref` указывает на native `<input>`.
+
+---
+
+# Markdown
+
+Markdown API разделён на три компонента:
+
+- `MarkdownInput` — редактор;
+- `MarkdownPreview` — preview;
+- `MarkdownComment` — готовая композиция редактора комментария.
+
+---
+
+## MarkdownInput
+
+Textarea с autosize, Markdown toolbar и Undo/Redo.
+
+```tsx
+import { MarkdownInput } from 'mangalicht-uikit'
+
+<MarkdownInput
+  value={text}
+  onChange={setText}
+  minRows={4}
+  maxRows={12}
+  showToolbar
+  maxLength={2000}
+/>
+```
+
+Toolbar появляется около выделенного текста, а не следует за курсором.
+
+### Toolbar actions
+
+```text
+bold
+italic
+strike
+code
+spoiler
+link
+quote
+unordered-list
+ordered-list
+```
+
+Пример callback:
+
+```tsx
+<MarkdownInput
+  value={text}
+  onChange={setText}
+  onToolbarAction={action => {
+    console.log(action)
+  }}
+/>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `value` | `string` | — | Controlled значение. |
+| `defaultValue` | `string` | `''` | Начальное значение. |
+| `onChange` | `(value: string) => void` | — | Изменение текста. |
+| `placeholder` | `string` | — | Placeholder. |
+| `disabled` | `boolean` | `false` | Отключить редактор. |
+| `readOnly` | `boolean` | `false` | Только чтение. |
+| `minRows` | `number` | `3` | Минимум строк. |
+| `maxRows` | `number` | `15` | Максимум строк. |
+| `historySize` | `number` | `100` | Размер Undo/Redo history. |
+| `maxLength` | `number` | — | Максимальная длина. |
+| `showToolbar` | `boolean` | `true` | Показывать floating toolbar. |
+| `className` | `string` | — | Класс wrapper. |
+| `textareaClassName` | `string` | — | Класс textarea. |
+| `children` | `ReactNode` | — | Дополнительное содержимое. |
+| `onToolbarAction` | `(action) => void` | — | Callback toolbar action. |
+| `onBlur` | `FocusEventHandler` | — | Blur textarea. |
+| `onFocus` | `FocusEventHandler` | — | Focus textarea. |
+| `...TextareaHTMLAttributes` | — | — | Остальные native props. |
+
+История оптимизирована для ввода: изменения внутри слова не создают отдельную историю на каждый символ; точки фиксации определяются завершением слова/Enter/пунктуацией и действиями toolbar.
+
+---
+
+## MarkdownPreview
+
+Рендерит Markdown в безопасный HTML.
+
+```tsx
+import { MarkdownPreview } from 'mangalicht-uikit'
+
+<MarkdownPreview
+  markdown="## Заголовок
+
+**Жирный текст**"
+  emptyText="Пока ничего нет"
+/>
+```
+
+Используются `marked` и `DOMPurify`.
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `markdown` | `string` | обязательный | Markdown. |
+| `emptyText` | `string` | — | Текст для пустого preview. |
+| `className` | `string` | — | Дополнительный класс. |
+
+---
+
+## MarkdownComment
+
+Готовая форма комментария: Write/Preview, toolbar, validation и counter.
+
+```tsx
+import { MarkdownComment } from 'mangalicht-uikit'
+
+<MarkdownComment
+  label="Комментарий"
+  value={comment}
+  onChange={setComment}
+  showPreviewToggle
+  showCounter
+  showToolbar
+  maxLength={1000}
+  rules={{ required: true }}
+/>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `value` | `string` | — | Controlled значение. |
+| `defaultValue` | `string` | `''` | Начальное uncontrolled значение. |
+| `onChange` | `(value, event?) => void` | — | Изменение текста. |
+| `maxLength` | `number` | — | Максимальная длина. |
+| `rules` | `ValidationRules` | — | Правила валидации. |
+| `validateOn` | `ValidateOn` | `'blur'` | Момент валидации. |
+| `onValidChange` | `(isValid, error) => void` | — | Результат валидации. |
+| `errorMessage` | `string` | — | Внешняя ошибка. |
+| `hint` | `string` | — | Подсказка. |
+| `label` | `string` | — | Label. |
+| `showPreviewToggle` | `boolean` | — | Write/Preview tabs. |
+| `showCounter` | `boolean` | — | Счётчик символов. |
+| `showToolbar` | `boolean` | — | Markdown toolbar. |
+| `minRows` | `number` | — | Минимум строк. |
+| `maxRows` | `number` | — | Максимум строк. |
+| `historySize` | `number` | — | Размер истории. |
+| `showSpoilerButton` | `boolean` | — | Кнопка spoiler. |
+| `wrapperClassName` | `string` | — | Класс root wrapper. |
+| `textareaClassName` | `string` | — | Класс textarea. |
+| `onBlur` | `FocusEventHandler` | — | Blur. |
+| `onFocus` | `FocusEventHandler` | — | Focus. |
+| `...TextareaHTMLAttributes` | — | — | Остальные textarea props. |
+
+---
+
+# ProgressBar
+
+Горизонтальный progress indicator.
+
+```tsx
+import { ProgressBar } from 'mangalicht-uikit'
+
+<ProgressBar
+  min={0}
+  max={100}
+  value={72}
+  fillColor="accent"
+/>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `min` | `number` | `0` | Минимум. |
+| `max` | `number` | `100` | Максимум. |
+| `value` | `number` | обязательный | Текущее значение. |
+| `showLabel` | `boolean` | `true` | Показывать значение. |
+| `label` | `ReactNode` | — | Пользовательская подпись. |
+| `ariaLabel` | `string` | — | Accessible label. |
+| `fillColor` | `'yellow' \| 'accent'` | — | Цвет заполнения. |
+| `classNames` | `string` | — | Класс track. |
+| `wrapperClassName` | `string` | — | Класс wrapper. |
+
+Значение визуально ограничивается диапазоном `[min, max]`.
+
+---
+
+# ScrollArea
+
+Custom scrollbar поверх обычного scroll container.
+
+```tsx
+import { ScrollArea } from 'mangalicht-uikit'
+
+<ScrollArea
+  visibleMode="scroll"
+  axis="vertical"
+>
+  {items}
+</ScrollArea>
+```
+
+## Режимы scrollbar
+
+```text
+default  — scrollbar виден при overflow
+none     — scrollbar скрыт
+scroll   — scrollbar появляется во время scrolling
+```
+
+## Оси
+
+```text
+vertical
+horizontal
+both
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `children` | `ReactNode` | обязательный | Scrollable content. |
+| `visibleMode` | `'default' \| 'none' \| 'scroll'` | `'default'` | Видимость scrollbar. |
+| `axis` | `'vertical' \| 'horizontal' \| 'both'` | — | Направление scroll. |
+| `onScroll` | `(event: UIEvent<HTMLDivElement>) => void` | — | Callback scroll. |
+| `classNames` | `string` | — | Класс root. |
+| `...HTMLAttributes` | — | — | Остальные div props. |
+
+### Ref API
+
+`ScrollArea` экспортирует `ScrollAreaHandle` / `ScrollAreaRef`.
+
+Доступный метод:
+
+```ts
+scrollTo(options: ScrollToOptions): void
+```
+
+Пример:
+
+```tsx
+const ref = useRef<ScrollAreaRef>(null)
+
+<ScrollArea ref={ref}>
+  ...
+</ScrollArea>
+
+ref.current?.scrollTo({
+  top: 500,
+  behavior: 'smooth',
+})
+```
+
+---
+
+# Select
+
+Кастомный accessible listbox.
+
+```tsx
+import { Select } from 'mangalicht-uikit'
+
+<Select
+  options={[
+    { value: 'manga', label: 'Манга' },
+    { value: 'novel', label: 'Новелла' },
+    { value: 'disabled', label: 'Недоступно', disabled: true },
+  ]}
+  value={type}
+  onChange={setType}
+  placeholder="Выберите тип"
+/>
+```
+
+### SelectOption
+
+```ts
+interface SelectOption {
+  value: string
+  label: string
+  disabled?: boolean
+}
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `options` | `SelectOption[]` | обязательный | Опции. |
+| `value` | `string` | — | Controlled значение. |
+| `defaultValue` | `string` | — | Начальное значение. |
+| `onChange` | `(value: string) => void` | — | Выбор option. |
+| `disabled` | `boolean` | `false` | Отключить select. |
+| `classNames` | `string` | — | Класс trigger. |
+| `placeholder` | `string` | — | Placeholder. |
+| `name` | `string` | — | Создаёт hidden input для form submit. |
+| `minWidth` | `number` | — | Минимальная ширина. |
+| `...ButtonHTMLAttributes` | — | — | Остальные trigger props. |
+
+Панель рендерится через Portal и позиционируется относительно trigger.
+
+Клавиатурная навигация включает:
+
+```text
+ArrowUp
+ArrowDown
+Enter
+Space
+Home
+End
+Escape
+```
+
+Фокус остаётся на trigger, а активная option передаётся через `aria-activedescendant`.
+
+---
+
+# Slider
+
+Визуально стилизованный native `input[type="range"]`.
+
+```tsx
+import { Slider } from 'mangalicht-uikit'
+
+<Slider
+  min={0}
+  max={100}
+  value={40}
+  onChange={setValue}
+/>
+```
+
+Uncontrolled:
+
+```tsx
+<Slider
+  min={0}
+  max={10}
+  step={0.5}
+  defaultValue={2.5}
+/>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `value` | `number` | — | Controlled значение. |
+| `defaultValue` | `number` | `min` | Начальное uncontrolled значение. |
+| `onChange` | `(value, event?) => void` | — | Изменение. |
+| `min` | `number` | `0` | Минимум. |
+| `max` | `number` | `100` | Максимум. |
+| `step` | `number` | `1` | Шаг. |
+| `showLabel` | `boolean` | `true` | Показывать label. |
+| `label` | `ReactNode` | — | Пользовательский label. |
+| `classNames` | `string` | — | Класс native input. |
+| `wrapperClassName` | `string` | — | Класс wrapper. |
+| `disabled` | `boolean` | `false` | Отключение. |
+| `...InputHTMLAttributes` | — | — | Остальные native props. |
+
+`ref` указывает на native range input.
+
+---
+
+# Switch
+
+Controlled switch на native checkbox.
+
+```tsx
+import { Switch } from 'mangalicht-uikit'
+
+<Switch
+  checked={darkMode}
+  onChange={setDarkMode}
+  labelText="Тёмная тема"
+/>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `checked` | `boolean` | обязательный | Текущее состояние. |
+| `onChange` | `(checked: boolean) => void` | обязательный | Изменение. |
+| `labelText` | `string` | — | Подпись. |
+| `disabled` | `boolean` | `false` | Блокировка. |
+| `name` | `string` | — | Native input name. |
+| `size` | `'default' \| 'small'` | `'default'` | Размер. |
+| `className` | `string` | — | Класс wrapper. |
+| `...InputHTMLAttributes` | — | — | Остальные props input. |
+
+`ref` указывает на native checkbox.
+
+---
+
+# TabList
+
+Список вкладок с анимированным индикатором.
+
+```tsx
+import { TabList } from 'mangalicht-uikit'
+
+<TabList
+  tabs={[
+    { id: 'write', label: 'Write', icon: <Pencil /> },
+    { id: 'preview', label: 'Preview', icon: <Eye /> },
+  ]}
+  activeTab={mode}
+  onTabChange={setMode}
+  variant="inner"
+/>
+```
+
+### TabItem
+
+```ts
+interface TabItem {
+  id: string
+  label: string
+  icon?: React.ReactNode
+}
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `tabs` | `TabItem[]` | обязательный | Вкладки. |
+| `variant` | `'block' \| 'inner'` | `'block'` | Визуальный вариант. |
+| `activeTab` | `string` | обязательный | ID активной вкладки. |
+| `onTabChange` | `(tabId: string) => void` | обязательный | Изменение вкладки. |
+| `className` | `string` | — | Класс root. |
+| `...ButtonHTMLAttributes` | — | — | Поддерживается API базового button type, кроме `children`/`variant`. |
+
+`ref` указывает на root `div`.
+
+---
+
+# Toggle
+
+Button, который ведёт себя как toggle.
+
+```tsx
+import { Toggle } from 'mangalicht-uikit'
+
+<Toggle
+  labelText="Избранное"
+  checked={favorite}
+  onCheckedChange={setFavorite}
+/>
+```
+
+Uncontrolled:
+
+```tsx
+<Toggle
+  labelText="Фильтр"
+  defaultChecked
+/>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `checked` | `boolean` | — | Controlled состояние. |
+| `defaultChecked` | `boolean` | `false` | Начальное состояние. |
+| `onCheckedChange` | `(checked, event) => void` | — | Callback изменения. |
+| `onClick` | `MouseEventHandler` | — | Внешний click callback. Выполняется после переключения. |
+| `activeClassName` | `string` | — | Дополнительный класс активного состояния. |
+| `activeVariant` | `ButtonProps['variant']` | `'highlight'` | Button variant при active. |
+| `toggleDisabled` | `boolean` | `false` | Запрещает переключение. |
+| `disabled` | `boolean` | `false` | Полностью блокирует Button. |
+| `...ButtonProps` | — | — | Остальные props Button. |
+
+`Toggle` использует `Button` внутри и выставляет `aria-pressed`.
+
+---
+
+# Tooltip
+
+Floating tooltip около курсора.
+
+```tsx
+import { Tooltip, Button } from 'mangalicht-uikit'
+
+<Tooltip
+  content="Сохранить изменения"
+  position="top"
+>
+  <Button labelText="Сохранить" />
+</Tooltip>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `content` | `ReactNode` | обязательный | Содержимое. |
+| `children` | `ReactElement` | обязательный | Trigger. |
+| `position` | `'top' \| 'bottom'` | `'top'` | Сторона относительно курсора. |
+| `disabled` | `boolean` | `false` | Отключить tooltip. |
+| `classNames` | `string` | — | Класс tooltip. |
+| `offset` | `number` | `12` | Отступ от курсора в px. |
+| `showDelay` | `number` | `500` | Задержка появления в ms. |
+| `cursorLag` | `number` | `100` | Плавность следования за курсором в ms; `0` отключает lag. |
+
+Tooltip использует Portal. Trigger оборачивается через `display: contents`, поэтому компонент корректно работает с UI Kit-компонентами, у которых реальный DOM root находится глубже.
+
+---
+
+# Sheet
+
+Side panel. **На текущий момент файл `src/components/Sheet` существует в архитектуре проекта, но `Sheet` не экспортируется из `src/components/index.ts` и потому не входит в публичный root API пакета.**
+
+Для внутреннего использования API выглядит так:
+
+```tsx
+<Sheet
+  open={open}
+  side="right"
+  titleText="Настройки"
+  width={360}
+  onClose={() => setOpen(false)}
+>
+  Content
+</Sheet>
+```
+
+### Props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `open` | `boolean` | обязательный | Открыта ли панель. |
+| `side` | `'left' \| 'right'` | `'right'` | Сторона появления. |
+| `titleText` | `string` | обязательный | Заголовок. |
+| `children` | `ReactNode` | — | Содержимое. |
+| `width` | `string \| number` | `360` | Ширина. |
+| `closeOnOverlayClick` | `boolean` | `true` | Закрытие по overlay. |
+| `closeOnEscape` | `boolean` | `true` | Закрытие по Escape. |
+| `blur` | `number` | `6` | Blur заднего фона. |
+| `className` | `string` | — | Класс панели. |
+| `onClose` | `() => void` | обязательный | Callback закрытия. |
+
+---
+
+# Общие hooks
+
+Hooks находятся в `src/hooks` и экспортируются из root API.
+
+## useAnchoredPosition
+
+Позиционирование floating-элемента относительно trigger. Используется, в частности, Select и DropDown.
+
+Основные возможности:
+
+- Portal-compatible positioning;
+- `@floating-ui/dom`;
+- placement;
+- offset;
+- flip;
+- shift;
+- optional match width.
+
+---
+
+## useAnimationTrigger
+
+Создаёт кратковременный animation trigger при изменении значения.
+
+Используется компонентами, которым нужна CSS-анимация перехода состояния.
+
+---
+
+## useAutosizeTextarea
+
+Автоматически подстраивает высоту textarea под содержимое с ограничениями `minRows` / `maxRows`.
+
+Используется Markdown editor.
+
+---
+
+## useClickOutside
+
+Отслеживает события вне переданного DOM-элемента.
+
+Используется для floating/overlay UI.
+
+---
+
+## useHistoryBuffer
+
+Буфер Undo/Redo для контролируемого и неконтролируемого значения.
+
+Markdown editor использует его для истории редактирования.
+
+---
+
+## useIsomorphicLayoutEffect
+
+SSR-safe вариант `useLayoutEffect`.
+
+---
+
+## useMouseTracking
+
+Отслеживает координаты pointer/mouse и вызывает callbacks enter/move/leave.
+
+Используется Tooltip.
+
+---
+
+## useSmoothFollow
+
+Плавно перемещает floating element к target position.
+
+Используется Tooltip и floating Markdown toolbar.
+
+---
+
+## useValidation
+
+Общая система валидации Input и MarkdownComment.
+
+Поддерживает:
+
+- `required`;
+- `minLength`;
+- `maxLength`;
+- `pattern`;
+- пользовательский `validate`;
+- `validateOn`;
+- `onValidChange`.
+
+Пример:
+
+```tsx
+<Input
+  value={name}
+  onChange={setName}
+  rules={{
+    required: true,
+    minLength: 3,
+    maxLength: 40,
+  }}
+  validateOn="blur"
+  onValidChange={(valid, error) => {
+    console.log(valid, error)
+  }}
+/>
+```
+
+---
+
+# Иконки
+
+SVG/React icons находятся в `src/icons` и экспортируются из корня.
+
+В текущей архитектуре присутствуют:
+
+```text
+Chevron
+Close
+Loading
+Markdown
+Search
+```
+
+Также компоненты библиотеки используют `lucide-react`, например:
+
+- `XIcon`;
+- `ChevronDown`;
+- `Flame`;
+- Markdown toolbar icons.
+
+Пример:
+
+```tsx
+import {
+  SearchIcon,
+  CloseIcon,
+} from 'mangalicht-uikit'
+
+<Button
+  iconStart={<SearchIcon />}
+  aria-label="Поиск"
+/>
+```
+
+---
+
+# Архитектура
+
+```text
+src/
+├── components/
+│   ├── AlertDialog/
+│   ├── Badge/
+│   ├── Block/
+│   ├── Button/
+│   ├── Carousel/
+│   ├── Checkbox/
+│   ├── DnD/
+│   ├── DropDown/
+│   ├── ExpandableCard/
+│   ├── Image/
+│   ├── Input/
+│   ├── Markdown/
+│   ├── ProgressBar/
+│   ├── ScrollArea/
+│   ├── Select/
+│   ├── Sheet/
+│   ├── Slider/
+│   ├── Switch/
+│   ├── TabList/
+│   ├── Toggle/
+│   └── Tooltip/
+│
+├── hooks/
+├── icons/
+├── shared/
+└── index.ts
+```
+
+## Компонентная структура
+
+Обычно директория компонента содержит:
+
+```text
+Button/
+├── Button.module.scss
+├── Button.stories.tsx
+├── _Button-vars.scss
+└── index.tsx
+```
+
+Таким образом:
+
+- `index.tsx` — React API и поведение;
+- `*.module.scss` — локальные стили;
+- `_*vars.scss` — component-specific SCSS tokens;
+- `*.stories.tsx` — документация и тестирование через Storybook.
+
+---
+
+# Floating UI
+
+Select, DropDown, Tooltip и Markdown toolbar используют Portal.
+
+Общий Portal root:
+
+```text
+src/shared/utils/portalRoot.ts
+```
+
+Это позволяет избежать проблем:
+
+- `overflow: hidden` у родителей;
+- `z-index`;
+- clipping;
+- неправильного stacking context.
+
+Позиционирование выполняется через `@floating-ui/dom`, где это необходимо.
+
+---
+
+# Доступность
+
+Компоненты стараются сохранять native HTML semantics.
+
+Примеры:
+
+- `Button` → native `<button>`;
+- `Checkbox` → native checkbox;
+- `Switch` → native checkbox + `role="switch"`;
+- `Slider` → native range;
+- `Select` → listbox semantics;
+- `Tooltip` → `role="tooltip"` + `aria-describedby`;
+- `AlertDialog` → `role="alertdialog"` + `aria-modal`;
+- keyboard navigation реализована там, где нативного поведения недостаточно.
+
+---
+
+# Controlled и uncontrolled
+
+Компоненты формы обычно поддерживают оба режима.
+
+Controlled:
+
+```tsx
+const [value, setValue] = useState('')
+
+<Input
+  value={value}
+  onChange={setValue}
+/>
+```
+
+Uncontrolled:
+
+```tsx
+<Input
+  defaultValue="Initial value"
+/>
 ```
 
 Аналогичный подход используется в:
@@ -1779,258 +1686,197 @@ Uncontrolled:
 - `Checkbox`;
 - `Select`;
 - `Slider`;
-- `Input`;
-- `MarkdownField`;
-- `Carousel`.
+- `Toggle`;
+- `MarkdownInput`;
+- `MarkdownComment`.
 
-`Switch` намеренно остаётся полностью controlled.
-
----
-
-## 5. `forwardRef`
-
-Компоненты, которым необходим прямой доступ к DOM-элементу, используют:
+Исключение — `Switch`, который по API является controlled:
 
 ```tsx
-forwardRef(...)
-```
-
-Это позволяет потребителю библиотеки:
-
-```tsx
-const inputRef = useRef<HTMLInputElement>(null)
-
-<Input ref={inputRef} />
-```
-
-и получать доступ к соответствующему нативному элементу.
-
----
-
-## 6. Floating UI отделён от обычного DOM-потока
-
-`Tooltip`, `Select` и `DropDown` используют отдельный Portal.
-
-Это предотвращает типичные проблемы:
-
-```text
-overflow: hidden
-z-index
-stacking context
-transform
-```
-
-родительских элементов.
-
----
-
-## 7. CSS Modules для локальных стилей
-
-Компоненты не используют глобальные CSS-классы для своей внутренней структуры.
-
-Вместо этого:
-
-```tsx
-styles.button
-styles.label
-styles.icon
-```
-
-генерируются в уникальные имена.
-
-Глобальными остаются только общие ресурсы:
-
-```text
-normalize
-theme
-global styles
+<Switch
+  checked={checked}
+  onChange={setChecked}
+/>
 ```
 
 ---
 
-## 8. Визуальная логика находится в Storybook
+# Storybook
 
-Каждый компонент имеет Storybook story:
+Storybook используется для разработки и визуальной проверки компонентов.
 
-```text
-Component.stories.tsx
-```
-
-Это позволяет проверять:
-
-- варианты;
-- состояния;
-- размеры;
-- взаимодействия;
-- темы;
-- edge cases.
-
----
-
-# Скрипты
-
-В `package.json` доступны следующие команды.
-
-### Разработка
+Запуск:
 
 ```bash
 npm run dev
 ```
 
-Запускает Storybook на порту `6006`.
+По умолчанию Storybook запускается на:
 
-### Production Storybook
+```text
+http://localhost:6006
+```
+
+Сборка:
 
 ```bash
 npm run build-storybook
 ```
 
-Создаёт статическую сборку Storybook.
+Storybook автоматически ищет stories в `src` согласно конфигурации `.storybook/main.ts`.
 
-### Сборка библиотеки
+В toolbar доступно переключение темы `light/dark`.
+
+---
+
+# Сборка
+
+Библиотека собирается Vite Library Mode.
 
 ```bash
 npm run build
 ```
 
-Создаёт production bundle библиотеки.
+Дополнительно:
 
-### Создание npm-архива
+```bash
+npm run typecheck
+npm run test
+npm run format
+```
+
+Упаковка npm tarball:
 
 ```bash
 npm run pack
 ```
 
-Собирает библиотеку и создаёт `.tgz` архив через `npm pack`.
+Результат сборки:
+
+```text
+dist/
+├── index.js
+├── index.d.ts
+├── components/
+├── icons/
+├── hooks/
+└── scss/
+```
+
+TypeScript declarations генерируются через `vite-plugin-dts`.
+
+CSS/SCSS подключается библиотекой автоматически, а SCSS-ресурсы также доступны через package exports.
 
 ---
 
-# Алиасы разработки
+# Экспорт пакета
 
-Vite и Storybook поддерживают следующие aliases:
-
-```text
-@           → src
-@components → src/components
-@hooks      → src/hooks
-@icons      → src/icons
-@shared     → src/shared
-```
-
-Например:
+Корневой API:
 
 ```tsx
-import { Button } from '@components/Button'
-import { useValidation } from '@hooks/useValidation'
-import { SearchIcon } from '@icons/Search'
-import styles from '@shared/...'
+import {
+  Button,
+  Input,
+  Select,
+  Slider,
+  ScrollArea,
+  Carousel,
+  DragArea,
+  DragElement,
+  ExpandableCard,
+} from 'mangalicht-uikit'
 ```
 
----
-
-# Peer Dependencies
-
-Библиотека не включает React в собственный bundle.
-
-Используются:
-
-```json
-{
-	"react": "^19.2.6",
-	"react-dom": "^19.2.6"
-}
-```
-
-Они объявлены как `peerDependencies`.
-
-Это позволяет приложению-потребителю использовать собственный экземпляр React.
-
----
-
-# Runtime Dependencies
-
-Библиотека использует:
+Дополнительные package paths:
 
 ```text
-@floating-ui/dom
-dompurify
-marked
+mangalicht-uikit/components/*
+mangalicht-uikit/icons
+mangalicht-uikit/hooks
+mangalicht-uikit/scss/*
 ```
 
-### `@floating-ui/dom`
+`Sheet` сейчас является частью исходной архитектуры, но не экспортируется из `src/components/index.ts`; если компонент должен стать частью публичного API, его необходимо добавить в экспортный файл.
 
-Используется для позиционирования floating UI.
+---
 
-### `marked`
+# Зависимости
 
-Используется для преобразования Markdown в HTML.
+Основные runtime зависимости:
 
-### `dompurify`
+- React 19;
+- `@floating-ui/dom`;
+- `dompurify`;
+- `marked`;
+- `lucide-react` как peer dependency.
 
-Используется для очистки HTML, генерируемого из пользовательского Markdown.
+Инструменты разработки:
+
+- Vite;
+- TypeScript;
+- Storybook 10;
+- Sass;
+- Vitest;
+- Testing Library;
+- `vite-plugin-dts`;
+- `vite-plugin-lib-inject-css`.
+
+---
+
+# Архитектурные рекомендации
+
+## 1. Используйте controlled режим для серверного состояния
+
+```tsx
+<Select
+  value={serverValue}
+  onChange={setServerValue}
+/>
+```
+
+## 2. Используйте uncontrolled режим для простых локальных форм
+
+```tsx
+<Input defaultValue="Имя" />
+```
+
+## 3. Для floating UI не создавайте собственное позиционирование
+
+Используйте существующие `Select`, `DropDown`, `Tooltip` и их Portal/Floating UI архитектуру.
+
+## 4. Для сортировки используйте только DragArea + DragElement
+
+Не требуется самостоятельно хранить порядок для визуальной сортировки:
+
+```tsx
+<DragArea>
+  {items.map(item => (
+    <DragElement key={item.id} id={item.id}>
+      {item.content}
+    </DragElement>
+  ))}
+</DragArea>
+```
+
+Получить итоговый порядок можно через:
+
+```tsx
+onOrderChange={(order, activeId) => {
+  // persist order
+}}
+```
+
+## 5. Не смешивайте `className` и `classNames` без необходимости
+
+В текущем API:
+
+- `classNames` — основной кастомизационный prop многих UI Kit компонентов;
+- `className` используется там, где компонент расширяет native HTML API или исторически использует стандартное имя.
+
+Ориентируйтесь на TypeScript API конкретного компонента.
 
 ---
 
 # Лицензия
 
-Проект распространяется под лицензией:
-
-```text
-MIT
-```
-
----
-
-# Текущая архитектура
-
-В упрощённом виде библиотека организована следующим образом:
-
-```text
-                    ┌──────────────────────┐
-                    │     src/index.ts     │
-                    │    Public API        │
-                    └──────────┬───────────┘
-                               │
-              ┌────────────────┼────────────────┐
-              │                │                │
-              ▼                ▼                ▼
-       ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-       │ Components  │  │    Icons    │  │   Shared    │
-       └──────┬──────┘  └─────────────┘  └──────┬──────┘
-              │                                  │
-       ┌──────┴──────┐                    ┌──────┴──────┐
-       │             │                    │             │
-       ▼             ▼                    ▼             ▼
-   UI logic       SCSS Modules        Theme vars   Global styles
-       │
-       ▼
-   ┌─────────────┐
-   │    Hooks    │
-   └──────┬──────┘
-          │
-    ┌─────┼──────────────┐
-    ▼     ▼              ▼
-Validation Positioning   Mouse/RAF
-```
-
-Основная идея архитектуры — разделение:
-
-```text
-UI
-│
-├── Components
-│
-├── Behaviour
-│   └── Hooks
-│
-├── Visual system
-│   └── SCSS / Theme
-│
-├── Infrastructure
-│   └── Portal / Utils
-│
-└── Documentation
-    └── Storybook
-```
-
-Такое разделение позволяет развивать компоненты независимо, повторно использовать поведенческую логику и сохранять единый визуальный слой библиотеки.
+MIT.
