@@ -1,8 +1,6 @@
 import React, { ButtonHTMLAttributes, forwardRef } from 'react'
 import styles from './Button.module.scss'
 
-export type ButtonAnimation = 'default' | 'none'
-
 export type ButtonVariants =
 	| 'default'
 	| 'highlight'
@@ -10,6 +8,10 @@ export type ButtonVariants =
 	| 'borderedAccent'
 	| 'ghost'
 	| 'transparent'
+
+export type ButtonAnimation = 'default' | 'none'
+export type ButtonType = 'default' | 'rounded' | 'square' | 'circle'
+export type ButtonSize = 'default' | 'sm' | 'xsm'
 
 const STYLE_TO_CLASS: Record<ButtonVariants, string> = {
 	default: styles.default,
@@ -32,6 +34,10 @@ export interface ButtonProps extends Omit<
 	onClick?: React.MouseEventHandler<HTMLButtonElement>
 	/** Визуальный вариант оформления */
 	variant?: ButtonVariants
+	/** Тип кнопки (обычная или скругленная) */
+	buttonType?: ButtonType
+	/** Размер кнопки */
+	size?: ButtonSize
 	/** пометка что кнопка должна быть окрашена в красный */
 	isAlert?: boolean
 	/** Текст лейбла внутри кнопки */
@@ -53,6 +59,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 			classNames,
 			onClick,
 			variant = 'default',
+			buttonType = 'default',
+			size = 'default',
 			isAlert = false,
 			labelText,
 			type = 'button',
@@ -74,6 +82,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 					.join(' ')}
 				disabled={disabled}
 				data-animation={animation}
+				data-type={buttonType}
+				data-size={size}
 				data-alert={isAlert}
 				onClick={onClick}
 				{...rest}

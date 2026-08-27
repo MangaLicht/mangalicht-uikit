@@ -2,6 +2,7 @@ import React, {
   isValidElement,
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
 } from 'react';
@@ -46,6 +47,7 @@ export const Tooltip = ({
   cursorLag = 100,
 }: TooltipProps) => {
   const [visible, setVisible] = useState(false);
+  const tooltipId = `uikit-tooltip-${useId()}`;
   const showTimer = useRef<number | null>(null);
 
   const applyPosition = useCallback(
@@ -106,6 +108,13 @@ export const Tooltip = ({
    * даёт Tooltip единый DOM-родитель, который получает события мыши
    * независимо от внутренней реализации дочернего компонента.
    */
+  const describedChild = React.cloneElement(
+    children as React.ReactElement<Record<string, unknown>>,
+    {
+      'aria-describedby': visible && !disabled ? tooltipId : undefined,
+    },
+  );
+
   const trigger = (
     <div
       style={{ display: 'contents' }}
@@ -113,25 +122,29 @@ export const Tooltip = ({
       onMouseMove={mouseHandlers.onMouseMove}
       onMouseLeave={mouseHandlers.onMouseLeave}
     >
-      {children}
+      {describedChild}
     </div>
   );
 
   return (
     <>
       {trigger}
-      {createPortal(
-        <div
-          ref={tooltipRef}
-          className={[styles.tooltip, classNames].filter(Boolean).join(' ')}
-          data-position={position}
-          data-visible={visible && !disabled}
-          role="tooltip"
-        >
-          {content}
-        </div>,
-        getPortalRoot(),
-      )}
+      {typeof document !== 'undefined'
+        ? createPortal(
+            <div
+              ref={tooltipRef}
+              id={tooltipId}
+              className={[styles.tooltip, classNames].filter(Boolean).join(' ')}
+              data-position={position}
+              data-visible={visible && !disabled}
+              aria-hidden={!visible || disabled}
+              role="tooltip"
+            >
+              {content}
+            </div>,
+            getPortalRoot(),
+          )
+        : null}
     </>
   );
 };

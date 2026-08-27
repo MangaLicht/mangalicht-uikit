@@ -26,7 +26,7 @@ const useExpandableCardContext = () => {
 
 	if (!context) {
 		throw new Error(
-			'ExpandableCard.ExpandableElenent must be used inside <ExpandableCard>.'
+			'ExpandableCard.ExpandableElement must be used inside <ExpandableCard>.'
 		)
 	}
 
@@ -60,17 +60,17 @@ export interface ExpandableCardProps extends Omit<
 	disabled?: boolean
 }
 
-export interface ExpandableElenentProps extends HTMLAttributes<HTMLDivElement> {
+export interface ExpandableElementProps extends HTMLAttributes<HTMLDivElement> {
 	children?: ReactNode
 
 	initialClassName?: string
 	expandedClassName?: string
 }
 
-export type ExpandableElenentComponent =
-	FunctionComponent<ExpandableElenentProps>
+export type ExpandableElementComponent =
+	FunctionComponent<ExpandableElementProps>
 
-const ExpandableElenent: ExpandableElenentComponent = ({
+const ExpandableElement: ExpandableElementComponent = ({
 	className,
 	children,
 	style,
@@ -98,7 +98,7 @@ const ExpandableElenent: ExpandableElenentComponent = ({
 	)
 }
 
-ExpandableElenent.displayName = 'ExpandableCard.ExpandableElenent'
+ExpandableElement.displayName = 'ExpandableCard.ExpandableElement'
 
 const MOBILE_DOUBLE_TAP_DELAY = 320
 
@@ -295,7 +295,6 @@ const ExpandableCardBase = ({
 				style={cardStyle}
 				data-expanded={expanded}
 				aria-expanded={expanded}
-
 				/*
 				 * Запоминаем тип взаимодействия.
 				 *
@@ -307,7 +306,6 @@ const ExpandableCardBase = ({
 
 					onPointerDown?.(event)
 				}}
-
 				/*
 				 * Обработка двойного тапа.
 				 */
@@ -316,7 +314,6 @@ const ExpandableCardBase = ({
 
 					onPointerUp?.(event)
 				}}
-
 				/*
 				 * Desktop hover.
 				 *
@@ -329,7 +326,6 @@ const ExpandableCardBase = ({
 
 					onPointerEnter?.(event)
 				}}
-
 				onPointerLeave={event => {
 					if (event.pointerType === 'mouse') {
 						close()
@@ -337,14 +333,12 @@ const ExpandableCardBase = ({
 
 					onPointerLeave?.(event)
 				}}
-
 				/*
 				 * Старые mouse callbacks сохраняются
 				 * для обратной совместимости API.
 				 */
 				onMouseEnter={onMouseEnter}
 				onMouseLeave={onMouseLeave}
-
 				/*
 				 * Keyboard focus продолжает открывать
 				 * карточку.
@@ -360,7 +354,6 @@ const ExpandableCardBase = ({
 
 					onFocus?.(event)
 				}}
-
 				onBlur={event => {
 					if (
 						!event.currentTarget.contains(
@@ -372,7 +365,6 @@ const ExpandableCardBase = ({
 
 					onBlur?.(event)
 				}}
-
 				/*
 				 * Desktop native double-click.
 				 *
@@ -401,13 +393,13 @@ const ExpandableCardBase = ({
 }
 
 export interface ExpandableCardComponent extends FunctionComponent<ExpandableCardProps> {
-	ExpandableElenent: ExpandableElenentComponent
+	ExpandableElement: ExpandableElementComponent
 }
 
 export const ExpandableCard = ExpandableCardBase as ExpandableCardComponent
 
 ExpandableCard.displayName = 'ExpandableCard'
 
-ExpandableCard.ExpandableElenent = ExpandableElenent
+ExpandableCard.ExpandableElement = ExpandableElement
 
-export { ExpandableElenent }
+export { ExpandableElement }

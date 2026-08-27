@@ -1,24 +1,17 @@
 import type { Decorator, Preview } from '@storybook/react'
 import { useEffect, type ReactNode } from 'react'
-// @ts-ignore: allow importing global SCSS in Storybook preview
 import '../src/shared/normalize.scss'
-// @ts-ignore: allow importing global SCSS in Storybook preview
 import '../src/shared/scss/global-styles.scss'
-// @ts-ignore: allow importing global SCSS in Storybook preview
 import '../src/shared/theme-vars.scss'
 
+type Theme = 'light' | 'dark'
+
 interface ThemeBackgroundProps {
-	theme: 'light' | 'dark'
+	theme: Theme
 	children: ReactNode
 }
 
-const ThemeBackground = ({
-	theme,
-	children
-}: {
-	theme: string
-	children: React.ReactNode
-}) => {
+const ThemeBackground = ({ theme, children }: ThemeBackgroundProps) => {
 	useEffect(() => {
 		document.documentElement.setAttribute('data-theme', theme)
 	}, [theme])
@@ -32,9 +25,9 @@ const ThemeBackground = ({
 
 export const withTheme: Decorator = (Story, context) => {
 	const theme =
-		(context.globals.theme as 'light' | 'dark') ??
-		(context.parameters.theme as 'light' | 'dark') ??
-		'dark'
+		(context.globals.theme as Theme | undefined) ??
+		(context.parameters.theme as Theme | undefined) ??
+		'light'
 
 	return (
 		<ThemeBackground theme={theme}>
@@ -45,7 +38,6 @@ export const withTheme: Decorator = (Story, context) => {
 
 const preview: Preview = {
 	decorators: [withTheme],
-
 	globalTypes: {
 		theme: {
 			name: 'Theme',
@@ -54,31 +46,21 @@ const preview: Preview = {
 			toolbar: {
 				icon: 'circlehollow',
 				items: [
-					{
-						value: 'light',
-						title: 'Light',
-						icon: 'circlehollow'
-					},
-					{
-						value: 'dark',
-						title: 'Dark',
-						icon: 'circle'
-					}
-				]
+					{ value: 'light', title: 'Light', icon: 'circlehollow' },
+					{ value: 'dark', title: 'Dark', icon: 'circle' }
+				],
+				showName: true
 			}
 		}
 	},
-
 	parameters: {
 		layout: 'centered',
-
 		controls: {
 			matchers: {
 				color: /(background|color)$/i,
 				date: /Date$/i
 			}
 		},
-
 		actions: {
 			argTypesRegex: '^on[A-Z].*'
 		}

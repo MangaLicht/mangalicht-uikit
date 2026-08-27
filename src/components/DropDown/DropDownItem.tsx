@@ -1,3 +1,4 @@
+import type { IUIKitProps } from '@shared/types/IUIKitProps'
 import React, { useContext } from 'react'
 import { DropDownContext } from './context'
 import styles from './DropDown.module.scss'

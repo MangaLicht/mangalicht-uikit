@@ -1,5 +1,4 @@
 export * from './components'
 export * from './icons'
-import './shared/normalize.scss'
-import './shared/theme-vars.scss'
-import './shared/scss/global-styles.scss'
+export * from './hooks'
+export type { IUIKitProps } from './shared/types'

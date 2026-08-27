@@ -1,18 +1,42 @@
 @use 'sass:math';
 
-@mixin adaptive-rounding($padding, $min-radius: 1px) {
+@mixin adaptive-rounding(
+	$padding,
+	$min-radius: 1px,
+	$top-right: true,
+	$top-left: true,
+	$bottom-right: true,
+	$bottom-left: true
+) {
 	--base-radius: var(--uikit-matched-radius);
 	--padding: #{$padding};
 	--min-radius: #{$min-radius};
 
 	--parent-radius: calc(var(--base-radius) + var(--padding));
-	border-radius: var(--parent-radius);
+
+	@if $top-right == true {
+		border-top-right-radius: var(--parent-radius);
+	}
+	@if $top-left == true {
+		border-top-left-radius: var(--parent-radius);
+	}
+	@if $bottom-right == true {
+		border-bottom-right-radius: var(--parent-radius);
+	}
+	@if $bottom-left == true {
+		border-bottom-left-radius: var(--parent-radius);
+	}
 
 	& * {
 		--child-radius: calc(var(--parent-radius) - var(--padding));
 		--current-radius: max(var(--child-radius), var(--min-radius));
 		border-radius: var(--current-radius) !important;
 	}
+}
+
+@mixin keep-radius($radius) {
+	--current-radius: #{$radius} !important;
+	border-radius: var(--current-radius);
 }
 
 @mixin safari-only {

@@ -1,0 +1,108 @@
+@use '../../shared/mixins' as *;
+
+$dialog-bg: var(--uikit-bg-block);
+$overlay-bg: rgb(0 0 0 / 58%);
+$content-bg: color-mix(in srgb, var(--uikit-text-main), transparent 96%);
+$border: var(--uikit-block-border);
+$dialog-padding: 8px;
+
+.overlay {
+	position: fixed;
+	z-index: 9999;
+	inset: 0;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 24px;
+
+	background: $overlay-bg;
+
+	backdrop-filter: blur(var(--alert-dialog-blur, 6px));
+	-webkit-backdrop-filter: blur(var(--alert-dialog-blur, 6px));
+
+	animation: overlayEnter 160ms ease-out;
+
+	isolation: isolate;
+}
+
+.dialog {
+	position: relative;
+
+	width: min(100%, 356px);
+
+	overflow: hidden;
+
+	border: 1px solid $border;
+
+	@include adaptive-rounding($dialog-padding, 1px);
+
+	background: $dialog-bg;
+
+	color: var(--uikit-text-main);
+
+	outline: none;
+
+	animation: dialogEnter 180ms ease-out;
+}
+
+.title {
+	padding: 18px 16px 4px;
+
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+.description {
+	padding: 4px 16px 16px;
+
+	color: var(--uikit-text-muted);
+
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.content {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+
+	padding: $dialog-padding;
+
+	border-top: 1px solid $border;
+	@include keep-radius(0px);
+
+	background: $content-bg;
+}
+
+@keyframes overlayEnter {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes dialogEnter {
+	from {
+		opacity: 0;
+		transform: translateY(6px) scale(0.98);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.overlay,
+	.dialog {
+		animation: none;
+	}
+}

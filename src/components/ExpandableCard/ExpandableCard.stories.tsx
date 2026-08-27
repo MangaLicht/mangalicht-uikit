@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { ExpandableCard } from './index'
 import { Button } from '../Button'
 import { Block } from '../Block'
-import { BookmarkIcon } from '../../icons/Bookmark'
+import { Bookmark } from 'lucide-react'
 // @ts-ignore: allow importing global SCSS in Storybook preview
 import styles from './ExpandableCard.stories.module.scss'
 
@@ -21,16 +21,16 @@ type Story = StoryObj<typeof meta>
 const ActionSection = () => (
 	<div className={styles.actionSection}>
 		{/* Cover */}
-		<ExpandableCard.ExpandableElenent
+		<ExpandableCard.ExpandableElement
 			initialClassName={styles.coverInitial}
 			expandedClassName={styles.coverExpanded}
 		>
 			<div className={styles.cover}>
 				<span>Обложка</span>
 			</div>
-		</ExpandableCard.ExpandableElenent>
+		</ExpandableCard.ExpandableElement>
 		{/* Action Buttons */}
-		<ExpandableCard.ExpandableElenent
+		<ExpandableCard.ExpandableElement
 			initialClassName={styles.readButtonInitial}
 			expandedClassName={styles.readButtonExpanded}
 		>
@@ -40,12 +40,12 @@ const ActionSection = () => (
 					<Button variant='default' labelText='К тайтлу' />
 					<Button
 						variant='default'
-						iconStart={<BookmarkIcon />}
+						iconStart={<Bookmark aria-hidden='true' />}
 						aria-label='Добавить в закладки'
 					/>
 				</div>
 			</div>
-		</ExpandableCard.ExpandableElenent>
+		</ExpandableCard.ExpandableElement>
 	</div>
 )
 
@@ -61,21 +61,21 @@ export const Reference: Story = {
 				animationDuration={360}
 			>
 				{/* Action Section */}
-				<ExpandableCard.ExpandableElenent
+				<ExpandableCard.ExpandableElement
 					initialClassName={styles.actionSectionInitial}
 					expandedClassName={styles.actionSectionExpanded}
 				>
 					<ActionSection />
-				</ExpandableCard.ExpandableElenent>
+				</ExpandableCard.ExpandableElement>
 				{/* Title */}
-				<ExpandableCard.ExpandableElenent
+				<ExpandableCard.ExpandableElement
 					initialClassName={styles.titleInitial}
 					expandedClassName={styles.titleExpanded}
 				>
 					Поколение Нова
-				</ExpandableCard.ExpandableElenent>
+				</ExpandableCard.ExpandableElement>
 				{/* Description */}
-				<ExpandableCard.ExpandableElenent
+				<ExpandableCard.ExpandableElement
 					initialClassName={styles.descriptionInitial}
 					expandedClassName={styles.descriptionExpanded}
 				>
@@ -104,9 +104,9 @@ export const Reference: Story = {
 							Конец демонстрационного описания.
 						</p>
 					</Block>
-				</ExpandableCard.ExpandableElenent>
+				</ExpandableCard.ExpandableElement>
 
-				<ExpandableCard.ExpandableElenent
+				<ExpandableCard.ExpandableElement
 					initialClassName={styles.tagsInitial}
 					expandedClassName={styles.tagsExpanded}
 				>
@@ -116,7 +116,7 @@ export const Reference: Story = {
 						<span className={styles.tag}>Драма</span>
 						<span className={styles.tag}>+ ещё</span>
 					</div>
-				</ExpandableCard.ExpandableElenent>
+				</ExpandableCard.ExpandableElement>
 			</ExpandableCard>
 		</div>
 	)

@@ -3,7 +3,6 @@ import {
 	memo,
 	useCallback,
 	useEffect,
-	useLayoutEffect,
 	useRef,
 	useState,
 	type MouseEvent as ReactMouseEvent,
@@ -17,19 +16,24 @@ import { computePosition, flip, offset, shift } from '@floating-ui/dom'
 import { useAutosizeTextarea } from '@/hooks/useAutosizeTextarea'
 import { useHistoryBuffer } from '@/hooks/useHistoryBuffer'
 import { useSmoothFollow } from '@/hooks/useSmoothFollow'
+import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
+import { measureTextareaSelection, type SelectionAnchorRect } from '@shared/utils/measureSelection'
+import { getPortalRoot } from '@shared/utils/portalRoot'
+
+import {
+	Bold,
+	Code2,
+	Eye,
+	Italic,
+	Link2,
+	List,
+	ListOrdered,
+	Quote,
+	Strikethrough,
+} from 'lucide-react'
 
 import { Button } from '@components/Button'
-import {
-	BoldIcon,
-	ItalicIcon,
-	LinkIcon,
-	ListIcon,
-	CodeIcon,
-	EyeIcon
-} from '@/icons/Markdown'
-
-import { UndoIcon } from '@/icons/Undo'
-import { RedoIcon } from '@/icons/Redo'
+import { RedoIcon, UndoIcon } from '@icons/index'
 
 import styles from './Markdown.module.scss'
 
@@ -81,12 +85,7 @@ export interface MarkdownInputProps extends Omit<
 	onFocus?: (event: FocusEvent<HTMLTextAreaElement>) => void
 }
 
-interface SelectionRect {
-	x: number
-	y: number
-	width: number
-	height: number
-}
+type SelectionRect = SelectionAnchorRect
 
 interface SelectionRange {
 	start: number
@@ -417,97 +416,6 @@ interface FloatingToolbarProps {
 }
 
 /**
- * Получает приблизительный bounding rect выделения внутри textarea.
- *
- * Для textarea используется mirror-element, поскольку обычный
- * Selection API не работает с текстовым содержимым textarea.
- */
-const getSelectionRect = (
-	textarea: HTMLTextAreaElement
-): SelectionRect | null => {
-	const start = textarea.selectionStart
-	const end = textarea.selectionEnd
-
-	const value = textarea.value
-	const computed = window.getComputedStyle(textarea)
-
-	const mirror = document.createElement('div')
-	const marker = document.createElement('span')
-
-	mirror.setAttribute('aria-hidden', 'true')
-
-	Object.assign(mirror.style, {
-		position: 'fixed',
-		visibility: 'hidden',
-		pointerEvents: 'none',
-		left: '0',
-		top: '0',
-		width: `${textarea.clientWidth}px`,
-		height: `${textarea.clientHeight}px`,
-		whiteSpace: 'pre-wrap',
-		overflowWrap: 'break-word',
-		boxSizing: computed.boxSizing,
-		fontFamily: computed.fontFamily,
-		fontSize: computed.fontSize,
-		fontWeight: computed.fontWeight,
-		fontStyle: computed.fontStyle,
-		lineHeight: computed.lineHeight,
-		letterSpacing: computed.letterSpacing,
-		wordSpacing: computed.wordSpacing,
-		textTransform: computed.textTransform,
-		textIndent: computed.textIndent,
-		padding: computed.padding,
-		border: computed.border,
-		tabSize: computed.tabSize
-	})
-
-	const before = document.createTextNode(value.slice(0, start))
-	const selected = value.slice(start, end)
-	const after = document.createTextNode(value.slice(end))
-
-	marker.textContent = selected || '\u200b'
-
-	mirror.appendChild(before)
-	mirror.appendChild(marker)
-	mirror.appendChild(after)
-
-	document.body.appendChild(mirror)
-
-	const mirrorRect = mirror.getBoundingClientRect()
-	const markerRect = marker.getBoundingClientRect()
-	const textareaRect = textarea.getBoundingClientRect()
-
-	/**
-	 * Важно учитывать внутренний scroll textarea.
-	 *
-	 * Без этого toolbar постепенно уезжает при вертикальном
-	 * или горизонтальном scroll.
-	 */
-	const x =
-		textareaRect.left +
-		markerRect.left -
-		mirrorRect.left -
-		textarea.scrollLeft
-
-	const y =
-		textareaRect.top + markerRect.top - mirrorRect.top - textarea.scrollTop
-
-	const rect: SelectionRect = {
-		x,
-		y,
-		width: Math.max(markerRect.width, 1),
-		height: Math.max(
-			markerRect.height,
-			parseFloat(computed.lineHeight) || 20
-		)
-	}
-
-	mirror.remove()
-
-	return rect
-}
-
-/**
  * Floating Markdown toolbar.
  *
  * Важно:
@@ -547,7 +455,7 @@ const FloatingToolbar = memo(
 			}
 		)
 
-		useLayoutEffect(() => {
+		useIsomorphicLayoutEffect(() => {
 			const toolbar = toolbarRef.current
 
 			if (!toolbar || !selectionRect || disabled) {
@@ -685,7 +593,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.bold}
 					aria-label='Жирный'
 					title='Жирный'
-					iconStart={<BoldIcon />}
+					iconStart={<Bold aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('bold')}
 				/>
@@ -701,7 +609,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.italic}
 					aria-label='Курсив'
 					title='Курсив'
-					iconStart={<ItalicIcon />}
+					iconStart={<Italic aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('italic')}
 				/>
@@ -717,7 +625,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.strike}
 					aria-label='Зачёркнутый'
 					title='Зачёркнутый'
-					labelText='S'
+					iconStart={<Strikethrough aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('strike')}
 				/>
@@ -733,7 +641,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.code}
 					aria-label='Код'
 					title='Код'
-					iconStart={<CodeIcon />}
+					iconStart={<Code2 aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('code')}
 				/>
@@ -749,7 +657,7 @@ const FloatingToolbar = memo(
 					aria-pressed={activeStyles.spoiler}
 					aria-label='Спойлер'
 					title='Спойлер'
-					iconStart={<EyeIcon />}
+					iconStart={<Eye aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('spoiler')}
 				/>
@@ -759,7 +667,7 @@ const FloatingToolbar = memo(
 					classNames={styles.toolbarButton}
 					aria-label='Ссылка'
 					title='Ссылка'
-					iconStart={<LinkIcon />}
+					iconStart={<Link2 aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('link')}
 				/>
@@ -769,7 +677,7 @@ const FloatingToolbar = memo(
 					classNames={styles.toolbarButton}
 					aria-label='Цитата'
 					title='Цитата'
-					labelText='❝'
+					iconStart={<Quote aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('quote')}
 				/>
@@ -779,7 +687,7 @@ const FloatingToolbar = memo(
 					classNames={styles.toolbarButton}
 					aria-label='Маркированный список'
 					title='Маркированный список'
-					iconStart={<ListIcon />}
+					iconStart={<List aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('unordered-list')}
 				/>
@@ -789,14 +697,16 @@ const FloatingToolbar = memo(
 					classNames={styles.toolbarButton}
 					aria-label='Нумерованный список'
 					title='Нумерованный список'
-					labelText='1.'
+					iconStart={<ListOrdered aria-hidden='true' />}
 					onMouseDown={preventSelectionLoss}
 					onClick={() => onAction('ordered-list')}
 				/>
 			</div>
 		)
 
-		return createPortal(toolbar, document.body)
+		return typeof document !== 'undefined'
+			? createPortal(toolbar, getPortalRoot())
+			: null
 	}
 )
 
@@ -1013,7 +923,7 @@ export const MarkdownInput = memo(
 					const hasActiveStyle =
 						Object.values(nextActiveStyles).some(Boolean)
 					setSelectionRect(
-						hasActiveStyle ? getSelectionRect(textarea) : null
+						hasActiveStyle ? measureTextareaSelection(textarea) : null
 					)
 					return
 				}
@@ -1027,7 +937,7 @@ export const MarkdownInput = memo(
 					getActiveMarkdownStyles(textarea.value, start, end)
 				)
 
-				const rect = getSelectionRect(textarea)
+				const rect = measureTextareaSelection(textarea)
 
 				setSelectionRect(rect)
 			}, [])

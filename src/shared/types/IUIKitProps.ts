@@ -1,3 +1,3 @@
-interface IUIKitProps {
-    classNames?: string
+export interface IUIKitProps {
+	classNames?: string
 }

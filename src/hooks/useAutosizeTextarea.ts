@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 interface UseAutosizeTextareaOptions {
   /** Минимальная высота в строках */
@@ -27,7 +27,7 @@ export function useAutosizeTextarea(
 ) {
   const { minRows = 3, maxRows, enabled = true } = options;
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const node = textareaRef.current;
     if (!node || !enabled) return undefined;
 

@@ -1,3 +1,4 @@
+import type { IUIKitProps } from '@shared/types/IUIKitProps'
 import React, {
 	cloneElement,
 	forwardRef,
@@ -13,7 +14,7 @@ import React, {
 import { createPortal } from 'react-dom'
 import { getPortalRoot } from '@shared/utils/portalRoot'
 import { useAnchoredPosition } from '@hooks/useAnchoredPosition'
-import { ChevronIcon } from '@icons/Chevron'
+import { ChevronDown } from 'lucide-react'
 import { DropDownContext } from './context'
 import styles from './DropDown.module.scss'
 
@@ -44,6 +45,11 @@ export interface DropDownProps
 	onClick?: (event: React.MouseEvent<HTMLLIElement>) => void
 	/** Иконка перед текстом — актуальна только для вложенного DropDown */
 	icon?: React.ReactNode
+}
+
+interface DropDownTriggerProps extends Record<string, unknown> {
+	onClick?: (event: React.MouseEvent<HTMLElement>) => void
+	disabled?: boolean
 }
 
 /**
@@ -185,8 +191,9 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 			// закрывает корневое меню (в отличие от листового DropDownItem)
 			triggerNode = (
 				<li
-					ref={setTriggerRef as any}
+					ref={setTriggerRef}
 					role='menuitem'
+					tabIndex={disabled ? -1 : 0}
 					className={[styles.item, classNames]
 						.filter(Boolean)
 						.join(' ')}
@@ -200,6 +207,18 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 						if (disabled) return
 						onClick?.(event)
 						toggleOpen()
+					}}
+					onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => {
+						if (disabled) return
+						if (event.key === 'ArrowLeft') {
+							event.preventDefault()
+							event.stopPropagation()
+							setOpen(false)
+						}
+						if (event.key === 'ArrowRight' && !open) {
+							event.preventDefault()
+							setOpen(true)
+						}
 					}}
 				>
 					<span className={styles.itemRow}>
@@ -216,7 +235,7 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 							className={styles.itemChevron}
 							data-expanded={open}
 						>
-							<ChevronIcon />
+							<ChevronDown aria-hidden='true' />
 						</span>
 					</span>
 				</li>
@@ -230,23 +249,25 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 				>
 					<span>{triggerLabel}</span>
 					<span className={styles.chevron} data-open={open}>
-						<ChevronIcon />
+						<ChevronDown aria-hidden='true' />
 					</span>
 				</button>
 			)
 			const triggerSource = trigger ?? defaultTrigger
 			triggerNode = isValidElement(triggerSource)
-				? cloneElement(triggerSource as React.ReactElement<any>, {
+				? cloneElement(
+						triggerSource as React.ReactElement<DropDownTriggerProps>,
+						{
 						ref: setTriggerRef,
-						onClick: (event: React.MouseEvent) => {
-							;(triggerSource.props as any).onClick?.(event)
+						onClick: (event: React.MouseEvent<HTMLElement>) => {
+							triggerSource.props.onClick?.(event)
 							toggleOpen()
 						},
 						'aria-haspopup': 'menu',
 						'aria-expanded': open,
 						'data-open': open,
 						disabled:
-							disabled || (triggerSource.props as any).disabled
+							disabled || triggerSource.props.disabled
 					})
 				: triggerSource
 		}
@@ -272,8 +293,9 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 			<>
 				{triggerNode}
 
-				{createPortal(
-					<ul
+				{typeof document !== 'undefined'
+					? createPortal(
+						<ul
 						ref={panelRef}
 						id={isNested ? submenuId : undefined}
 						role='menu'
@@ -295,9 +317,10 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 						<DropDownContext.Provider value={contextValue}>
 							{children}
 						</DropDownContext.Provider>
-					</ul>,
-					getPortalRoot()
-				)}
+						</ul>,
+						getPortalRoot()
+					)
+					: null}
 			</>
 		)
 	}

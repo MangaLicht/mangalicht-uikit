@@ -7,7 +7,7 @@ import {
 	type FocusEvent,
 	type TextareaHTMLAttributes
 } from 'react'
-import { EyeIcon, PencilIcon } from '@/icons/Markdown'
+import { Eye, Pencil } from 'lucide-react'
 import { useValidation } from '@/hooks/useValidation'
 import type { ValidateOn, ValidationRules } from '@/hooks/useValidation'
 import { TabList } from '../TabList'
@@ -159,8 +159,8 @@ export const MarkdownComment = memo(
 			}
 
 			const tabs = [
-				{ id: 'write', label: 'Написать', icon: <PencilIcon /> },
-				{ id: 'preview', label: 'Превью', icon: <EyeIcon /> }
+				{ id: 'write', label: 'Написать', icon: <Pencil aria-hidden='true' /> },
+				{ id: 'preview', label: 'Превью', icon: <Eye aria-hidden='true' /> }
 			]
 
 			return (

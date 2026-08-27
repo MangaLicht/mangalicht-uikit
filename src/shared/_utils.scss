@@ -1,26 +1,33 @@
 @use './mixins' as *;
 
 .visually-hidden {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    margin: -1px !important;
-    border: 0 !important;
-    padding: 0 !important;
-    white-space: nowrap !important;
-    clip-path: inset(100%) !important;
-    clip: rect(0 0 0 0) !important;
-    overflow: hidden !important;
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	margin: -1px !important;
+	border: 0 !important;
+	padding: 0 !important;
+	white-space: nowrap !important;
+	clip-path: inset(100%) !important;
+	clip: rect(0 0 0 0) !important;
+	overflow: hidden !important;
+}
+
+.rounded {
+	height: 100% !important;
+	aspect-ratio: 1 / 1 !important;
+	--current-radius: 999px !important;
+	border-radius: var(--current-radius);
 }
 
 .hidden-mobile {
-    @include mobile {
-        display: none !important;
-    }
+	@include mobile {
+		display: none !important;
+	}
 }
 
 .visually-mobile {
-    @include mobile-above {
-        display: none !important;
-    }
+	@include mobile-above {
+		display: none !important;
+	}
 }

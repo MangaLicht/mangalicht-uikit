@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback, useId, useRef, useState } from 'react'
 import { useValidation } from '@hooks/useValidation'
 import type { ValidateOn, ValidationRules } from '@hooks/useValidation'
-import { CloseIcon } from '@icons/Close'
+import { X } from 'lucide-react'
 import styles from './Input.module.scss'
 
 export interface InputProps
@@ -152,7 +152,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               aria-label="Очистить поле"
               tabIndex={-1}
             >
-              <CloseIcon />
+              <X aria-hidden='true' />
             </button>
           ) : null}
         </div>

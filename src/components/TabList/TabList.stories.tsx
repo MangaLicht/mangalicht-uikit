@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { TabList } from './index'
-import { PencilIcon, EyeIcon } from '../../icons/Markdown'
-//import { HomeIcon, BookIcon, UsersIcon, SettingsIcon } from '@icons/Navigation';
+import { Pencil, Eye } from 'lucide-react'
 
 const meta = {
   title: 'Components/TabList',
@@ -18,8 +17,8 @@ export const Default = {
   render: () => {
     const [activeTab, setActiveTab] = useState('write')
     const tabs = [
-      { id: 'write', label: 'Написать', icon: <PencilIcon /> },
-      { id: 'preview', label: 'Превью', icon: <EyeIcon /> },
+      { id: 'write', label: 'Написать', icon: <Pencil aria-hidden='true' /> },
+      { id: 'preview', label: 'Превью', icon: <Eye aria-hidden='true' /> },
     ]
 
     return (
