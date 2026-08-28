@@ -53,7 +53,6 @@ export {
 	ScrollArea,
 	type ScrollAreaProps,
 	type ScrollAreaHandle,
-	type ScrollAreaRef,
 	type ScrollAreaAxis,
 	type ScrollAreaVisibleMode
 } from '@/components/ScrollArea'

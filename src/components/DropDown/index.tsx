@@ -47,9 +47,13 @@ export interface DropDownProps
 	icon?: React.ReactNode
 }
 
-interface DropDownTriggerProps extends Record<string, unknown> {
+// Расширяем стандартные HTML-атрибуты и добавляем индексную сигнатуру для data-* свойств
+interface DropDownTriggerProps extends React.HTMLAttributes<HTMLElement> {
 	onClick?: (event: React.MouseEvent<HTMLElement>) => void
 	disabled?: boolean
+	ref?: React.Ref<any>
+	// Позволяет передавать любые произвольные свойства (например, data-open)
+	[key: string]: any
 }
 
 /**
@@ -58,7 +62,7 @@ interface DropDownTriggerProps extends Record<string, unknown> {
  * (кнопка-триггер снизу + панель). Если контекст есть — DropDown вложен в
  * другой DropDown, и тогда рендерится строкой в стиле DropDownItem, а по
  * клику раскрывает СОБСТВЕННУЮ floating-панель сбоку (placement: 'right-start').
- * closeMenu/rootOpen/реестр панелей всегда пробрасываются от корня насквозь,
+ * closeMenu/rootOpen/реестр панели всегда пробрасываются от корня насквозь,
  * сколько бы уровней вложенности ни было.
  */
 export const DropDown = forwardRef<HTMLElement, DropDownProps>(
@@ -254,20 +258,21 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 				</button>
 			)
 			const triggerSource = trigger ?? defaultTrigger
-			triggerNode = isValidElement(triggerSource)
-				? cloneElement(
-						triggerSource as React.ReactElement<DropDownTriggerProps>,
-						{
+
+			const typedTriggerSource =
+				triggerSource as React.ReactElement<DropDownTriggerProps>
+
+			triggerNode = isValidElement(typedTriggerSource)
+				? cloneElement(typedTriggerSource, {
 						ref: setTriggerRef,
 						onClick: (event: React.MouseEvent<HTMLElement>) => {
-							triggerSource.props.onClick?.(event)
+							typedTriggerSource.props.onClick?.(event)
 							toggleOpen()
 						},
 						'aria-haspopup': 'menu',
 						'aria-expanded': open,
 						'data-open': open,
-						disabled:
-							disabled || triggerSource.props.disabled
+						disabled: disabled || typedTriggerSource.props.disabled
 					})
 				: triggerSource
 		}
@@ -295,31 +300,31 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 
 				{typeof document !== 'undefined'
 					? createPortal(
-						<ul
-						ref={panelRef}
-						id={isNested ? submenuId : undefined}
-						role='menu'
-						className={[
-							styles.panel,
-							'uikit_rounded',
-							!isNested && classNames
-						]
-							.filter(Boolean)
-							.join(' ')}
-						data-open={open}
-						style={
-							!isNested && width !== undefined
-								? { ...panelStyle, width: `${width}px` }
-								: panelStyle
-						}
-						{...(!isNested ? rest : {})}
-					>
-						<DropDownContext.Provider value={contextValue}>
-							{children}
-						</DropDownContext.Provider>
-						</ul>,
-						getPortalRoot()
-					)
+							<ul
+								ref={panelRef}
+								id={isNested ? submenuId : undefined}
+								role='menu'
+								className={[
+									styles.panel,
+									'uikit_rounded',
+									!isNested && classNames
+								]
+									.filter(Boolean)
+									.join(' ')}
+								data-open={open}
+								style={
+									!isNested && width !== undefined
+										? { ...panelStyle, width: `${width}px` }
+										: panelStyle
+								}
+								{...(!isNested ? rest : {})}
+							>
+								<DropDownContext.Provider value={contextValue}>
+									{children}
+								</DropDownContext.Provider>
+							</ul>,
+							getPortalRoot()
+						)
 					: null}
 			</>
 		)
@@ -328,5 +333,7 @@ export const DropDown = forwardRef<HTMLElement, DropDownProps>(
 
 DropDown.displayName = 'DropDown'
 
-export { DropDownItem } from './DropDownItem'
-export type { DropDownItemProps } from './DropDownItem'
+export {
+	DropDownItem,
+	type DropDownItemProps
+} from '@/components/DropDown/DropDownItem'
