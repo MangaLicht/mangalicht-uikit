@@ -273,6 +273,8 @@ import { ProfileLevelBadge } from 'mangalicht-uikit'
 
 Доступные тиры:
 
+ProfileLevelBadge variants:
+
 ```text
 bronze
 silver
