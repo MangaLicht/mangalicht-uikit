@@ -296,8 +296,8 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	width: 16px;
-	height: 16px;
+	width: auto;
+	height: auto;
 	color: inherit;
 
 	svg {
@@ -306,8 +306,6 @@
 		color: currentColor;
 	}
 
-	// Lucide uses stroke=currentColor and must not inherit the old
-	// fill rule used by the previous custom SVG icon set.
 	:global(svg.lucide) {
 		fill: none;
 		stroke: currentColor;
