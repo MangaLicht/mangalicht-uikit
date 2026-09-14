@@ -6,28 +6,17 @@ $sheet-bg: var(--uikit-bg-block);
 $border: var(--uikit-block-border);
 
 .overlay {
-	position: fixed;
-	inset: 0;
-
-	z-index: 9998;
-
-	display: flex;
-
 	background: $overlay-bg;
 
 	backdrop-filter: blur(var(--sheet-blur, 6px));
 
 	-webkit-backdrop-filter: blur(var(--sheet-blur, 6px));
-
-	animation: overlayIn 180ms ease-out;
 }
 
 .sheet {
-	position: fixed;
-	top: 0;
-	bottom: 0;
+	position: relative;
 
-	z-index: 9999;
+	align-self: stretch;
 
 	display: flex;
 	flex-direction: column;
@@ -39,55 +28,68 @@ $border: var(--uikit-block-border);
 	overflow: hidden;
 
 	background: $sheet-bg;
+
 	color: var(--uikit-text-main);
 
-	border: 1px solid var(--uikit-block-border);
+	border: 1px solid $border;
 
-	will-change: transform;
+	will-change: transform, opacity;
 
 	animation-duration: 240ms;
+
 	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+
 	animation-fill-mode: both;
 }
 
-.left {
-	left: 0;
-	@include adaptive-rounding(4px, 1px, true, false, true, false);
+.sheet[data-dialog-state='open'] {
+	animation-name: sheetIn;
+}
 
-	animation-name: slideInLeft;
+.sheet[data-dialog-state='closing'] {
+	animation-name: sheetOut;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.left {
+	margin-right: auto;
+
+	@include adaptive-rounding(4px, 1px, true, false, true, false);
 }
 
 .right {
-	right: 0;
-	@include adaptive-rounding(4px, 1px, false, true, false, true);
+	margin-left: auto;
 
-	animation-name: slideInRight;
+	@include adaptive-rounding(4px, 1px, false, true, false, true);
 }
 
 .header {
 	display: flex;
 	flex-direction: row;
+
 	justify-content: center;
 	align-items: end;
 
 	gap: 8px;
+
+	padding: 6px 6px 8px 12px;
+
+	border-bottom: 1px solid $border;
+
+	@include keep-radius(0px);
 
 	& > :first-child {
 		flex: 1 1 100%;
 	}
 
 	& > :last-child {
-		flex: 1;
+		flex: 8%;
 	}
-
-	padding: 6px 6px 8px 12px;
-
-	border-bottom: 1px solid $border;
-	@include keep-radius(0px);
 }
 
 .title {
 	letter-spacing: rem(2);
+
 	font-weight: 500;
 }
 
@@ -112,38 +114,43 @@ $border: var(--uikit-block-border);
 	display: none;
 }
 
-@keyframes overlayIn {
+@keyframes sheetIn {
 	from {
 		opacity: 0;
+
+		transform: translateX(var(--sheet-start-offset));
 	}
 
 	to {
 		opacity: 1;
-	}
-}
 
-@keyframes slideInRight {
-	from {
-		transform: translateX(100%);
-	}
-
-	to {
 		transform: translateX(0);
 	}
 }
 
-@keyframes slideInLeft {
+@keyframes sheetOut {
 	from {
-		transform: translateX(-100%);
+		opacity: 1;
+
+		transform: translateX(0);
 	}
 
 	to {
-		transform: translateX(0);
+		opacity: 0;
+
+		transform: translateX(var(--sheet-start-offset));
 	}
+}
+
+.left {
+	--sheet-start-offset: -100%;
+}
+
+.right {
+	--sheet-start-offset: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.overlay,
 	.sheet {
 		animation-duration: 1ms;
 	}
