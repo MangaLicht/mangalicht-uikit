@@ -2,8 +2,8 @@
 
 $overlay-bg: rgb(0 0 0 / 58%);
 $content-bg: color-mix(in srgb, var(--uikit-text-main), transparent 96%);
-$sheet-bg: var(--uikit-bg-block);
-$border: var(--uikit-block-border);
+$sheet-bg: var(--uikit-surface);
+$border: var(--uikit-border);
 
 .overlay {
 	background: $overlay-bg;
@@ -104,6 +104,8 @@ $border: var(--uikit-block-border);
 
 	overflow-y: auto;
 	overflow-x: hidden;
+
+	@include keep-radius(0);
 
 	background-color: $content-bg;
 

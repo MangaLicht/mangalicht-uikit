@@ -17,9 +17,16 @@
 	padding: 4px;
 	&[data-variant='block'] {
 		background-color: $tab-container-bg;
+		box-shadow: 0 0 8px -4px var(--uikit-shadow-300);
 	}
 	&[data-variant='inner'] {
+		border: 2px solid var(--uikit-border);
+		box-shadow: 0 2px 8px -4px var(--uikit-shadow-300);
 		background-color: $tab-container-bg-inner;
+
+		& .indicator {
+			border-radius: 8px !important;
+		}
 	}
 	position: relative;
 	z-index: 1;
@@ -56,7 +63,7 @@
 	position: absolute;
 	top: 4px;
 	height: calc(100% - 8px);
-	border-radius: var(--border-radius-inner);
+
 	background-color: $tab-indicator-bg;
 	z-index: -1;
 	pointer-events: none !important;

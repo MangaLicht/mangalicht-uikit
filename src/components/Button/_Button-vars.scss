@@ -1,10 +1,10 @@
 // default style
 $btn-default-bg-color: var(--uikit-primary);
-$btm-default-highlight-mask: var(--uikit-neutral-mask);
+$btm-default-highlight-mask: var(--uikit-neutral-300);
 $btn-default-text: var(--uikit-text-main);
 // highlight style
 $btm-highlight-bg-color: var(--uikit-accent);
-$btm-highlight-highlight-mask: var(--uikit-neutral-mask);
+$btm-highlight-highlight-mask: var(--uikit-neutral-600);
 $btm-highlight-text: var(--uikit-text-main);
 // bordered style
 $btn-bordered-border-color: var(--uikit-primary);
@@ -16,4 +16,4 @@ $btn-bordacct-border-color: var(--uikit-accent);
 $btn-bordacct-border-color--hover: var(--uikit-accent-hover);
 $btn-bordacct-text: var(--uikit-accent);
 $btn-bordacct-text--hover: var(--uikit-accent-hover);
-$btn-ghost-mask: var(--uikit-neutral-bg-mask);
+$btn-ghost-mask: var(--uikit-neutral-bg);

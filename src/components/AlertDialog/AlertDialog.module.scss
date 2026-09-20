@@ -1,10 +1,11 @@
 @use '../../shared/mixins' as *;
 
-$dialog-bg: var(--uikit-bg-block);
+$dialog-bg: var(--uikit-bg);
 $overlay-bg: rgb(0 0 0 / 58%);
 $content-bg: color-mix(in srgb, var(--uikit-text-main), transparent 96%);
-$border: var(--uikit-block-border);
+$border: var(--uikit-border);
 $dialog-padding: 8px;
+$border-width: 2px;
 
 .overlay {
 	position: fixed;
@@ -37,7 +38,7 @@ $dialog-padding: 8px;
 	max-height: calc(100dvh - 48px);
 
 	overflow: hidden;
-	border: 1px solid $border;
+	border: $border-width solid $border;
 
 	@include adaptive-rounding($dialog-padding, 1px);
 
@@ -72,7 +73,7 @@ $dialog-padding: 8px;
 
 	padding: $dialog-padding;
 
-	border-top: 1px solid $border;
+	border-top: $border-width solid $border;
 
 	@include keep-radius(0px);
 

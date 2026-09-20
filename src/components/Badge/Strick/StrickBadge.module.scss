@@ -1,8 +1,8 @@
 @use '../../../shared/mixins' as *;
 
-$strick-color: var(--uikit-yellow);
+$strick-color: var(--uikit-accent-orange-light);
 $strick-glow: rgba(253, 130, 49, 0.95);
-$strick-bg: color-mix(in srgb, $strick-color 10%, var(--uikit-bg-block, #fff));
+$strick-bg: color-mix(in srgb, $strick-color 10%, var(--uikit-surface, #fff));
 $strick-animation-glow-size: 8px;
 
 .badge {

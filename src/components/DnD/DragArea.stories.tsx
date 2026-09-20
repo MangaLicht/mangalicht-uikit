@@ -22,7 +22,7 @@ const pageStyle = {
 	minHeight: '100vh',
 	padding: 24,
 	boxSizing: 'border-box' as const,
-	background: 'var(--uikit-bg-main)',
+	background: 'var(--uikit-bg)',
 	color: 'var(--uikit-text-main)',
 	fontFamily: 'inherit'
 }
@@ -34,8 +34,8 @@ const panelStyle = {
 	boxSizing: 'border-box' as const,
 	border: '1px solid var(--uikit-border)',
 	borderRadius: 'var(--uikit-matched-radius)',
-	background: 'var(--uikit-bg-block-inner)',
-	boxShadow: '0 10px 30px var(--uikit-block-shadow)'
+	background: 'var(--uikit-surface-2)',
+	boxShadow: '0 10px 30px var(s--uikit-shadow-300)'
 }
 
 const cardStyle = {
@@ -44,7 +44,7 @@ const cardStyle = {
 	boxSizing: 'border-box' as const,
 	border: '1px solid var(--uikit-border)',
 	borderRadius: 'var(--uikit-matched-radius)',
-	background: 'var(--uikit-bg-block)',
+	background: 'var(--uikit-surface)',
 	overflow: 'hidden',
 	position: 'relative' as const
 }
@@ -58,7 +58,7 @@ const Card = ({ index }: { index: number }) => (
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'space-between',
-				background: 'var(--uikit-bg-block-inner)',
+				background: 'var(--uikit-surface-2)',
 				borderBottom: '1px solid var(--uikit-border)',
 				color: 'var(--uikit-text-muted)',
 				fontSize: 12

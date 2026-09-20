@@ -3,137 +3,136 @@
 @use '../../shared/_mixins.scss' as *;
 
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-  font-family: inherit;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	width: 100%;
+	font-family: inherit;
 }
 
 .label {
-  font-size: 13px;
-  font-weight: 500;
-  color: $input-label-color;
+	font-size: 13px;
+	font-weight: 500;
+	color: $input-label-color;
 }
 
 .fieldWrapper {
-  @include adaptive-rounding(0px);
+	@include adaptive-rounding(0px);
 
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-  border: $input-border-width solid $input-border-color;
-  background-color: $input-bg-color;
-  transition:
-    border-color var(--uikit-transition-fast, 0.18s ease),
-    box-shadow var(--uikit-transition-fast, 0.18s ease);
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	box-sizing: border-box;
+	border: $input-border-width solid $input-border-color;
+	background-color: $input-bg-color;
+	transition:
+		border-color var(--uikit-transition-fast, 0.18s ease),
+		box-shadow var(--uikit-transition-fast, 0.18s ease);
 
-  &:hover:not([data-disabled='true']) {
-    border-color: $input-border-color--hover;
-  }
+	&:hover:not([data-disabled='true']) {
+		border-color: $input-border-color--hover;
+	}
 
-  &:focus-within {
-    border-color: $input-border-color--focus;
-  }
+	&:focus-within {
+		border-color: $input-border-color--focus;
+	}
 
-  &[data-invalid='true'] {
-    border-color: $input-border-color--error;
-  }
+	&[data-invalid='true'] {
+		border-color: $input-border-color--error;
+	}
 
-  &[data-disabled='true'] {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+	&[data-disabled='true'] {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
 }
 
 .icon {
-  display: inline-flex;
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  margin-left: 12px;
-  color: $input-icon-color;
+	display: inline-flex;
+	flex-shrink: 0;
+	width: 16px;
+	height: 16px;
+	margin-left: 12px;
+	color: $input-icon-color;
 
-  svg {
-    width: 100%;
-    height: 100%;
-  }
+	svg {
+		width: 100%;
+		height: 100%;
+	}
 }
 
 .input {
-  @include reset-button;
+	@include reset-button;
 
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-  height: 40px;
-  box-sizing: border-box;
-  padding: 0 12px;
-  font: inherit;
-  font-size: $input-font-size;
-  color: $input-text-color;
-  background: transparent;
+	flex: 1;
+	min-width: 0;
+	width: 100%;
+	height: 40px;
+	box-sizing: border-box;
+	padding: 0 12px;
+	font: inherit;
+	font-size: $input-font-size;
+	color: $input-text-color;
 
-  &::placeholder {
-    color: $input-placeholder-color;
-  }
+	&::placeholder {
+		color: $input-placeholder-color;
+	}
 
-  // прячем нативную кнопку очистки браузера у type="search" (кружок/крестик
-  // в Chrome/Edge, "x" в старом Edge) — у нас есть своя через проп clearable,
-  // и без этого правила они дублируются
-  &::-webkit-search-cancel-button,
-  &::-webkit-search-decoration {
-    appearance: none;
-    display: none;
-  }
-  &::-ms-clear {
-    display: none;
-  }
+	// прячем нативную кнопку очистки браузера у type="search" (кружок/крестик
+	// в Chrome/Edge, "x" в старом Edge) — у нас есть своя через проп clearable,
+	// и без этого правила они дублируются
+	&::-webkit-search-cancel-button,
+	&::-webkit-search-decoration {
+		appearance: none;
+		display: none;
+	}
+	&::-ms-clear {
+		display: none;
+	}
 
-  &:disabled {
-    cursor: not-allowed;
-  }
+	&:disabled {
+		cursor: not-allowed;
+	}
 }
 
 .clearButton {
-  @include reset-button;
-  @include flex-center($isInline: true);
+	@include reset-button;
+	@include flex-center($isInline: true);
 
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
-  border-radius: 50%;
-  color: $input-clear-icon-color;
-  cursor: pointer;
-  transition: background-color var(--uikit-transition-fast, 0.18s ease);
+	flex-shrink: 0;
+	width: 20px;
+	height: 20px;
+	margin-right: 8px;
+	border-radius: 50%;
+	color: $input-clear-icon-color;
+	cursor: pointer;
+	transition: background-color var(--uikit-transition-fast, 0.18s ease);
 
-  &:hover {
-    & svg {
-      color: $input-clear-icon-hover;
-    }
-    background-color: $input-clear-hover-bg;
-  }
+	&:hover {
+		& svg {
+			color: $input-clear-icon-hover;
+		}
+		background-color: $input-clear-hover-bg;
+	}
 
-  svg {
-    width: 60%;
-    height: 60%;
-    transition: color 300ms ease;
-    -webkit-transition: color 300ms ease;
-    -moz-transition: color 300ms ease;
-    -ms-transition: color 300ms ease;
-    -o-transition: color 300ms ease;
-}
+	svg {
+		width: 60%;
+		height: 60%;
+		transition: color 300ms ease;
+		-webkit-transition: color 300ms ease;
+		-moz-transition: color 300ms ease;
+		-ms-transition: color 300ms ease;
+		-o-transition: color 300ms ease;
+	}
 }
 
 .message {
-  font-size: 12px;
-  line-height: 1.4;
-  color: $input-hint-color;
+	font-size: 12px;
+	line-height: 1.4;
+	color: $input-hint-color;
 
-  &[data-variant='error'] {
-    color: $input-error-color;
-  }
+	&[data-variant='error'] {
+		color: $input-error-color;
+	}
 }

@@ -31,12 +31,12 @@
 .destructive {
 	$text-color: color-mix(
 		in srgb,
-		var(--uikit-alert),
+		var(--uikit-danger),
 		var(--uikit-text-main) 90%
 	);
 
 	color: $text-color;
-	background-color: var(--uikit-alert);
+	background-color: var(--uikit-danger);
 }
 
 .outline {
@@ -45,7 +45,7 @@
 }
 
 .positive {
-	color: var(--c-black);
+	color: black;
 	font-weight: 700;
-	background-color: var(--uikit-positive);
+	background-color: var(--uikit-success);
 }

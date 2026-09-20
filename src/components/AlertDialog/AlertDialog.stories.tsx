@@ -171,7 +171,7 @@ export const WithoutOverlayClose: Story = {
 					onClose={() => setOpen(false)}
 				>
 					<Button
-						variant='ghost'
+						variant='default'
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>

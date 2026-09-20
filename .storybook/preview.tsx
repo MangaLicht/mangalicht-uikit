@@ -2,7 +2,7 @@ import type { Decorator, Preview } from '@storybook/react'
 import { useEffect, type ReactNode } from 'react'
 import '../src/shared/normalize.scss'
 import '../src/shared/scss/global-styles.scss'
-import '../src/shared/theme-vars.scss'
+import '../src/shared/theme.scss'
 
 type Theme = 'light' | 'dark'
 
