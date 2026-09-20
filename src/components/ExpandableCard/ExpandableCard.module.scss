@@ -26,7 +26,7 @@
 	border-radius: $border-radius;
 	background: $background;
 	color: $text-primary;
-	box-shadow: 0px 4px 16px -2px $shadow;
+	box-shadow: 0px 4px 16px -6px $shadow;
 
 	transition:
 		width $card-transition-duration $ease,
@@ -39,8 +39,8 @@
 		width: $card-expanded-width;
 		height: $card-expanded-height;
 		box-shadow:
-			0px 20px 40px -8px $shadow,
-			0px 4px 12px 0px $shadow;
+			0px 12px 18px -8px $shadow,
+			0px 4px 12px -2px $shadow;
 	}
 }
 

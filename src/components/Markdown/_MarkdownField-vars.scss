@@ -1,32 +1,32 @@
 // color theme
 $md-label-color: var(--uikit-text-main);
-$md-bg-color: var(--uikit-secondary);
+$md-bg-color: var(--uikit-surface-2);
 $md-border-color: var(--uikit-border);
 $md-border-color--normal: var(--uikit-border);
 $md-border-color--hover: var(--uikit-accent);
 $md-border-color--focus: var(--uikit-accent);
-$md-border-color--error: var(--uikit-alert);
-$md-error-color: var(--uikit-alert);
-$md-counter-color: var(--uikit-text-ghost);
-$md-counter-color--over: var(--uikit-alert);
+$md-border-color--error: var(--uikit-danger);
+$md-error-color: var(--uikit-danger);
+$md-counter-color: var(--uikit-text-muted);
+$md-counter-color--over: var(--uikit-danger);
 
 $md-text-color: var(--uikit-text-main);
-$md-placeholder-color: var(--uikit-text-ghost);
-$md-hint-color: var(--uikit-text-ghost);
+$md-placeholder-color: var(--uikit-text-muted);
+$md-hint-color: var(--uikit-text-muted);
 
-$md-toolbar-bg-color: var(--uikit-bg-block);
+$md-toolbar-bg-color: var(--uikit-primary);
 $md-toolbar-border-color: var(--uikit-border);
-$md-toolbar-icon-color: var(--uikit-text-ghost);
+$md-toolbar-icon-color: var(--uikit-neutral-300);
 $md-toolbar-icon-color--hover: var(--uikit-text-main);
-$md-toolbar-hover-bg: var(--uikit-neutral-mask);
+$md-toolbar-hover-bg: var(--uikit-neutral-400);
 $md-toolbar-shadow: 0px 2px 12px -4px rgba(0, 0, 0, 0.5);
 
 $md-mode-text-color: var(--uikit-text-ghost);
 $md-mode-text-color--active: var(--uikit-accent);
-$md-mode-bg--active: var(--uikit-neutral-accent-mask);
+$md-mode-bg--active: var(--uikit-neutral-highlight);
 
 $md-preview-quote-border: var(--uikit-border);
-$md-preview-code-bg: var(--uikit-bg-block);
+$md-preview-code-bg: var(--uikit-primary);
 
 // variables
 $md-font-size: 14px;

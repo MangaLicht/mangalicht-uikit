@@ -83,12 +83,12 @@ export const Default: Story = {
 					onClose={() => setOpen(false)}
 				>
 					<Button
-						variant='secondary'
+						variant='default'
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
 					<Button
-						variant='primary'
+						variant='highlight'
 						labelText='Continue'
 						onClick={() => setOpen(false)}
 					/>
@@ -115,7 +115,7 @@ export const DeleteConfirmation: Story = {
 				}}
 			>
 				<Button
-					variant='primary'
+					variant='default'
 					labelText='Delete account'
 					onClick={() => setOpen(true)}
 				/>
@@ -126,12 +126,12 @@ export const DeleteConfirmation: Story = {
 					onClose={() => setOpen(false)}
 				>
 					<Button
-						variant='secondary'
+						variant='default'
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
 					<Button
-						variant='primary'
+						variant='highlight'
 						isAlert={true}
 						labelText='Continue'
 						onClick={() => {
@@ -159,7 +159,7 @@ export const WithoutOverlayClose: Story = {
 				}}
 			>
 				<Button
-					variant='primary'
+					variant='default'
 					labelText='Open Dialog'
 					onClick={() => setOpen(true)}
 				/>
@@ -171,12 +171,12 @@ export const WithoutOverlayClose: Story = {
 					onClose={() => setOpen(false)}
 				>
 					<Button
-						variant='secondary'
+						variant='default'
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
 					<Button
-						variant='primary'
+						variant='highlight'
 						labelText='Continue'
 						onClick={() => setOpen(false)}
 					/>
@@ -200,7 +200,7 @@ export const WithoutEscapeClose: Story = {
 				}}
 			>
 				<Button
-					variant='primary'
+					variant='default'
 					labelText='Open Dialog'
 					onClick={() => setOpen(true)}
 				/>
@@ -212,12 +212,12 @@ export const WithoutEscapeClose: Story = {
 					onClose={() => setOpen(false)}
 				>
 					<Button
-						variant='secondary'
+						variant='default'
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
 					<Button
-						variant='primary'
+						variant='highlight'
 						labelText='Continue'
 						onClick={() => setOpen(false)}
 					/>
@@ -268,12 +268,12 @@ export const Blur: Story = {
 					onClose={() => setOpen(false)}
 				>
 					<Button
-						variant='secondary'
+						variant='default'
 						labelText='Cancel'
 						onClick={() => setOpen(false)}
 					/>
 					<Button
-						variant='primary'
+						variant='highlight'
 						labelText='Continue'
 						onClick={() => setOpen(false)}
 					/>

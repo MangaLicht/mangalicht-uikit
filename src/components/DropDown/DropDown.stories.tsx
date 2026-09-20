@@ -1,5 +1,5 @@
 import React from 'react';
-import { DropDown } from './';
+import { DropDown, type DropDownPlacement } from './';
 import { DropDownItem } from './';
 import { Button } from '../Button';
 
@@ -11,12 +11,28 @@ const meta = {
     triggerLabel: { control: 'text' },
     width: { control: 'number' },
     closeOnItemClick: { control: 'boolean' },
+    placement: {
+      control: 'select',
+      options: ['top', 'bottom', 'left', 'right', 'auto'],
+      description: 'Сторона открытия меню относительно триггера',
+    },
     children: { control: false },
     trigger: { control: false },
   },
 };
 
 export default meta;
+
+const placementItems = (
+  prefix: string = ''
+) => (
+  <>
+    <DropDownItem label={`${prefix}Профиль`} onClick={() => console.log('Профиль')} />
+    <DropDownItem label={`${prefix}Настройки`} onClick={() => console.log('Настройки')} />
+    <DropDownItem label={`${prefix}Документы`} onClick={() => console.log('Документы')} />
+    <DropDownItem label={`${prefix}Выйти`} onClick={() => console.log('Выйти')} />
+  </>
+);
 
 export const Default = {
   render: () => (
@@ -89,6 +105,195 @@ export const KeepOpenOnItemClick = {
       <DropDownItem label="По имени" onClick={() => console.log('По имени')} />
       <DropDownItem label="По размеру" onClick={() => console.log('По размеру')} />
     </DropDown>
+  ),
+};
+
+/**
+ * Демонстрация новой возможности placement.
+ * Все четыре статических значения показывают, что меню открывается
+ * строго относительно соответствующей стороны триггера.
+ */
+export const Placements = {
+  name: 'Placement — all directions',
+  render: () => {
+    const placements: DropDownPlacement[] = [
+      'top',
+      'bottom',
+      'left',
+      'right',
+    ];
+
+    return (
+      <div
+        style={{
+          minHeight: 360,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, minmax(120px, 1fr))',
+          gridTemplateRows: 'repeat(3, 100px)',
+          placeItems: 'center',
+          gap: 16,
+        }}
+      >
+        <div style={{ gridColumn: 2, gridRow: 1 }}>
+          <DropDown triggerLabel="Top" placement="top">
+            {placementItems('Top — ')}
+          </DropDown>
+        </div>
+
+        <div style={{ gridColumn: 1, gridRow: 2 }}>
+          <DropDown triggerLabel="Left" placement="left">
+            {placementItems('Left — ')}
+          </DropDown>
+        </div>
+
+        <div style={{ gridColumn: 2, gridRow: 2 }}>
+          <DropDown triggerLabel="Bottom" placement="bottom">
+            {placementItems('Bottom — ')}
+          </DropDown>
+        </div>
+
+        <div style={{ gridColumn: 3, gridRow: 2 }}>
+          <DropDown triggerLabel="Right" placement="right">
+            {placementItems('Right — ')}
+          </DropDown>
+        </div>
+      </div>
+    );
+  },
+};
+
+/**
+ * Демонстрация placement как Storybook control.
+ * Значение можно переключать непосредственно через Controls.
+ */
+export const PlacementControl = {
+  name: 'Placement — interactive',
+  args: {
+    triggerLabel: 'Выбрать placement',
+    placement: 'bottom' as DropDownPlacement,
+    width: 220,
+  },
+  render: (args: {
+    triggerLabel: string;
+    placement: DropDownPlacement;
+    width: number;
+  }) => (
+    <div
+      style={{
+        minHeight: 260,
+        display: 'grid',
+        placeItems: 'center',
+      }}
+    >
+      <DropDown
+        triggerLabel={args.triggerLabel}
+        placement={args.placement}
+        width={args.width}
+      >
+        <DropDownItem label="Первый пункт" onClick={() => {}} />
+        <DropDownItem label="Второй пункт" onClick={() => {}} />
+        <DropDownItem label="Третий пункт" onClick={() => {}} />
+        <DropDownItem label="Четвёртый пункт" onClick={() => {}} />
+      </DropDown>
+    </div>
+  ),
+};
+
+/**
+ * Главная демонстрация auto-позиционирования.
+ * Триггеры расположены у разных границ viewport, поэтому при открытии
+ * меню можно увидеть, как DropDown выбирает доступную сторону.
+ *
+ * Для проверки именно auto удобно открыть меню около нижней/правой
+ * границы Storybook viewport.
+ */
+export const AutoPlacement = {
+  name: 'Placement — auto',
+  render: () => (
+    <div
+      style={{
+        minHeight: 620,
+        position: 'relative',
+        padding: 24,
+        boxSizing: 'border-box',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: 24,
+          left: 24,
+        }}
+      >
+        <DropDown triggerLabel="Auto: top-left" placement="auto" width={220}>
+          <DropDownItem label="Меню автоматически" onClick={() => {}} />
+          <DropDownItem label="Подстраивается под viewport" onClick={() => {}} />
+          <DropDownItem label="Без обрезания" onClick={() => {}} />
+        </DropDown>
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          top: 24,
+          right: 24,
+        }}
+      >
+        <DropDown triggerLabel="Auto: top-right" placement="auto" width={220}>
+          <DropDownItem label="Меню автоматически" onClick={() => {}} />
+          <DropDownItem label="Подстраивается под viewport" onClick={() => {}} />
+          <DropDownItem label="Без обрезания" onClick={() => {}} />
+        </DropDown>
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 24,
+          left: 24,
+        }}
+      >
+        <DropDown triggerLabel="Auto: bottom-left" placement="auto" width={220}>
+          <DropDownItem label="Меню автоматически" onClick={() => {}} />
+          <DropDownItem label="При нехватке места снизу" onClick={() => {}} />
+          <DropDownItem label="откроется сверху" onClick={() => {}} />
+        </DropDown>
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 24,
+          right: 24,
+        }}
+      >
+        <DropDown triggerLabel="Auto: bottom-right" placement="auto" width={220}>
+          <DropDownItem label="Меню автоматически" onClick={() => {}} />
+          <DropDownItem label="При нехватке места" onClick={() => {}} />
+          <DropDownItem label="выберет свободную сторону" onClick={() => {}} />
+        </DropDown>
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'grid',
+          placeItems: 'center',
+          pointerEvents: 'none',
+          textAlign: 'center',
+          padding: 100,
+          boxSizing: 'border-box',
+        }}
+      >
+        <div>
+          <strong>placement="auto"</strong>
+          <div style={{ marginTop: 8 }}>
+            Попробуйте открыть меню у разных границ области.
+          </div>
+        </div>
+      </div>
+    </div>
   ),
 };
 

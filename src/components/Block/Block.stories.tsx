@@ -4,6 +4,7 @@ import { Button } from '../Button'
 import { Checkbox } from '../Checkbox'
 import { Switch } from '../Switch'
 import { Select } from '../Select'
+import { Carousel } from '../Carousel'
 
 const meta = {
 	title: 'Components/Block',
@@ -50,8 +51,27 @@ export const Nested = () => {
 		{ value: 'kiwi', label: 'Киви' }
 	]
 
+	const cardSlides = Array.from({ length: 8 }, (_, index) => ({
+		id: `card-${index + 1}`,
+		content: (
+			<div
+				style={{
+					width: '100%',
+					height: '100%',
+					display: 'grid',
+					placeItems: 'center',
+					fontSize: 36,
+					fontWeight: 700,
+					color: 'var(--uikit-text-main)'
+				}}
+			>
+				{index + 1}
+			</div>
+		)
+	}))
+
 	return (
-		<div style={{ display: 'flex', width: '256px', height: '512px' }}>
+		<div style={{ display: 'flex', width: '256px', height: 'auto' }}>
 			<Block variant='default' title='Test' titleStyle={3}>
 				<div
 					style={{
@@ -111,6 +131,20 @@ export const Nested = () => {
 						<Select
 							options={fruitOptions}
 							classNames='uikit_rounded'
+						/>
+					</Block>
+					<Block variant='outlined' title='Carousel' titleStyle={6}>
+						<Carousel
+							slides={cardSlides}
+							variant='card'
+							height={346}
+							cardWidth={314}
+							cardHeight={346}
+							gap={6}
+							showDots={true}
+							dotsPosition='inside'
+							showArrows
+							swipe
 						/>
 					</Block>
 				</div>

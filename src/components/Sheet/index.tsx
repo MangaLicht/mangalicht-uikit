@@ -1,7 +1,9 @@
-import { type CSSProperties, type ReactNode, useEffect } from 'react'
-import { createPortal } from 'react-dom'
+import { type CSSProperties, type ReactNode } from 'react'
+
 import { XIcon } from 'lucide-react'
+
 import { Button } from '../Button'
+import { DialogWindow } from '../DialogWindow'
 
 import styles from './Sheet.module.scss'
 
@@ -18,6 +20,9 @@ export interface SheetProps {
 	 */
 	side?: SheetSide
 
+	/**
+	 * Заголовок панели.
+	 */
 	titleText: string
 
 	/**
@@ -31,12 +36,12 @@ export interface SheetProps {
 	width?: string | number
 
 	/**
-	 * Закрывать Sheet при клике по overlay.
+	 * Закрывать при клике по overlay.
 	 */
 	closeOnOverlayClick?: boolean
 
 	/**
-	 * Закрывать Sheet клавишей Escape.
+	 * Закрывать клавишей Escape.
 	 */
 	closeOnEscape?: boolean
 
@@ -68,91 +73,38 @@ export const Sheet = ({
 	className,
 	onClose
 }: SheetProps) => {
-	useEffect(() => {
-		if (!open || !closeOnEscape) {
-			return
-		}
-
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key !== 'Escape') {
-				return
-			}
-
-			event.preventDefault()
-			onClose()
-		}
-
-		document.addEventListener('keydown', handleKeyDown)
-
-		return () => {
-			document.removeEventListener('keydown', handleKeyDown)
-		}
-	}, [open, closeOnEscape, onClose])
-
-	useEffect(() => {
-		if (!open) {
-			return
-		}
-
-		const previousOverflow = document.body.style.overflow
-
-		document.body.style.overflow = 'hidden'
-
-		return () => {
-			document.body.style.overflow = previousOverflow
-		}
-	}, [open])
-
-	if (!open) {
-		return null
-	}
-
-	const sheetClassName = [styles.sheet, styles[side], className]
-		.filter(Boolean)
-		.join(' ')
-
 	const sheetStyle = {
 		'--sheet-width': typeof width === 'number' ? `${width}px` : width,
 		'--sheet-blur': `${blur}px`
 	} as CSSProperties
 
-	const handleOverlayMouseDown = (
-		event: React.MouseEvent<HTMLDivElement>
-	) => {
-		if (!closeOnOverlayClick) {
-			return
-		}
-
-		if (event.target === event.currentTarget) {
-			onClose()
-		}
-	}
-
-	return createPortal(
-		<div
-			className={styles.overlay}
+	return (
+		<DialogWindow
+			isOpen={open}
+			onClose={onClose}
+			closeOnOverlayClick={closeOnOverlayClick}
+			closeOnEscape={closeOnEscape}
+			overlayClassName={styles.overlay}
+			className={[styles.sheet, styles[side], className]
+				.filter(Boolean)
+				.join(' ')}
 			style={sheetStyle}
-			onMouseDown={handleOverlayMouseDown}
+			role='dialog'
+			aria-modal='true'
 		>
-			<aside
-				className={sheetClassName}
-				role='dialog'
-				aria-modal='true'
-				onMouseDown={event => event.stopPropagation()}
-			>
-				<div className={styles.header}>
-					<h6 className={styles.title}>{titleText}</h6>
-					<Button
-						variant='ghost'
-						iconStart={<XIcon />}
-						classNames={styles.closeButton}
-						onClick={onClose}
-					/>
-				</div>
-				<div className={styles.content}>{children}</div>
-			</aside>
-		</div>,
-		document.body
+			<div className={styles.header}>
+				<h6 className={styles.title}>{titleText}</h6>
+
+				<Button
+					variant='ghost'
+					iconStart={<XIcon />}
+					classNames={styles.closeButton}
+					onClick={onClose}
+				/>
+			</div>
+
+			<div className={styles.content}>{children}</div>
+		</DialogWindow>
 	)
 }
 

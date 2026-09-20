@@ -47,27 +47,26 @@ export {
 	ProgressBar,
 	type ProgressBarProps,
 	type ProgressFill
-} from '@/components/ProgressBar'
-export { Slider, type SliderProps } from '@/components/Slider'
+} from '@components/ProgressBar'
+export { Slider, type SliderProps } from '@components/Slider'
 export {
 	ScrollArea,
 	type ScrollAreaProps,
 	type ScrollAreaHandle,
-	type ScrollAreaRef,
 	type ScrollAreaAxis,
 	type ScrollAreaVisibleMode
-} from '@/components/ScrollArea'
+} from '@components/ScrollArea'
 export {
 	DropDown,
 	DropDownItem,
 	type DropDownProps,
 	type DropDownItemProps
-} from '@/components/DropDown'
+} from '@components/DropDown'
 export {
 	Carousel,
 	type CarouselProps,
 	type CarouselSlide
-} from '@/components/Carousel'
+} from '@components/Carousel'
 export {
 	ExpandableCard,
 	ExpandableElement,
@@ -75,6 +74,8 @@ export {
 	type ExpandableElementProps,
 	type ExpandableCardComponent,
 	type ExpandableElementComponent
-} from '@/components/ExpandableCard'
+} from '@components/ExpandableCard'
 export { Image, type ImageProps, type ImageSource } from '@components/Image'
-export { AlertDialog, type AlertDialogProps } from '@/components/AlertDialog'
+export { AlertDialog, type AlertDialogProps } from '@components/AlertDialog'
+export { Sheet, type SheetProps, type SheetSide } from '@components/Sheet'
+export { DialogWindow, type DialogWindowProps } from '@components/DialogWindow'

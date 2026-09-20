@@ -1,9 +1,8 @@
-import type { IUIKitProps } from '@shared/types/IUIKitProps'
 import React, { useContext } from 'react'
 import { DropDownContext } from './context'
 import styles from './DropDown.module.scss'
 
-export interface DropDownItemProps extends IUIKitProps {
+export interface DropDownItemProps {
 	/** Текст пункта меню */
 	label: string
 	/** Колбэк клика */
@@ -12,6 +11,7 @@ export interface DropDownItemProps extends IUIKitProps {
 	disabled?: boolean
 	/** Иконка перед текстом */
 	icon?: React.ReactNode
+	classNames?: string
 }
 
 /**

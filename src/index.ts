@@ -1,4 +1,5 @@
 export * from './components'
 export * from './icons'
 export * from './hooks'
+export * from '@/shared/style'
 export type { IUIKitProps } from './shared/types'

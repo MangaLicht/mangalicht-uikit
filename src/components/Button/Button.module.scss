@@ -2,6 +2,41 @@
 @use '../../shared/mixins' as *;
 @use '../../shared/_media.scss' as *;
 
+@mixin IsAlert($bordered: false) {
+	@if $bordered == false {
+		&[data-alert='true'] {
+			color: var(--c-white);
+			background-color: var(--uikit-danger);
+
+			&::after {
+				content: '';
+				background-color: var(--uikit-neutral-danger) !important;
+			}
+
+			&:hover:not(:disabled) {
+				color: var(--c-white);
+			}
+			&:active:not(:disabled) {
+				color: var(--c-white);
+			}
+		}
+	} @else {
+		&[data-alert='true'] {
+			border-color: var(--uikit-danger);
+			color: var(--uikit-danger);
+
+			&:hover:not(:disabled) {
+				border-color: var(--uikit-danger-hover);
+				color: var(--uikit-danger-hover);
+			}
+			&:active:not(:disabled) {
+				border-color: var(--uikit-danger-hover);
+				color: var(--uikit-danger-hover);
+			}
+		}
+	}
+}
+
 .button {
 	position: relative;
 
@@ -126,16 +161,7 @@
 	background-color: $btn-default-bg-color;
 	color: $btn-default-text;
 
-	&[data-alert='true'] {
-		color: var(--c-white);
-		background-color: var(--uikit-alert);
-		&:hover:not(:disabled) {
-			color: var(--c-white);
-		}
-		&:active:not(:disabled) {
-			color: var(--c-white);
-		}
-	}
+	@include IsAlert();
 
 	&::after {
 		content: '';
@@ -157,19 +183,10 @@
 	border-color: transparent;
 	color: $btm-highlight-text;
 
+	@include IsAlert();
+
 	& > span {
 		font-weight: 700 !important;
-	}
-
-	&[data-alert='true'] {
-		color: var(--c-white);
-		background-color: var(--uikit-alert);
-		&:hover:not(:disabled) {
-			color: var(--c-white);
-		}
-		&:active:not(:disabled) {
-			color: var(--c-white);
-		}
 	}
 
 	&::after {
@@ -193,18 +210,7 @@
 	color: $btn-bordered-text;
 	border-color: $btn-bordered-border-color;
 
-	&[data-alert='true'] {
-		color: var(--uikit-alert);
-		border-color: var(--uikit-alert);
-		&:hover:not(:disabled) {
-			color: var(--uikit-alert-hover);
-			border-color: var(--uikit-alert-hover);
-		}
-		&:active {
-			color: var(--uikit-alert-hover);
-			border-color: var(--uikit-alert-hover);
-		}
-	}
+	@include IsAlert(true);
 
 	&:hover:not(:disabled) {
 		color: $btn-bordered-text--hover;
@@ -222,18 +228,7 @@
 	color: $btn-bordacct-text;
 	border-color: $btn-bordacct-border-color;
 
-	&[data-alert='true'] {
-		color: var(--uikit-alert);
-		border-color: var(--uikit-alert);
-		&:hover:not(:disabled) {
-			color: var(--uikit-alert-hover);
-			border-color: var(--uikit-alert-hover);
-		}
-		&:active {
-			color: var(--uikit-alert-hover);
-			border-color: var(--uikit-alert-hover);
-		}
-	}
+	@include IsAlert(true);
 
 	&:hover:not(:disabled) {
 		color: $btn-bordacct-text--hover;
@@ -250,15 +245,7 @@
 	border-color: transparent;
 	color: $btn-default-text;
 
-	&[data-alert='true'] {
-		color: var(--uikit-alert);
-		&:hover:not(:disabled) {
-			color: var(--uikit-alert-hover);
-		}
-		&:active:not(:disabled) {
-			color: var(--uikit-alert-hover);
-		}
-	}
+	@include IsAlert(true);
 
 	&::after {
 		content: '';
@@ -279,16 +266,6 @@
 	background-color: transparent;
 	border-color: transparent;
 	color: $btn-default-text;
-
-	&[data-alert='true'] {
-		color: var(--uikit-alert);
-		&:hover:not(:disabled) {
-			color: var(--uikit-alert-hover);
-		}
-		&:active:not(:disabled) {
-			color: var(--uikit-alert-hover);
-		}
-	}
 }
 
 .icon {
@@ -296,8 +273,10 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	width: 16px;
-	height: 16px;
+	width: auto;
+	height: auto;
+	min-height: 12px;
+	min-width: 12px;
 	color: inherit;
 
 	svg {
@@ -306,8 +285,6 @@
 		color: currentColor;
 	}
 
-	// Lucide uses stroke=currentColor and must not inherit the old
-	// fill rule used by the previous custom SVG icon set.
 	:global(svg.lucide) {
 		fill: none;
 		stroke: currentColor;

@@ -13,8 +13,6 @@
 	padding: $block-padding;
 	overflow: hidden;
 
-	border: $block-border-width solid var(--uikit-block-border);
-
 	@include adaptive-rounding($block-padding, 1px);
 }
 
@@ -33,10 +31,11 @@
 
 .default {
 	background-color: $block-bg-color;
-	//box-shadow: inset 0 0 8px 0px $block-shadow-color;
+	box-shadow: 0 0 8px -4px $block-shadow-color;
 }
 
 .outlined {
 	background-color: $block-bg-bordered-color;
+	box-shadow: 0 2px 8px -4px $block-shadow-color;
 	border: $block-border-width solid $block-border-color;
 }

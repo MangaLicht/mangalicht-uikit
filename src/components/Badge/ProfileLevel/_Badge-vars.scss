@@ -1,16 +1,40 @@
 $badge-fill-opacity: 80%;
-$badge-bronze: #A9711F;
-$badge-bronze-bg: color-mix(in srgb, $badge-bronze, var(--uikit-bg-block) $badge-fill-opacity);
+$badge-bronze: #a9711f;
+$badge-bronze-bg: color-mix(
+	in srgb,
+	$badge-bronze,
+	var(--uikit-surface) $badge-fill-opacity
+);
 $badge-silver: #9da1a8;
-$badge-silver-bg: color-mix(in srgb, $badge-silver, var(--uikit-bg-block) $badge-fill-opacity);
-$badge-gold: #F0A93E;
-$badge-gold-bg: color-mix(in srgb, $badge-gold, var(--uikit-bg-block) $badge-fill-opacity);
-$badge-platinum: #75798A;
-$badge-platinum-bg: color-mix(in srgb, $badge-platinum, var(--uikit-bg-block) $badge-fill-opacity);
-$badge-ruby: #E2465B;
-$badge-ruby-bg: color-mix(in srgb, $badge-ruby, var(--uikit-bg-block) $badge-fill-opacity);
-$badge-diamond: #6FA8DC;
-$badge-diamond-bg: color-mix(in srgb, $badge-diamond, var(--uikit-bg-block) $badge-fill-opacity);
+$badge-silver-bg: color-mix(
+	in srgb,
+	$badge-silver,
+	var(--uikit-surface) $badge-fill-opacity
+);
+$badge-gold: #f0a93e;
+$badge-gold-bg: color-mix(
+	in srgb,
+	$badge-gold,
+	var(--uikit-surface) $badge-fill-opacity
+);
+$badge-platinum: #75798a;
+$badge-platinum-bg: color-mix(
+	in srgb,
+	$badge-platinum,
+	var(--uikit-surface) $badge-fill-opacity
+);
+$badge-ruby: #e2465b;
+$badge-ruby-bg: color-mix(
+	in srgb,
+	$badge-ruby,
+	var(--uikit-surface) $badge-fill-opacity
+);
+$badge-diamond: #6fa8dc;
+$badge-diamond-bg: color-mix(
+	in srgb,
+	$badge-diamond,
+	var(--uikit-surface) $badge-fill-opacity
+);
 
 $badge-font-size: 14px;
 $badge-padding-y: 8px;

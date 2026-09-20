@@ -93,9 +93,9 @@
 	max-height: 240px;
 	overflow-y: auto;
 	@include adaptive-rounding(4px);
-	border: 0 solid $select-panel-border-color;
+	border: 2px solid $select-panel-border-color;
 	background-color: $select-panel-bg-color;
-	box-shadow: 0 8px 24px $select-panel-shadow-color;
+	box-shadow: 0 8px 24px -2px $select-panel-shadow-color;
 	box-sizing: border-box;
 
 	opacity: 0;
@@ -171,6 +171,7 @@
 
 	&[data-selected='true'] {
 		color: $select-option-text-color--selected;
+		background-color: $select-option--highlight-selected;
 		font-weight: 500;
 	}
 

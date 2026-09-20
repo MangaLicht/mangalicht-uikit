@@ -154,36 +154,36 @@ export const AllVariants = {
 			<Button
 				variant='default'
 				buttonType='square'
-				iconStart={<XIcon />}
+				iconStart={<XIcon size={16} />}
 			/>
 			<Button
 				variant='borderedAccent'
 				buttonType='square'
 				size='sm'
-				iconStart={<XIcon />}
+				iconStart={<XIcon size={16} />}
 			/>
 			<Button
 				variant='ghost'
 				buttonType='square'
 				size='xsm'
-				iconStart={<XIcon />}
+				iconStart={<XIcon size={16} />}
 			/>
 			<Button
 				variant='default'
 				buttonType='circle'
-				iconStart={<XIcon />}
+				iconStart={<XIcon size={16} />}
 			/>
 			<Button
 				variant='highlight'
 				buttonType='circle'
 				size='sm'
-				iconStart={<XIcon />}
+				iconStart={<XIcon size={16} />}
 			/>
 			<Button
 				variant='bordered'
 				buttonType='circle'
 				size='xsm'
-				iconStart={<XIcon />}
+				iconStart={<XIcon size={16} />}
 			/>
 		</div>
 	)
