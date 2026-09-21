@@ -66,11 +66,11 @@
 	/* --- Статусы --- */
 	--uikit-danger: #ef4444;
 	--uikit-danger-hover: color-mix(in srgb, #ca2929, var(--uikit-bg) 30%);
-	--uikit-danger-soft: rgb(239 68 68 / 0.1);
+	--uikit-danger-soft: rgb(239 68 68 / 0.4);
 	--uikit-success: #4ade80;
-	--uikit-success-soft: rgb(34 197 94 / 0.2);
+	--uikit-success-soft: rgb(34 197 94 / 0.6);
 	--uikit-warning: #facc15;
-	--uikit-warning-soft: rgb(234 179 8 / 0.2);
+	--uikit-warning-soft: rgb(234 179 8 / 0.6);
 
 	/* --- Медиа и градиенты --- */
 	--uikit-image-outline: rgb(255 255 255 / 0.1);
@@ -113,6 +113,8 @@
 	--uikit-primary-hover: color-mix(in srgb, var(--uikit-primary), #000000 5%);
 	--uikit-focus-ring: #2563eb;
 	--uikit-image-outline: rgb(0 0 0 / 0.1);
+
+	--uikit-danger-soft: rgb(239 68 68 / 0.6);
 
 	--uikit-danger-hover: color-mix(
 		in srgb,

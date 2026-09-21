@@ -29,14 +29,8 @@
 }
 
 .destructive {
-	$text-color: color-mix(
-		in srgb,
-		var(--uikit-danger),
-		var(--uikit-text-main) 90%
-	);
-
-	color: $text-color;
-	background-color: var(--uikit-danger);
+	color: var(--uikit-danger);
+	background-color: var(--uikit-danger-soft);
 }
 
 .outline {
@@ -45,7 +39,13 @@
 }
 
 .positive {
-	color: black;
 	font-weight: 700;
-	background-color: var(--uikit-success);
+	background-color: var(--uikit-success-soft);
+}
+
+:root[data-theme='dark'] .positive {
+	color: color-mix(in srgb, var(--uikit-success), white 50%);
+}
+:root[data-theme='light'] .positive {
+	color: color-mix(in srgb, var(--uikit-success), black 50%);
 }
